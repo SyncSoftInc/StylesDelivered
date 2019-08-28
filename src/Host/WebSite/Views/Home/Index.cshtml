@@ -1,0 +1,39 @@
+﻿<div id="app">
+
+    <div class="card-columns">
+        <div class="card w-75" v-for="item in items">
+            <div class="text-center"><img v-bind:src="item.imageUrl" class="card-img-top" alt="..."></div>
+            <div class="card-body">
+                <h5 class="card-title">{{item.productName}}</h5>
+                <p class="card-text">{{item.itemNo}} (Stock: {{item.invQty}})</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    @section Scripts{
+        <script>
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    pageSize: 10,
+                    pageIndex: 1,
+                    items: []
+                },
+                methods: {
+                    loadData: function () {
+                        var self = this;
+                        $.get("/api/product/items?pagesize=" + this.pageSize + "&pageindex=" + this.pageIndex, function (dt) {
+                            self.items = dt.data;
+                        });
+                    }
+                }
+            });
+
+            $(function () {
+                app.loadData();
+            });
+        </script>
+    }

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="..\..\build\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="ss.pfx" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="ss.pfx" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.10" />
+    </ItemGroup>
+
+</Project>
