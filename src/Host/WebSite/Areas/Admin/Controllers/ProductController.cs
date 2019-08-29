@@ -14,6 +14,11 @@ namespace SyncSoft.StylesDelivered.WebSite.Areas.Product.Controllers
             return View();
         }
 
+        public IActionResult Save()
+        {
+            return View();
+        }
+
         #endregion
     }
 }

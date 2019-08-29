@@ -1,17 +1,26 @@
-﻿<div id="app">
-    <div><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal">New</button></div>
+﻿<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="~/">Home</a></li>
+        <li class="breadcrumb-item"><a>User</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Address</li>
+    </ol>
+</nav>
+
+
+<div id="app">
+    <div><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#editor">New</button></div>
     <hr />
     <div class="card-columns">
         <div class="card" v-for="item in addresses">
             <div class="card-body">
                 <p class="card-text">{{item.address1}}<br />{{item.address2}}<br />{{item.city}}<br />{{item.state}} {{item.zipCode}}</p>
-                <button type="button" class="btn btn-danger" v-on:click="remove(item.id)">Delete</button>
+                <button type="button" class="btn btn-danger" v-on:click="remove(item.hash)">Delete</button>
             </div>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -34,7 +43,10 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="text" class="form-control" v-model="address.State" placeholder="State" />
+                        <select class="form-control" v-model="address.State">
+                            <option disabled value="">State</option>
+                            <option v-for="state in states" v-bind:value="state.code">{{state.name}}</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -51,58 +63,5 @@
 </div>
 
 @section Scripts{
-    <script>
-        var app = new Vue({
-            el: "#app",
-            data: {
-                addresses: [],
-                address: {}
-            },
-            methods: {
-                loadData: function () {
-                    var self = this;
-                    $.get("/api/user/addresses", function (rs) {
-                        self.addresses = rs;
-                    });
-                },
-                save: function () {
-                    var self = this;
-                    $.post("/api/user/address", { Address: self.address }, function (rs) {
-
-                        if ($.isSuccess(rs)) {
-                            $('#modal').modal('hide');
-                            self.loadData();
-                        }
-                        else {
-                            bootbox.alert(rs);
-                        }
-                    });
-                },
-                remove: function (id) {
-                    var self = this;
-                    bootbox.confirm("Delete this address?", function (flag) {
-                        if (flag) {
-                            $.ajax({
-                                url: '/api/user/address',
-                                type: 'DELETE',
-                                data: { "AddressID": id },
-                                success: function (rs) {
-                                    if ($.isSuccess(rs)) {
-                                        self.loadData();
-                                    }
-                                    else {
-                                        bootbox.alert(rs);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-
-        $(function () {
-            app.loadData();
-        });
-    </script>
+    <partial name="Script" model='"address"' />
 }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SyncSoft.App.Components;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
+using SyncSoft.ECP.DTOs.Users;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
-using SyncSoft.StylesDelivered.Domain.User;
 using SyncSoft.StylesDelivered.DTO.Common;
 using System;
 using System.Collections.Generic;
@@ -20,30 +20,42 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         private static readonly Lazy<IUserDF> _lazyUserDF = ObjectContainer.LazyResolve<IUserDF>();
         private IUserDF UserDF => _lazyUserDF.Value;
 
-        private static readonly Lazy<IUserService> _lazyUserService = ObjectContainer.LazyResolve<IUserService>();
-        private IUserService UserService => _lazyUserService.Value;
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  GetUser  -
+
+        /// <summary>
+        /// 获取用户基础信息
+        /// </summary>
+        [HttpGet("api/user/{id}")]
+        public Task<UserBasicInfoDTO> GetUserAsync(Guid id)
+        {
+            return UserDF.GetUserBasicInfoAsync(id);
+        }
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  CURD  -
+        #region -  Address  -
 
         /// <summary>
         /// 创建地址
         /// </summary>
         [HttpPost("api/user/address")]
         public Task<string> CreateAddressAsync(SaveAddressCommand cmd)
-            => UserService.SaveAddressAsync(cmd);
+        {
+            cmd.Address.User_ID = User.Identity.UserID();
+            return base.RequestAsync(cmd);
+        }
 
         /// <summary>
         /// 删除地址
         /// </summary>
         [HttpDelete("api/user/address")]
         public Task<string> DeleteAddressAsync(RemoveAddressCommand cmd)
-            => UserService.RemoveAddressAsync(cmd);
-
-        #endregion
-        // *******************************************************************************************************************************
-        #region -  GetAddresses  -
+        {
+            cmd.Address.User_ID = User.Identity.UserID();
+            return base.RequestAsync(cmd);
+        }
 
         /// <summary>
         /// 获取用户地址

@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.10" />
         <PackageReference Include="SyncSoft.ECP.MongoDB" Version="2.9.10" />
     </ItemGroup>
 

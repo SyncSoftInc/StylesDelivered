@@ -1,9 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
-using SyncSoft.StylesDelivered.DTO.User;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.User
@@ -15,14 +13,7 @@ namespace SyncSoft.StylesDelivered.Domain.User
 
         public async Task<string> RemoveAddressAsync(RemoveAddressCommand cmd)
         {
-            var userId = cmd.Identity.UserID();
-            var user = await GetOrInitUserAsync(userId).ConfigureAwait(false);
-            var address = user.Addresses.FirstOrDefault(x => x.ID == cmd.AddressID);
-            if (address.IsNotNull())
-            {
-                user.Addresses.Remove(address);
-            }
-            return await UserDAL.UpdateUserAddressesAsync(userId, user.Addresses).ConfigureAwait(false);
+            return await UserDAL.DeleteUserAddressAsync(cmd.Address).ConfigureAwait(false);
         }
 
         public async Task<string> SaveAddressAsync(SaveAddressCommand cmd)
@@ -33,31 +24,18 @@ namespace SyncSoft.StylesDelivered.Domain.User
             cmd.Address.City = Utils.FormatAddress(cmd.Address.City);
             cmd.Address.State = Utils.FormatAddress(cmd.Address.State);
             cmd.Address.ZipCode = Utils.FormatAddress(cmd.Address.ZipCode);
+            cmd.Address.Country = "US";
+            cmd.Address.Hash = cmd.Address.ToSha1();
 
-            var userId = cmd.Identity.UserID();
-            var user = await GetOrInitUserAsync(userId).ConfigureAwait(false);
-            if (!user.Addresses.Contains(cmd.Address))
+            var existAddress = await UserDAL.GetUserAddressAsync(cmd.Address.User_ID, cmd.Address.Hash).ConfigureAwait(false);
+            if (existAddress.IsNull())
             {// 没有才添加
-                cmd.Address.ID = cmd.Address.ToSha1();
-                user.Addresses.Add(cmd.Address);
+                return await UserDAL.InsertUserAddressAsync(cmd.Address).ConfigureAwait(false);
             }
             else
-            {
+            {// 更新
                 return MsgCodes.AddressExists;
             }
-
-            return await UserDAL.UpdateUserAddressesAsync(userId, user.Addresses).ConfigureAwait(false);
-        }
-
-        public async Task<UserDTO> GetOrInitUserAsync(Guid userId)
-        {
-            var user = await UserDAL.GetUserAsync(userId).ConfigureAwait(false);
-            if (user.IsNull())
-            {
-                user = new UserDTO { ID = userId };
-                await UserDAL.InsertUserAsync(user).ConfigureAwait(false);
-            }
-            return user;
         }
     }
 }

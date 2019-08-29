@@ -1,6 +1,5 @@
-﻿using SyncSoft.StylesDelivered.DTO.Common;
+﻿using SyncSoft.ECP.Enums.User;
 using System;
-using System.Collections.Generic;
 
 namespace SyncSoft.StylesDelivered.DTO.User
 {
@@ -8,6 +7,8 @@ namespace SyncSoft.StylesDelivered.DTO.User
     {
         public Guid ID { get; set; }
         public string Phone { get; set; }
-        public IList<AddressDTO> Addresses { get; set; } = new List<AddressDTO>();
+        public string Email { get; set; }
+        public UserStatusEnum Status { get; set; }
+        public UserRoleEnum Roles { get; set; }
     }
 }

@@ -8,10 +8,13 @@ namespace SyncSoft.StylesDelivered.DataAccess.User
 {
     public interface IUserDAL
     {
-        Task<string> UpdateUserAddressesAsync(Guid userId, IList<AddressDTO> addresses);
-
-        Task<IList<AddressDTO>> GetUserAddressesAsync(Guid userId);
         Task<UserDTO> GetUserAsync(Guid userId);
-        Task InsertUserAsync(UserDTO user);
+        Task<string> InsertUserAsync(UserDTO user);
+
+        Task<string> InsertUserAddressAsync(AddressDTO dto);
+        Task<AddressDTO> GetUserAddressAsync(Guid userId, string hash);
+        Task<string> UpdateUserAddressAsync(string oldHash, AddressDTO dto);
+        Task<string> DeleteUserAddressAsync(AddressDTO dto);
+        Task<IList<AddressDTO>> GetUserAddressesAsync(Guid userId);
     }
 }

@@ -6,10 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.10" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Shared\Core\SyncSoft.StylesDelivered.csproj" />
     </ItemGroup>
 

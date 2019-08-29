@@ -1,8 +1,16 @@
-﻿<div class="mb-2">
-    <button class="btn btn-primary" type="button" onclick="Add()">Add</button>
+﻿<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="~/">Home</a></li>
+        <li class="breadcrumb-item"><a>Admin</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Products</li>
+    </ol>
+</nav>
+
+<div class="mb-2">
+    <a class="btn btn-primary" asp-action="Save">New</a>
 </div>
 
-<hr/>
+<hr />
 
 <table id="mainTable" class="table table-striped table-bordered" style="width:100%">
     <thead>
@@ -15,54 +23,5 @@
 </table>
 
 @section Scripts{
-    <script>
-        $(function () {
-            var mainTable = $('#mainTable').DataTable({
-                lengthMenu: [25, 50, 100],
-                ajax: {
-                    url: '/api/product/items',
-                    data: function (data) {
-                        data.ItemNo = "AAA";
-                    }
-                },
-                columns: [
-                    {
-                        width: 100,
-                        orderable: false,
-                        render: function (id, display, item) {
-                            var url = 'https://ihb.azureedge.net/p/img/7a3440234cba046c52c91f913316587643399918.jpg?w=350&h=350';
-                            return '<img src="' + url + '" style="width:50px;height:50px;" />';
-                        }
-                    },
-                    {
-                        data: "itemNo",
-                        orderable: false
-                    },
-                    {
-                        data: "createdOnUtc",
-                        width: 150,
-                        orderable: false,
-                        render: function (data, type, full, meta) {
-                            return $.timeFormat(data);
-                        }
-                    }
-                ],
-                order: [[1, "DESC"]]
-            });
-        });
-
-        function Add() {
-            $.post("/api/product/item", {
-                itemNo: "AAA",
-                description: "BBB",
-                imageUrl: "CCC",
-                customers: [
-                    { code: "D", name: "F" },
-                    { code: "E", name: "G" }
-                ]
-            }, function (rs) {
-                alert(rs);
-            });
-        }
-    </script>
+    <partial name="Script" model='"admin/product/items"' />
 }

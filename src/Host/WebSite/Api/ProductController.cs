@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SyncSoft.App.Components;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
+using SyncSoft.StylesDelivered.Command.Product;
 using SyncSoft.StylesDelivered.DataAccess.Product;
-using SyncSoft.StylesDelivered.Domain.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Query.Product;
 using SyncSoft.StylesDelivered.WebSite.Models;
@@ -20,9 +20,6 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         private static readonly Lazy<IProductDF> _lazyProductDF = ObjectContainer.LazyResolve<IProductDF>();
         private IProductDF ProductDF => _lazyProductDF.Value;
 
-        private static readonly Lazy<IProductService> _lazyProductService = ObjectContainer.LazyResolve<IProductService>();
-        private IProductService ProductService => _lazyProductService.Value;
-
         #endregion
         // *******************************************************************************************************************************
         #region -  CURD  -
@@ -31,8 +28,8 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// 创建Item
         /// </summary>
         [HttpPost("api/product/item")]
-        public async Task<string> CreateItemAsync(ProductItemDTO dto)
-            => await ProductService.CreateItemAsync(dto);
+        public Task<string> CreateItemAsync(CreateProductItemCommand cmd)
+            => base.RequestAsync(cmd);
 
         /// <summary>
         /// 获取Item
@@ -45,8 +42,8 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// 删除Item
         /// </summary>
         [HttpDelete("api/product/item/{itemNo}")]
-        public Task<string> DeleteItemAsync(string itemNo)
-            => ProductService.DeleteItemAsync(itemNo);
+        public Task<string> DeleteItemAsync(DeleteProductItemCommand cmd)
+            => base.RequestAsync(cmd);
 
         #endregion
         // *******************************************************************************************************************************
@@ -61,8 +58,10 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
             {
                 PageSize = model.PageSize,
                 PageIndex = model.PageIndex,
+                OrderBy = model.OrderBy,
                 Draw = model.Draw,
-                Keyword = model.Keyword
+                Keyword = model.Keyword,
+                SortDirection = model.SortDirection,
             };
             query.SetContext(User.Identity);
 

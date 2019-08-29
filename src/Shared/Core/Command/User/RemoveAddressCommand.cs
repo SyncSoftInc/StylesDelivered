@@ -1,9 +1,10 @@
 ﻿using SyncSoft.App.Messaging;
+using SyncSoft.StylesDelivered.DTO.Common;
 
 namespace SyncSoft.StylesDelivered.Command.User
 {
     public class RemoveAddressCommand : RequestCommand
     {
-        public string AddressID { get; set; }
+        public AddressDTO Address { get; set; }
     }
 }

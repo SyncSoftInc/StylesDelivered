@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using SyncSoft.ECP;
@@ -13,10 +14,13 @@ namespace SyncSoft.StylesDelivered.WebSite
         {
             services.AddWebSiteServer(o =>
             {
-                o.WholeSiteAuthPolicy = CONSTANTs.Policies.OpenId;
+                o.WholeSiteAuthPolicy = CONSTANTs.Policies.BearerOpenId;
+                o.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+
                 o.ConfigureMvcOptions = a =>
                 {
                     a.Filters.Add(new MessageHandlerAttribute());
+                    //a.Conventions.Add(new FromBodyBindingSourceConvention());
                 };
             });
         }

@@ -10,12 +10,15 @@ namespace SyncSoft.StylesDelivered.WebSite
             Engine.Init(args)
                 .UseEcpHostQuickSettings(o =>
                 {
-                    o.ProjectName = "StylesDelivered";
+                    o.ProjectName = "styd";
                 })
+                .UseMessageQueue()
+                .UseDefaultMessageComponents()
                 .UseWebSiteApiClient()
                 .UseStylesDeliveredDomain()
-                .UseStylesDeliveredMongoDB()
+                .UseStylesDeliveredMySql()
                 .UseStylesDeliveredDF()
+                .UseAliyun()
                 .UseJsonConfiguration()
                 .Start();
 

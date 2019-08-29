@@ -1,0 +1,7 @@
+﻿@model string
+<environment include="Development">
+    <script src="~/js/@(Model).js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/@(Model).min.js"></script>
+</environment>

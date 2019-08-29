@@ -7,13 +7,12 @@
   </PropertyGroup>
 
     <ItemGroup>
+      <Content Remove="appsettings*" />
       <Content Remove="bundleconfig.json" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="Areas\Admin\Views\Product\Items.cshtml" />
-      <None Include="Areas\Admin\Views\_ViewImports.cshtml" />
-      <None Include="Areas\Admin\Views\_ViewStart.cshtml" />
+      <None Include="appsettings*" />
       <None Include="bundleconfig.json" />
     </ItemGroup>
 
@@ -25,9 +24,11 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Business\Aliyun\SyncSoft.StylesDelivered.Aliyun.csproj" />
+    <ProjectReference Include="..\..\Business\Consumer\SyncSoft.StylesDelivered.Consumer.csproj" />
     <ProjectReference Include="..\..\Business\Domain\SyncSoft.StylesDelivered.Domain.csproj" />
     <ProjectReference Include="..\..\DataAccess\DataFacade\SyncSoft.StylesDelivered.DataFacade.csproj" />
-    <ProjectReference Include="..\..\DataAccess\MongoDB\SyncSoft.StylesDelivered.MongoDB.csproj" />
+    <ProjectReference Include="..\..\DataAccess\MySql\SyncSoft.StylesDelivered.MySql.csproj" />
   </ItemGroup>
 
 </Project>

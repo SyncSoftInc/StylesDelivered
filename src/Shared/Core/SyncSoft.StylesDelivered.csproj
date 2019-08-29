@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.10" />
+        <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.11" />
     </ItemGroup>
 
 </Project>

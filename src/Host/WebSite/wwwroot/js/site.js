@@ -1,9 +1,9 @@
-// ÅĞ¶Ï¶ÔÏóÊÇ·ñÎª¿Õ
+// åˆ¤æ–­å¯¹è±¡æ˜¯å¦ä¸ºç©º
 $.isNW = function (obj) {
     return obj === undefined || obj === null || obj.toString().trim().length === 0;
 };
 
-// ¸ñÊ½»¯³ÉÊ±¼ä
+// æ ¼å¼åŒ–æˆæ—¶é—´
 $.timeFormat = function (value, timeformat) {
     if (!$.isNW(value)) {
         timeformat = timeformat || "MM/DD/YYYY hh:mm:ss A";
@@ -13,7 +13,7 @@ $.timeFormat = function (value, timeformat) {
     }
 };
 
-// ¸ñÊ½»¯³ÉÈÕÆÚ
+// æ ¼å¼åŒ–æˆæ—¥æœŸ
 $.dateFormat = function (value, timeformat) {
     if (!$.isNW(value)) {
         timeformat = timeformat || "MM/DD/YYYY";
@@ -22,7 +22,7 @@ $.dateFormat = function (value, timeformat) {
     }
 };
 
-// ÅĞ¶ÏÏûÏ¢ÂëÊÇ·ñ³É¹¦
+// åˆ¤æ–­æ¶ˆæ¯ç æ˜¯å¦æˆåŠŸ
 $.isSuccess = function (msgCode) {
     return msgCode === "";
 };
