@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\Business\Domain\SyncSoft.StylesDelivered.Domain.csproj" />
     <ProjectReference Include="..\..\DataAccess\DataFacade\SyncSoft.StylesDelivered.DataFacade.csproj" />
     <ProjectReference Include="..\..\DataAccess\MySql\SyncSoft.StylesDelivered.MySql.csproj" />
+    <ProjectReference Include="..\..\DataAccess\Redis\SyncSoft.StylesDelivered.Redis.csproj" />
   </ItemGroup>
 
 </Project>

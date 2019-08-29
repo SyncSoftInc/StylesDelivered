@@ -25,7 +25,7 @@ namespace SyncSoft.App
             {
                 configurator.Engine.Starting += (o, e) =>
                 {
-                    ObjectContainer.Register<IMasterDB>(() => new MasterDB(options.MasterDBConnStrName), LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IMasterDB>(() => new MasterDB(options.DBConnStrName), LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IProductDAL, ProductDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserDAL, UserDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<ICommonDAL, CommonDAL>(LifeCycleEnum.Singleton);
@@ -34,10 +34,5 @@ namespace SyncSoft.App
 
             return configurator;
         }
-    }
-
-    public class DBOptions
-    {
-        public string MasterDBConnStrName { get; set; } = "MasterDB";
     }
 }

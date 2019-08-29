@@ -16,6 +16,7 @@ namespace SyncSoft.StylesDelivered.WebSite
                 .UseDefaultMessageComponents()
                 .UseWebSiteApiClient()
                 .UseStylesDeliveredDomain()
+                .UseStylesDeliveredRedis()
                 .UseStylesDeliveredMySql()
                 .UseStylesDeliveredDF()
                 .UseAliyun()

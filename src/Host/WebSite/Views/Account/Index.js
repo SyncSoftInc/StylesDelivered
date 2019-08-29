@@ -31,9 +31,9 @@
 
             return false;
         }
+    },
+    beforeMount: function () {
+        var self = this;
+        self.loadProfile();
     }
-});
-
-$(function () {
-    indexVM.loadProfile();
 });

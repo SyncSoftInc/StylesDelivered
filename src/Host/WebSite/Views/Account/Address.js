@@ -56,13 +56,15 @@
                 }
             });
         }
+    },
+    beforeMount: function () {
+        var self = this;
+        self.loadStates();
+        self.loadAddresses();
     }
 });
 
 $(function () {
-    addressVM.loadStates();
-    addressVM.loadAddresses();
-
     $('#editor').on('show.bs.modal', function (e) {
         // 编辑器打开时清空数据
         addressVM.address = { "State": "" };
