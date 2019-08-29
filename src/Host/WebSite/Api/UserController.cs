@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SyncSoft.App.Components;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
-using SyncSoft.ECP.DTOs.Users;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.DTO.Common;
+using SyncSoft.StylesDelivered.DTO.User;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,9 +28,32 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// 获取用户基础信息
         /// </summary>
         [HttpGet("api/user/{id}")]
-        public Task<UserBasicInfoDTO> GetUserAsync(Guid id)
+        public Task<UserDTO> GetUserAsync(Guid id)
         {
-            return UserDF.GetUserBasicInfoAsync(id);
+            return UserDF.GetUserAsync(id);
+        }
+
+        /// <summary>
+        /// 获取用户基础信息
+        /// </summary>
+        [HttpGet("api/user")]
+        public Task<UserDTO> GetUserAsync()
+        {
+            var userId = User.Identity.UserID();
+            return UserDF.GetUserAsync(userId);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  SaveUser  -
+
+        /// <summary>
+        /// 保存用户基础信息
+        /// </summary>
+        [HttpPatch("api/user/profile")]
+        public Task<string> SaveUserProfileAsync(SaveUserProfileCommand cmd)
+        {
+            return RequestAsync(cmd);
         }
 
         #endregion

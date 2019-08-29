@@ -11,10 +11,16 @@ namespace SyncSoft.StylesDelivered.MySql.User
 {
     public class UserDAL : ECPMySqlDAL, IUserDAL
     {
+        // *******************************************************************************************************************************
+        #region -  Constructor(s)  -
+
         public UserDAL(IMasterDB db) : base(db)
         {
         }
 
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  User  -
 
         public Task<string> InsertUserAsync(UserDTO user)
         {
@@ -27,11 +33,24 @@ VALUES(@ID, @Phone, @Email, @Status, @Roles)", user);
             return base.QueryFirstOrDefaultAsync<UserDTO>("SELECT * FROM User WHERE ID = @UserID", new { UserID = userId });
         }
 
+        public Task<string> UpdateUserAsync(UserDTO user)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<string> UpdateUserProfileAsync(UserDTO user)
+        {
+            return base.TryExecuteAsync("UPDATE User SET Email = @Email, Phone = @Phone WHERE ID = @ID", user);
+        }
 
+        public Task<string> DeleteUserAsync(Guid id)
+        {
+            return base.TryExecuteAsync("DELETE FROM User WHERE ID = @ID", new { ID = id });
+        }
 
-
-
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  User Address  -
 
         public Task<string> InsertUserAddressAsync(AddressDTO dto)
         {
@@ -72,9 +91,17 @@ WHERE Hash = @OldHash AND User_ID = @User_ID", new
             return base.TryExecuteAsync("DELETE FROM Address WHERE Hash = @Hash AND User_ID = @User_ID", dto);
         }
 
+
+
+
+
+
+
         public Task<IList<AddressDTO>> GetUserAddressesAsync(Guid userId)
         {
             return base.QueryListAsync<AddressDTO>("SELECT * FROM Address WHERE User_ID = @UserID ORDER BY ZipCode ASC", new { UserID = userId });
         }
+
+        #endregion
     }
 }

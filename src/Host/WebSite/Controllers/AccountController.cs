@@ -5,6 +5,16 @@ namespace SyncSoft.StylesDelivered.WebSite.Controllers
 {
     public class AccountController : Controller
     {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Address()
+        {
+            return View();
+        }
+
         public IActionResult AccessDenied()
         {
             if (!User.Identity.IsAuthenticated)
@@ -16,11 +26,6 @@ namespace SyncSoft.StylesDelivered.WebSite.Controllers
             {
                 return new EmptyResult();
             }
-        }
-
-        public IActionResult Address()
-        {
-            return View();
         }
     }
 }

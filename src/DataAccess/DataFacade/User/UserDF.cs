@@ -1,7 +1,7 @@
 ﻿using SyncSoft.App.Components;
-using SyncSoft.ECP.DTOs.Users;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.DTO.Common;
+using SyncSoft.StylesDelivered.DTO.User;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,23 +16,9 @@ namespace SyncSoft.StylesDelivered.DataFacade.User
         public Task<IList<AddressDTO>> GetUserAddressesAsync(Guid userId)
             => UserDAL.GetUserAddressesAsync(userId);
 
-        public async Task<UserBasicInfoDTO> GetUserBasicInfoAsync(Guid userId)
+        public Task<UserDTO> GetUserAsync(Guid userId)
         {
-            var user = await UserDAL.GetUserAsync(userId).ConfigureAwait(false);
-            if (user.IsNotNull())
-            {
-                return new UserBasicInfoDTO
-                {
-                    ID = user.ID,
-                    Email = user.Email,
-                    Status = user.Status,
-                    Roles = (long?)user.Roles,
-                };
-            }
-            else
-            {
-                return null;
-            }
+            return UserDAL.GetUserAsync(userId);
         }
     }
 }

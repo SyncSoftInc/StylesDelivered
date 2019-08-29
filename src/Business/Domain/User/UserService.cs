@@ -8,8 +8,15 @@ namespace SyncSoft.StylesDelivered.Domain.User
 {
     public class UserService : IUserService
     {
+        // *******************************************************************************************************************************
+        #region -  Lazy Object(s)  -
+
         private static readonly Lazy<IUserDAL> _lazyUserDAL = ObjectContainer.LazyResolve<IUserDAL>();
         private IUserDAL UserDAL => _lazyUserDAL.Value;
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  User Address  -
 
         public async Task<string> RemoveAddressAsync(RemoveAddressCommand cmd)
         {
@@ -37,5 +44,26 @@ namespace SyncSoft.StylesDelivered.Domain.User
                 return MsgCodes.AddressExists;
             }
         }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  User  -
+
+        public async Task<string> SaveProfileAsync(SaveUserProfileCommand cmd)
+        {
+            if (cmd.Identity.UserID() != cmd.User.ID) return MsgCodes.SecurityCheckFailed;
+            // ^^^^^^^^^^   必须本人
+
+            var user = await UserDAL.GetUserAsync(cmd.User.ID).ConfigureAwait(false);
+            if (user.IsNull()) return MsgCodes.UserNotExists;
+            // ^^^^^^^^^^
+
+            user.Email = cmd.User.Email;
+            user.Phone = cmd.User.Phone;
+
+            return await UserDAL.UpdateUserProfileAsync(user).ConfigureAwait(false);
+        }
+
+        #endregion
     }
 }

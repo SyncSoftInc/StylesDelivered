@@ -9,11 +9,14 @@
     <ItemGroup>
       <Content Remove="appsettings*" />
       <Content Remove="bundleconfig.json" />
+      <Content Remove="wwwroot\js\account\index.min.js" />
     </ItemGroup>
 
     <ItemGroup>
       <None Include="appsettings*" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\account\index.min.js" />
       <None Include="bundleconfig.json" />
+      <None Include="wwwroot\js\account\index.min.js" />
     </ItemGroup>
 
 

@@ -7,5 +7,6 @@ namespace SyncSoft.StylesDelivered.Domain.User
     {
         Task<string> SaveAddressAsync(SaveAddressCommand cmd);
         Task<string> RemoveAddressAsync(RemoveAddressCommand cmd);
+        Task<string> SaveProfileAsync(SaveUserProfileCommand message);
     }
 }

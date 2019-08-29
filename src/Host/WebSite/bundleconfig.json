@@ -12,9 +12,15 @@
         ]
     },
     {
-        "outputFileName": "wwwroot/js/address.js",
+        "outputFileName": "wwwroot/js/account/address.js",
         "inputFiles": [
             "Views/Account/Address.js"
+        ]
+    },
+    {
+        "outputFileName": "wwwroot/js/account/index.js",
+        "inputFiles": [
+            "Views/Account/Index.js"
         ]
     },
     {
