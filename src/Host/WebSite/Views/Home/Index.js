@@ -1,20 +1,44 @@
 ﻿var homeVM = new Vue({
     el: "#app",
     data: {
-        pageSize: 10,
+        pageSize: 9,
         pageIndex: 1,
+        totalPage: 1,
         items: []
     },
     methods: {
         loadData: function () {
             var self = this;
-            $.get("/api/product/items?pagesize=" + this.pageSize + "&pageindex=" + this.pageIndex, function (dt) {
-                self.items = dt.data;
+
+            var cursor = (self.pageIndex - 1) * self.pageSize;
+
+            return $.get("/api/product/items?length=" + self.pageSize + "&start=" + cursor, function (dt) {
+                self.totalPage = dt.totalPage;
+                self.items = self.items.concat(dt.data);
             });
+        },
+        scroll: function () {
+            var self = this;
+            let isLoading = false;
+
+            window.onscroll = () => {
+                let bottomOfWindow = $.getScrollTop() + $.getWindowHeight() === $.getScrollHeight();
+                if (bottomOfWindow && !isLoading && self.pageIndex < self.totalPage) {
+                    isLoading = true;
+                    self.pageIndex++;
+                    self.loadData().done(function () {
+                        isLoading = false;
+                    });
+                }
+            };
         }
     },
     beforeMount: function () {
         var self = this;
         self.loadData();
+    },
+    mounted: function () {
+        var self = this;
+        self.scroll();
     }
 });
