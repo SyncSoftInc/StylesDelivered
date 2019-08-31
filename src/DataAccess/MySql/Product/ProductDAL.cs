@@ -54,5 +54,16 @@ namespace SyncSoft.StylesDelivered.MySql.Product
             return base.TryExecuteAsync(@"INSERT INTO ProductItem(ItemNo, ProductName, Description, ImageUrl, InvQty, CreatedOnUtc)
 VALUES(@ItemNo, @ProductName, @Description, @ImageUrl, @InvQty, @CreatedOnUtc)", dto);
         }
+
+        public Task<string> UpdateItemAsync(ProductItemDTO dto)
+        {
+            return base.TryExecuteAsync(@"
+UPDATE ProductItem SET 
+ProductName = @ProductName
+, Description = @Description
+, ImageUrl = @ImageUrl
+, InvQty = @InvQty
+WHERE ItemNo = @ItemNo", dto);
+        }
     }
 }

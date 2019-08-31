@@ -6,6 +6,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
     public interface IProductService
     {
         Task<string> CreateItemAsync(ProductItemDTO dto);
+        Task<string> UpdateItemAsync(ProductItemDTO dto);
         Task<string> DeleteItemAsync(string itemNo);
     }
 }

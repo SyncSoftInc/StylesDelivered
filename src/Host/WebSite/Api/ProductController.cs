@@ -7,6 +7,7 @@ using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Query.Product;
 using SyncSoft.StylesDelivered.WebSite.Models;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.WebSite.Api
@@ -30,6 +31,20 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         [HttpPost("api/product/item")]
         public Task<string> CreateItemAsync(CreateProductItemCommand cmd)
             => base.RequestAsync(cmd);
+
+        /// <summary>
+        /// Upadte Item
+        /// </summary>
+        [HttpPut("api/product/item")]
+        public Task<string> UpdateItemAsync(UpdateProductItemCommand cmd)
+        {
+            using (var stream = Request.Form.Files[0].OpenReadStream())
+            {
+                cmd.PictureData = stream.ToBytes();
+            }
+
+            return base.RequestAsync(cmd);
+        }
 
         /// <summary>
         /// 获取Item
@@ -70,5 +85,6 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         }
 
         #endregion
+
     }
 }

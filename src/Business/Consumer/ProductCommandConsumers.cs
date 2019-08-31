@@ -9,6 +9,7 @@ namespace SyncSoft.StylesDelivered.Consumer
 {
     public class ProductCommandConsumers : IConsumer<DeleteProductItemCommand>
          , IConsumer<CreateProductItemCommand>
+         , IConsumer<UpdateProductItemCommand>
     {
         private static readonly Lazy<IProductService> _lazyProductService = ObjectContainer.LazyResolve<IProductService>();
         private IProductService ProductService => _lazyProductService.Value;
@@ -21,6 +22,11 @@ namespace SyncSoft.StylesDelivered.Consumer
         public async Task<object> HandleAsync(IContext<CreateProductItemCommand> context)
         {
             return await ProductService.CreateItemAsync(context.Message.ProductItem).ConfigureAwait(false);
+        }
+
+        public async Task<object> HandleAsync(IContext<UpdateProductItemCommand> context)
+        {
+            return await ProductService.UpdateItemAsync(context.Message.ProductItem).ConfigureAwait(false);
         }
     }
 }

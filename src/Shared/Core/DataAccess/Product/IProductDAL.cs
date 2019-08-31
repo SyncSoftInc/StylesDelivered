@@ -8,6 +8,7 @@ namespace SyncSoft.StylesDelivered.DataAccess.Product
     public interface IProductDAL
     {
         Task<string> InsertItemAsync(ProductItemDTO dto);
+        Task<string> UpdateItemAsync(ProductItemDTO dto);
 
         Task<string> DeleteProductItemAsync(string itemNo);
 
