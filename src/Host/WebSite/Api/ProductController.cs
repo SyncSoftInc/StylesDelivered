@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SyncSoft.App;
 using SyncSoft.App.Components;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
 using SyncSoft.StylesDelivered.Command.Product;
@@ -29,44 +30,43 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// 创建Item
         /// </summary>
         [HttpPost("api/product/item")]
-        public Task<string> CreateItemAsync(CreateProductItemCommand cmd)
-            => base.RequestAsync(cmd);
+        public Task<string> CreateItemAsync(CreateProductItemCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
         /// Upadte Item
         /// </summary>
         [HttpPut("api/product/item")]
-        public Task<string> UpdateItemAsync(UpdateProductItemCommand cmd)
-        {
-            using (var stream = Request.Form.Files[0].OpenReadStream())
-            {
-                cmd.PictureData = stream.ToBytes();
-            }
-
-            return base.RequestAsync(cmd);
-        }
+        public Task<string> UpdateItemAsync(UpdateProductItemCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
         /// 获取Item
         /// </summary>
         [HttpGet("api/product/item/{itemNo}")]
-        public Task<ProductItemDTO> GetItemAsync(string itemNo)
-            => ProductDF.GetItemAsync(itemNo);
+        public Task<ProductItemDTO> GetItemAsync(string itemNo) => ProductDF.GetItemAsync(itemNo);
 
         /// <summary>
         /// 删除Item
         /// </summary>
         [HttpDelete("api/product/item/{itemNo}")]
-        public Task<string> DeleteItemAsync(DeleteProductItemCommand cmd)
-            => base.RequestAsync(cmd);
+        public Task<string> DeleteItemAsync(DeleteProductItemCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
         /// Upadte Item
         /// </summary>
         [HttpPost("api/product/upload")]
-        public Task<string> UploadImageAsync()
+        public Task<MsgResult<ProductItemDTO>> UploadImageAsync(UploadProductImageCommand cmd)
         {
-            return Task.FromResult(MsgCodes.SUCCESS);
+            using (var stream = Request.Form.Files[0].OpenReadStream())
+            {
+                var itemNo = Request.Form["PostData[ItemNo]"].ToString();
+                if (itemNo.IsNotNull())
+                {
+                    cmd.ItemNo = itemNo;
+                    cmd.PictureData = stream.ToBytes();
+                }
+            }
+
+            return base.RequestAsync<UploadProductImageCommand, MsgResult<ProductItemDTO>>(cmd);
         }
         #endregion
         // *******************************************************************************************************************************

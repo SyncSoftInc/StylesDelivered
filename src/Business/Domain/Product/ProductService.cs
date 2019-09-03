@@ -1,4 +1,5 @@
-﻿using SyncSoft.App.Components;
+﻿using SyncSoft.App;
+using SyncSoft.App.Components;
 using SyncSoft.App.Securities;
 using SyncSoft.StylesDelivered.Command.Product;
 using SyncSoft.StylesDelivered.DataAccess.Product;
@@ -11,6 +12,12 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 {
     public class ProductService : IProductService
     {
+        // *******************************************************************************************************************************
+        #region -  Field(s)  -
+
+        private const string _urlRoot = "https://eec.oss-us-west-1.aliyuncs.com/";
+
+        #endregion
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
@@ -32,15 +39,12 @@ namespace SyncSoft.StylesDelivered.Domain.Product
                 return "ItemNo already exists.";
             }
 
+            dto.CreatedOnUtc = DateTime.UtcNow;
             return await ProductDAL.InsertItemAsync(dto).ConfigureAwait(false);
         }
 
         public async Task<string> UpdateItemAsync(ProductItemDTO dto)
         {
-            await UploadImageAsync(new UpdateProductItemCommand { ProductItem = dto }).ConfigureAwait(false);
-            dto.ImageUrl = $"p/{DateTime.UtcNow:yyyy'/'MM'/'dd}/{dto.ImageUrl}";
-            dto.CreatedOnUtc = DateTime.UtcNow;
-
             return await ProductDAL.UpdateItemAsync(dto).ConfigureAwait(false);
         }
 
@@ -53,11 +57,21 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         // *******************************************************************************************************************************
         #region -  UploadImageAsync  -
 
-        private async Task<string> UploadImageAsync(UpdateProductItemCommand cmd)
+        public async Task<MsgResult<ProductItemDTO>> UploadImageAsync(UploadProductImageCommand cmd)
         {
-            var sha1 = cmd.PictureData.ToSha1String();
+            var dto = await ProductDAL.GetProductItemAsync(cmd.ItemNo).ConfigureAwait(false);
+            if (dto.IsNotNull())
+            {
+                var sha1 = cmd.PictureData.ToSha1String();
+                var key = $"p/{ DateTime.Now:yyyy'/'MM'/'dd}/{sha1}.jpg";
+                var msgCode = await Storage.SaveAsync(key, cmd.PictureData).ConfigureAwait(false);
+                if (!msgCode.IsSuccess()) return new MsgResult<ProductItemDTO>(MsgCodes.SaveFileToCloudFailed);
 
-            return await Storage.SaveAsync($"p/{DateTime.Now:yyyy'/'mm'/'dd}/{sha1}.jpg", cmd.PictureData).ConfigureAwait(false);
+                dto.ImageUrl = _urlRoot + key;
+                await ProductDAL.UpdateItemImageAsync(dto).ConfigureAwait(false);
+            }
+
+            return new MsgResult<ProductItemDTO>(dto);
         }
 
         #endregion

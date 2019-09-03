@@ -8,33 +8,22 @@
         </ol>
     </nav>
 
-    <form class="dropzone dz-clickable needsclick" id="mydropzone" action="/api/product/upload">
-        <div class="dz-message needsclick">
-            Drop files here or click to upload.<BR>
-            <span class="note needsclick">
-                (This is just a demo dropzone. Selected
-                files are <STRONG>not</STRONG> actually uploaded.)
-            </span>
-        </div>
-    </form>
-    <br>
-
     <form onsubmit="return saveVM.save();">
         <div class="form-row">
-            <div class="form-group col-md-6" id="previewContainer">
-                <img id='productItemImg' v-bind:src="productItem.imageUrl" style="width:300px;height:300px;" />
+            <div class="form-group col-md-6 col-sm-4" :hidden="itemNo == ''">
+                <img class="pic_m" id='productItemImg' v-bind:src="productItem.imageUrl" data-toggle="modal" data-target="#uploadModal" />
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-6 col-sm-4">
                 <label for="itemNo">ItemNo</label>
                 <input type="text" class="form-control" v-model="productItem.itemNo" placeholder="ItemNo" :readonly="itemNo != ''">
                 <label for="productName">ProductName</label>
                 <input type="text" class="form-control" v-model="productItem.productName" placeholder="ProductName">
                 <label for="invQty">Inv Qty</label>
-                <input class="form-control" type="number" v-model="productItem.invQty">
+                <input class="form-control" type="number" min="0" v-model="productItem.invQty">
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group  col-md-12">
+            <div class="form-group col-md-12">
                 <label for="description">Description</label>
                 <textarea class="form-control" v-model="productItem.description" rows="4" placeholder="Description"></textarea>
             </div>
@@ -43,9 +32,34 @@
     </form>
 </div>
 
-
-@*<div class="dz-image" id="preview"><img data-dz-thumbnail style="width:300px;height:300px;" /></div>*@
-
+<!-- Upload Modal START-->
+<div class="modal fade" id="uploadModal" aria-labelledby="uploadModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <!-- Modal Content START-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span class="widget-icon"> <i class="fa fa-cloud-upload"></i> </span>
+                    Upload Files
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form novalidate="novalidate" class="dropzone" id="mydropzone" action="/api/product/upload"></form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="uploadBtn" class="btn btn-primary" disabled>
+                    <i class="fa fa-upload"></i>
+                    Upload
+                </button>
+            </div>
+        </div>
+        <!-- Modal Content END-->
+    </div>
+</div>
+<!-- Upload Modal END-->
 
 <style>
     .dropzone, .dropzone * {

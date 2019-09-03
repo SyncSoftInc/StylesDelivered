@@ -61,6 +61,10 @@ $.getWindowHeight = function () {
     return windowHeight;
 };
 
+$.pic = function (url, width = 350, height = 350) {
+    return url + "?x-oss-process=image/resize,m_lfit,h_" + height + ",w_" + width;
+}
+
 Vue.component("itembox", {
     props: ["item"],
     template: '<div>\
