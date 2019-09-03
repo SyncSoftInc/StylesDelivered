@@ -2,9 +2,11 @@
 using SyncSoft.App.EngineConfigs;
 using SyncSoft.StylesDelivered.DataAccess.Common;
 using SyncSoft.StylesDelivered.DataAccess.Product;
+using SyncSoft.StylesDelivered.DataAccess.ShoppingCart;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.DataFacade.Common;
 using SyncSoft.StylesDelivered.DataFacade.Product;
+using SyncSoft.StylesDelivered.DataFacade.ShoppingCart;
 using SyncSoft.StylesDelivered.DataFacade.User;
 
 namespace SyncSoft.App
@@ -21,6 +23,7 @@ namespace SyncSoft.App
                 {
                     ObjectContainer.Register<IProductDF, ProductDF>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserDF, UserDF>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IShoppingCartDF, ShoppingCartDF>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<ICommonDF, CommonDF>(LifeCycleEnum.Singleton);
                 };
             }

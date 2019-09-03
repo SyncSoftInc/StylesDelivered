@@ -53,10 +53,21 @@ $.getScrollHeight = function () {
 // 获取浏览器窗口高度
 $.getWindowHeight = function () {
     var windowHeight = 0;
-    if (document.compatMode == "CSS1Compat") {
+    if (document.compatMode === "CSS1Compat") {
         windowHeight = document.documentElement.clientHeight;
     } else {
         windowHeight = document.body.clientHeight;
     }
     return windowHeight;
 };
+
+Vue.component("itembox", {
+    props: ["item"],
+    template: '<div>\
+<div class="text-center"><img v-bind:src="item.imageUrl" class="card-img-top" alt="..."></div>\
+<div class="card-body">\
+<h5 class="card-title">{{item.productName}}</h5>\
+<p class="card-text">{{item.itemNo}} (Stock: {{item.invQty}})</p>\
+<a href="#" class="btn btn-primary">Go somewhere</a>\
+</div>\
+</div>'});

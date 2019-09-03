@@ -2,14 +2,8 @@
 
     <div class="card-columns">
         <div class="card w-75" v-for="item in items">
-            <div class="text-center"><img v-bind:src="item.imageUrl" class="card-img-top" alt="..."></div>
-            <div class="card-body">
-                <h5 class="card-title">{{item.productName}}</h5>
-                <p class="card-text">{{item.itemNo}} (Stock: {{item.invQty}})</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
+            <itembox :item="item"></itembox>
         </div>
-
     </div>
 </div>
 

@@ -1,6 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.App.EngineConfigs;
 using SyncSoft.StylesDelivered.Domain.Product;
+using SyncSoft.StylesDelivered.Domain.ShoppingCart;
 using SyncSoft.StylesDelivered.Domain.User;
 
 namespace SyncSoft.App
@@ -17,6 +18,7 @@ namespace SyncSoft.App
                 {
                     ObjectContainer.Register<IProductService, ProductService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserService, UserService>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IShoppingCartService, ShoppingCartService>(LifeCycleEnum.Singleton);
                 };
             }
 

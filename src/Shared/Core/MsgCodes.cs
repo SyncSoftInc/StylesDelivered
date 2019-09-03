@@ -10,5 +10,6 @@ namespace SyncSoft.StylesDelivered
         public const string SaveFileToCloudFailed = nameof(SaveFileToCloudFailed);
         public const string DeleteFileOnCloudFailed = nameof(DeleteFileOnCloudFailed);
         public const string SecurityCheckFailed = nameof(SecurityCheckFailed);
+        public const string CreateShoppingCartFailed = nameof(CreateShoppingCartFailed);
     }
 }
