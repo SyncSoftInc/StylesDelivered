@@ -59,23 +59,30 @@ VALUES
 
         public Task<string> InsertItemAsync(ShoppingCartItemDTO dto)
         {
-            return base.TryExecuteAsync(@"INSERT INTO StylesDelivered.ShoppingCartItem
-(Cart_ID,
-ItemNo,
-Status,
-Qty,
-AddedOnUtc)
-VALUES
-(@Cart_ID
-@ItemNo
-@Status
-@Qty
-@AddedOnUtc)", dto);
+            return base.TryExecuteAsync(@"INSERT INTO ShoppingCartItem
+(
+  Cart_ID
+, ItemNo
+, Status
+, Qty
+, AddedOnUtc
+)VALUES(
+  @Cart_ID
+, @ItemNo
+, @Status
+, @Qty
+, @AddedOnUtc
+)", dto);
         }
 
         public Task<ShoppingCartItemDTO> GetItemAsync(Guid cartId, string itemNo)
         {
-            return base.QueryFirstOrDefaultAsync<ShoppingCartItemDTO>("SELECT * FROM ShoppingCartItem WHERE Cart_ID = @Cart_ID AND ItemNo = @ItemNo", new { ID = cartId, ItemNo = itemNo });
+            return base.QueryFirstOrDefaultAsync<ShoppingCartItemDTO>("SELECT * FROM ShoppingCartItem WHERE Cart_ID = @Cart_ID AND ItemNo = @ItemNo",
+                new
+                {
+                    Cart_ID = cartId,
+                    ItemNo = itemNo
+                });
         }
 
         public Task<string> UpdateItemStatusAsync(ShoppingCartItemDTO dto)
@@ -94,6 +101,5 @@ VALUES
         }
 
         #endregion
-
     }
 }

@@ -3,7 +3,7 @@ using SyncSoft.StylesDelivered.DTO.ShoppingCart;
 
 namespace SyncSoft.StylesDelivered.Command.Product
 {
-    public class ChangeItemStatusCommand : RequestCommand
+    public class SaveForLaterCommand : RequestCommand
     {
         public ShoppingCartItemDTO Item { get; set; }
     }

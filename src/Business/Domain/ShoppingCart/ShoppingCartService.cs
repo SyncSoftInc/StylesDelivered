@@ -76,10 +76,21 @@ namespace SyncSoft.StylesDelivered.Domain.ShoppingCart
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  ChangeItemStatus  -
+        #region -  SaveForLater  -
 
-        public Task<string> ChangeItemStatusAsync(ChangeItemStatusCommand cmd)
+        public Task<string> SaveForLaterAsync(SaveForLaterCommand cmd)
         {
+            cmd.Item.Status = ShoppingCartItemStatusEnum.SavedForLater;
+            return ShoppingCartDAL.UpdateItemStatusAsync(cmd.Item);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  ShopNow  -
+
+        public Task<string> ShopNowAsync(SaveForLaterCommand cmd)
+        {
+            cmd.Item.Status = ShoppingCartItemStatusEnum.Active;
             return ShoppingCartDAL.UpdateItemStatusAsync(cmd.Item);
         }
 
