@@ -15,6 +15,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyncSoft.StylesDelivered.DataFacade", "DataAccess\DataFacade\SyncSoft.StylesDelivered.DataFacade.csproj", "{E16363C2-779E-474B-8CF4-CE66B8A94B6C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{6481E629-F19B-4442-9124-AFE6A1B2E235}"
+	ProjectSection(SolutionItems) = preProject
+		Business\Domain\EngineExtensions.cs = Business\Domain\EngineExtensions.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{EE84E622-46E4-4A3D-BA01-C1A42F01C31B}"
 EndProject

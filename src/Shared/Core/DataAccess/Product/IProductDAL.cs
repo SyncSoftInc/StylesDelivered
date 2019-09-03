@@ -9,7 +9,7 @@ namespace SyncSoft.StylesDelivered.DataAccess.Product
     {
         Task<string> InsertItemAsync(ProductItemDTO dto);
         Task<string> UpdateItemAsync(ProductItemDTO dto);
-
+        Task<string> UpdateItemImageAsync(ProductItemDTO dto);
         Task<string> DeleteProductItemAsync(string itemNo);
 
         Task<PagedList<ProductItemDTO>> GetProductItemsAsync(GetProductsQuery query);

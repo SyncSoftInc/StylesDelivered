@@ -18,3 +18,8 @@ main > .container {
 code {
     font-size: 80%;
 }
+
+.pic_m{
+    max-width:300px;
+    max-height:300px;
+}

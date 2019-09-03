@@ -61,8 +61,15 @@ VALUES(@ItemNo, @ProductName, @Description, @ImageUrl, @InvQty, @CreatedOnUtc)",
 UPDATE ProductItem SET 
 ProductName = @ProductName
 , Description = @Description
-, ImageUrl = @ImageUrl
 , InvQty = @InvQty
+WHERE ItemNo = @ItemNo", dto);
+        }
+
+        public Task<string> UpdateItemImageAsync(ProductItemDTO dto)
+        {
+            return base.TryExecuteAsync(@"
+UPDATE ProductItem SET 
+ImageUrl = @ImageUrl
 WHERE ItemNo = @ItemNo", dto);
         }
     }
