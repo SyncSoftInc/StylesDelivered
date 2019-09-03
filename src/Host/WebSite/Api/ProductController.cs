@@ -60,6 +60,14 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         public Task<string> DeleteItemAsync(DeleteProductItemCommand cmd)
             => base.RequestAsync(cmd);
 
+        /// <summary>
+        /// Upadte Item
+        /// </summary>
+        [HttpPost("api/product/upload")]
+        public Task<string> UploadImageAsync()
+        {
+            return Task.FromResult(MsgCodes.SUCCESS);
+        }
         #endregion
         // *******************************************************************************************************************************
         #region -  GetProducts  -

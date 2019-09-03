@@ -1,5 +1,6 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.App.Securities;
+using SyncSoft.StylesDelivered.Command.Product;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Storage;
@@ -36,7 +37,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> UpdateItemAsync(ProductItemDTO dto)
         {
-            await UploadImageAsync(dto.ImageUrl).ConfigureAwait(false);
+            await UploadImageAsync(new UpdateProductItemCommand { ProductItem = dto }).ConfigureAwait(false);
             dto.ImageUrl = $"p/{DateTime.UtcNow:yyyy'/'MM'/'dd}/{dto.ImageUrl}";
             dto.CreatedOnUtc = DateTime.UtcNow;
 
@@ -50,13 +51,13 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  Utilities  -
+        #region -  UploadImageAsync  -
 
-        private async Task<string> UploadImageAsync(string cmd)
+        private async Task<string> UploadImageAsync(UpdateProductItemCommand cmd)
         {
-            var sha1 = cmd.Data.ToSha1String();
+            var sha1 = cmd.PictureData.ToSha1String();
 
-            await Storage.SaveAsync($"p/{DateTime.Now:yyyy'/'mm'/'dd}/{sha1}.jpg", cmd.Data).ConfigureAwait(false);
+            return await Storage.SaveAsync($"p/{DateTime.Now:yyyy'/'mm'/'dd}/{sha1}.jpg", cmd.PictureData).ConfigureAwait(false);
         }
 
         #endregion

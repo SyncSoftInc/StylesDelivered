@@ -8,20 +8,20 @@
         </ol>
     </nav>
 
-    <FORM class="dropzone dz-clickable needsclick" id="mydropzone" action="/upload">
-        <DIV class="dz-message needsclick">
+    <form class="dropzone dz-clickable needsclick" id="mydropzone" action="/api/product/upload">
+        <div class="dz-message needsclick">
             Drop files here or click to upload.<BR>
-            <SPAN class="note needsclick">
+            <span class="note needsclick">
                 (This is just a demo dropzone. Selected
                 files are <STRONG>not</STRONG> actually uploaded.)
-            </SPAN>
-        </DIV>
-    </FORM>
+            </span>
+        </div>
+    </form>
     <br>
 
     <form onsubmit="return saveVM.save();">
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-6" id="previewContainer">
                 <img id='productItemImg' v-bind:src="productItem.imageUrl" style="width:300px;height:300px;" />
             </div>
             <div class="form-group col-md-6">
@@ -43,6 +43,10 @@
     </form>
 </div>
 
+
+@*<div class="dz-image" id="preview"><img data-dz-thumbnail style="width:300px;height:300px;" /></div>*@
+
+
 <style>
     .dropzone, .dropzone * {
         box-sizing: border-box !important;
@@ -59,5 +63,5 @@
 </style>
 
 @section Scripts{
-    <partial name="Script" model='"admin/product/save"' />
+<partial name="Script" model='"admin/product/save"' />
 }

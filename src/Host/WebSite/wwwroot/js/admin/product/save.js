@@ -56,7 +56,9 @@ Dropzone.autoDiscover = false;
 var dropzone = new Dropzone('#mydropzone', {
     parallelUploads: 1,
     //autoProcessQueue: false,
-    //addRemoveLinks: true,
+    addRemoveLinks: true,
+    dictResponseError: 'Error uploading file!',
+    //previewsContainer: false,
     maxFilesize: 1,
     dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg">Drop files to upload</span> <span>&nbsp&nbsp<h4 class="display-inline"> (Or Click)</h4></span>',
     dictResponseError: 'Error uploading file!',
@@ -64,10 +66,10 @@ var dropzone = new Dropzone('#mydropzone', {
     init: function () {
         var myDropzone = this;
 
-        //myDropzone.on("addedfile", function (file) {
-        //    //var image = $("#dz-image").src();
-        //    //$("#productItemImg").src(file);
-        //});
+        myDropzone.on("addedfile", function (file) {
+            //var image = $("#dz-image").src();
+            //$("#productItemImg").src(file);
+        });
 
         //myDropzone.on("sending", function (file, xhr, formData) {
         //    // post extra data
@@ -78,9 +80,9 @@ var dropzone = new Dropzone('#mydropzone', {
         //    formData.append('PostData[' + file.name + ']', JSON.stringify(postData));
         //});
 
-        myDropzone.on("queuecomplete", function (progress) {
-            var image = $(".dz-image").find("img")[0].src;
-            $("#productItemImg").src = image;
-        });
+        //myDropzone.on("queuecomplete", function (progress) {
+        //    var image = $(".dz-image").find("img")[0].src;
+        //    $("#productItemImg").src = image;
+        //});
     }
 });
