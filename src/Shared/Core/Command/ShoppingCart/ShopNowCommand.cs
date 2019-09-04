@@ -1,9 +1,9 @@
 ﻿using SyncSoft.App.Messaging;
 using SyncSoft.StylesDelivered.DTO.ShoppingCart;
 
-namespace SyncSoft.StylesDelivered.Command.Product
+namespace SyncSoft.StylesDelivered.Command.ShoppingCart
 {
-    public class ChangeItemStatusCommand : RequestCommand
+    public class ShopNowCommand : RequestCommand
     {
         public ShoppingCartItemDTO Item { get; set; }
     }

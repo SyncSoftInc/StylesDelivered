@@ -1,5 +1,5 @@
 ﻿using SyncSoft.App.Components;
-using SyncSoft.StylesDelivered.Command.Product;
+using SyncSoft.StylesDelivered.Command.ShoppingCart;
 using SyncSoft.StylesDelivered.DataAccess.ShoppingCart;
 using SyncSoft.StylesDelivered.DTO.ShoppingCart;
 using SyncSoft.StylesDelivered.Enum.ShoppingCart;
@@ -42,6 +42,8 @@ namespace SyncSoft.StylesDelivered.Domain.ShoppingCart
 
         public async Task<string> AddItemAsync(AddItemCommand cmd)
         {
+            cmd.Item.Cart_ID = cmd.Identity.UserID();   // 防止跨购物车攻击
+
             var dto = await ShoppingCartDAL.GetItemAsync(cmd.Item.Cart_ID, cmd.Item.ItemNo).ConfigureAwait(false);
             if (dto.IsNull())
             {
@@ -62,6 +64,7 @@ namespace SyncSoft.StylesDelivered.Domain.ShoppingCart
 
         public Task<string> RemoveItemAsync(RemoveItemCommand cmd)
         {
+            cmd.Item.Cart_ID = cmd.Identity.UserID();   // 防止跨购物车攻击
             return ShoppingCartDAL.DeleteItemAsync(cmd.Item);
         }
 
@@ -71,15 +74,29 @@ namespace SyncSoft.StylesDelivered.Domain.ShoppingCart
 
         public Task<string> ChangeItemQtyAsync(ChangeItemQtyCommand cmd)
         {
+            cmd.Item.Cart_ID = cmd.Identity.UserID();   // 防止跨购物车攻击
             return ShoppingCartDAL.UpdateItemQtyAsync(cmd.Item);
         }
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  ChangeItemStatus  -
+        #region -  SaveForLater  -
 
-        public Task<string> ChangeItemStatusAsync(ChangeItemStatusCommand cmd)
+        public Task<string> SaveForLaterAsync(SaveForLaterCommand cmd)
         {
+            cmd.Item.Cart_ID = cmd.Identity.UserID();   // 防止跨购物车攻击
+            cmd.Item.Status = ShoppingCartItemStatusEnum.SavedForLater;
+            return ShoppingCartDAL.UpdateItemStatusAsync(cmd.Item);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  ShopNow  -
+
+        public Task<string> ShopNowAsync(SaveForLaterCommand cmd)
+        {
+            cmd.Item.Cart_ID = cmd.Identity.UserID();   // 防止跨购物车攻击
+            cmd.Item.Status = ShoppingCartItemStatusEnum.Active;
             return ShoppingCartDAL.UpdateItemStatusAsync(cmd.Item);
         }
 

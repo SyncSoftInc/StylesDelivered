@@ -14,6 +14,9 @@ var homeVM = new Vue({
 
             return $.get("/api/product/items?length=" + self.pageSize + "&start=" + cursor, function (dt) {
                 self.totalPage = dt.totalPage;
+                $.each(dt.data, function (i, x) {
+                    x.imageUrl = $.pic(x.imageUrl);
+                });
                 self.items = self.items.concat(dt.data);
             });
         },
