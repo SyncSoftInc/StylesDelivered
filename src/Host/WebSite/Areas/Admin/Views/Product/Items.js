@@ -30,7 +30,6 @@ $(function () {
                 width: 20,
                 orderable: false,
                 render: function (id, display, item) {
-                    //return '<router-link class="btn btn-sm btn-primary" :to="{ name: "Save", params: { itemNo: ' + item['itemno'] + '}}">Edit</router-link>';
                     return '<a class="btn btn-sm btn-primary" href="/admin/product/Save/' + item['itemNo'] + '">Edit</a>';
                 }
             }

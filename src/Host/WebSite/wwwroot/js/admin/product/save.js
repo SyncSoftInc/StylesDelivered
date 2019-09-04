@@ -1,6 +1,7 @@
 var saveVM = new Vue({
     el: "#app",
     data: {
+        isNew: true,
         itemNo: "",
         title: "New",
         productItem: {
@@ -10,7 +11,8 @@ var saveVM = new Vue({
     methods: {
         loadData: function () {
             var self = this;
-            self.title = self.itemNo != "" ? "Edit" : "New";
+            self.isNew = self.itemNo == "";
+            self.title = self.isNew ? "Edit" : "New";
 
             if (self.itemNo != "") {
                 $.get("/api/product/item/" + self.itemNo, function (rs) {
@@ -31,7 +33,11 @@ var saveVM = new Vue({
                 },
                 success: function (rs) {
                     if ($.isSuccess(rs)) {
-                        bootbox.alert("Save successfully.");
+                        self.itemNo = self.productItem.itemNo;
+                        bootbox.alert("Save successfully.", function () {
+                            window.location = "/admin/product/Save/" + self.itemNo;
+                        });
+
                     }
                     else {
                         bootbox.alert(rs);
