@@ -63,15 +63,21 @@ $.getWindowHeight = function () {
 
 $.pic = function (url, width = 350, height = 350) {
     return url + "?x-oss-process=image/resize,m_lfit,h_" + height + ",w_" + width;
-}
+};
 
 Vue.component("itembox", {
     props: ["item"],
-    template: '<div>\
-<div class="text-center"><img v-bind:src="item.imageUrl" class="card-img-top" alt="..."></div>\
-<div class="card-body">\
-<h5 class="card-title">{{item.productName}}</h5>\
-<p class="card-text">{{item.itemNo}} (Stock: {{item.invQty}})</p>\
-<a href="#" class="btn btn-primary">Go somewhere</a>\
-</div>\
-</div>'});
+    template: '#item-box',
+    methods: {
+        addToCart: function (item) {
+            $.post("/api/shoppingcart/item", {
+                Item: {
+                    ItemNo: item.ItemNo,
+                    Qty: item.Qty
+                }
+            }, function (rs) {
+
+            });
+        }
+    }
+});

@@ -1,4 +1,4 @@
-﻿using SyncSoft.StylesDelivered.Command.Product;
+﻿using SyncSoft.StylesDelivered.Command.ShoppingCart;
 using SyncSoft.StylesDelivered.DTO.ShoppingCart;
 using System;
 using System.Threading.Tasks;
