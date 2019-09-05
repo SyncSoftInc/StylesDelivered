@@ -1,7 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.App.EngineConfigs;
-using SyncSoft.StylesDelivered.DataAccess.Product;
-using SyncSoft.StylesDelivered.Redis.Product.Inventory;
+using SyncSoft.StylesDelivered.DataAccess.Inventory;
+using SyncSoft.StylesDelivered.Redis.Inventory;
 using System;
 
 namespace SyncSoft.App
@@ -20,7 +20,7 @@ namespace SyncSoft.App
                 configurator.Engine.Starting += (o, e) =>
                 {
                     ObjectContainer.Register<IInventoryDB>(() => new InventoryDB(options.DBConnStrName), LifeCycleEnum.Singleton);
-                    ObjectContainer.Register<IInventoryQueryDAL, InventoryQueryDAL>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IInventoryDAL, InventoryQueryDAL>(LifeCycleEnum.Singleton);
                 };
             }
 

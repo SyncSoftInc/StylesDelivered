@@ -1,6 +1,7 @@
 ﻿using SyncSoft.ECP.DTOs;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Query.Product;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.DataAccess.Product
@@ -14,5 +15,7 @@ namespace SyncSoft.StylesDelivered.DataAccess.Product
 
         Task<PagedList<ProductItemDTO>> GetProductItemsAsync(GetProductsQuery query);
         Task<ProductItemDTO> GetProductItemAsync(string itemNo);
+
+        Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories);
     }
 }

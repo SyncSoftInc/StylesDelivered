@@ -1,6 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.StylesDelivered.Command.ShoppingCart;
 using SyncSoft.StylesDelivered.DataAccess.ShoppingCart;
+using SyncSoft.StylesDelivered.Domain.Inventory;
 using SyncSoft.StylesDelivered.DTO.ShoppingCart;
 using SyncSoft.StylesDelivered.Enum.ShoppingCart;
 using System;
@@ -15,6 +16,9 @@ namespace SyncSoft.StylesDelivered.Domain.ShoppingCart
 
         private static readonly Lazy<IShoppingCartDAL> _lazyShoppingCartDAL = ObjectContainer.LazyResolve<IShoppingCartDAL>();
         private IShoppingCartDAL ShoppingCartDAL => _lazyShoppingCartDAL.Value;
+
+        private static readonly Lazy<IItemInventoryFactory> _lazyItemInventoryFactory = ObjectContainer.LazyResolve<IItemInventoryFactory>();
+        private IItemInventoryFactory ItemInventoryFactory => _lazyItemInventoryFactory.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -44,8 +48,14 @@ namespace SyncSoft.StylesDelivered.Domain.ShoppingCart
         {
             cmd.Item.Cart_ID = cmd.Identity.UserID();   // 防止跨购物车攻击
 
-            var dto = await ShoppingCartDAL.GetItemAsync(cmd.Item.Cart_ID, cmd.Item.ItemNo).ConfigureAwait(false);
-            if (dto.IsNull())
+            // 库存检查
+            var itemInventory = ItemInventoryFactory.Create(cmd.Item.ItemNo);
+            var isAvailable = itemInventory.IsAvailable(cmd.Item.Qty);
+            if (!isAvailable) return MsgCodes.ShortageOfInventory;
+            // ^^^^^^^^^^
+
+            var itemDTO = await ShoppingCartDAL.GetItemAsync(cmd.Item.Cart_ID, cmd.Item.ItemNo).ConfigureAwait(false);
+            if (itemDTO.IsNull())
             {
                 cmd.Item.Status = ShoppingCartItemStatusEnum.Active;
                 cmd.Item.AddedOnUtc = DateTime.UtcNow;
@@ -53,8 +63,8 @@ namespace SyncSoft.StylesDelivered.Domain.ShoppingCart
             }
             else
             {
-                dto.Qty += cmd.Item.Qty;
-                return await ShoppingCartDAL.UpdateItemQtyAsync(dto).ConfigureAwait(false);
+                itemDTO.Qty += cmd.Item.Qty;
+                return await ShoppingCartDAL.UpdateItemQtyAsync(itemDTO).ConfigureAwait(false);
             }
         }
 
