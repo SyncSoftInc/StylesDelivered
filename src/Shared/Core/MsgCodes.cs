@@ -12,7 +12,7 @@ namespace SyncSoft.StylesDelivered
         public const string SecurityCheckFailed = nameof(SecurityCheckFailed);
         public const string CreateShoppingCartFailed = nameof(CreateShoppingCartFailed);
 
-        // Validation
+        // Product Validation
         public const string ItemNoCannotBeEmpty = nameof(ItemNoCannotBeEmpty);
         public const string ProductNameCannotBeEmpty = nameof(ProductNameCannotBeEmpty);
         public const string InvalidItemNoLength = nameof(InvalidItemNoLength);
@@ -20,5 +20,11 @@ namespace SyncSoft.StylesDelivered
         public const string InvalidDescriptionLength = nameof(InvalidDescriptionLength);
         public const string InvalidImageUrlLength = nameof(InvalidImageUrlLength);
         public const string InvalidInventoryQuantity = nameof(InvalidInventoryQuantity);
+
+        // User Validation
+        public const string IDCannotBeEmpty = nameof(IDCannotBeEmpty);
+        public const string InvalidPhoneLength = nameof(InvalidPhoneLength);
+        public const string InvalidEmailLength = nameof(InvalidEmailLength);
+
     }
 }

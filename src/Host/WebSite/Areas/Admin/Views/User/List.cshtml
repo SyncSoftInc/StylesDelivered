@@ -1,0 +1,29 @@
+﻿<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="~/">Home</a></li>
+        <li class="breadcrumb-item"><a>Admin</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Users</li>
+    </ol>
+</nav>
+
+<div class="mb-2">
+    <a class="btn btn-primary" asp-action="Save">New</a>
+</div>
+
+<hr />
+
+<table id="mainTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Roles</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+@section Scripts{
+    <partial name="Script" model='"admin/user/list"' />
+}

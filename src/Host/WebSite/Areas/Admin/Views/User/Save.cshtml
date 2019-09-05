@@ -1,0 +1,68 @@
+﻿<div id="app">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="~/">Home</a></li>
+            <li class="breadcrumb-item"><a>Admin</a></li>
+            <li class="breadcrumb-item"><a asp-action="Items">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page" v-text="title"></li>
+        </ol>
+    </nav>
+
+    <form onsubmit="return saveVM.save();">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-4 d-flex flex-wrap align-content-center justify-content-center">
+                    <div v-if="isNew">
+                        <h6 class="text-center align-middle">Save to Upload Image</h6>
+                    </div>
+                    <div v-else>
+                        <img class="rounded img-fluid pointer" data-toggle="modal" data-target="#uploadModal"
+                             v-bind:src="productItem.imageUrl" v-bind:alt="productItem.productName" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-8 d-flex flex-wrap align-content-bottom">
+                    <label for="itemNo">ItemNo</label>
+                    <input type="text" class="form-control" v-model="productItem.itemNo" placeholder="ItemNo" v-bind:readonly="!isNew" required>
+                    <label for="productName">ProductName</label>
+                    <input type="text" class="form-control" v-model="productItem.productName" placeholder="ProductName" required>
+                    <label for="invQty">Inv Qty</label>
+                    <input class="form-control" type="number" min="0" v-model="productItem.invQty">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" v-model="productItem.description" rows="4" placeholder="Description"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary float-right">Save</button>
+        </div>
+    </form>
+</div>
+
+<!-- Upload Modal START-->
+<div class="modal fade" id="uploadModal" aria-labelledby="uploadModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <!-- Modal Content START-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Upload Image
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <form novalidate="novalidate" class="dropzone" id="mydropzone" action="/api/product/upload"></form>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="uploadBtn" class="btn btn-primary" disabled>
+                    <i class="fa fa-upload"></i>
+                    Upload
+                </button>
+            </div>
+        </div>
+        <!-- Modal Content END-->
+    </div>
+</div>
+<!-- Upload Modal END-->
+@section Scripts{
+<partial name="Script" model='"admin/product/save"' />
+}

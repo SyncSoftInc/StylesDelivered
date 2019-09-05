@@ -1,6 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
+using SyncSoft.StylesDelivered.DTO.User;
 using System;
 using System.Threading.Tasks;
 
@@ -49,8 +50,27 @@ namespace SyncSoft.StylesDelivered.Domain.User
         // *******************************************************************************************************************************
         #region -  User  -
 
+        public async Task<string> CreateProfileAsync(CreateUserProfileCommand cmd)
+        {
+            var msgCode = CheckUserDTO(cmd.User);
+            if (!msgCode.IsSuccess()) return msgCode;
+            // ^^^^^^^^^^
+
+            var user = await UserDAL.GetUserAsync(cmd.User.ID).ConfigureAwait(false);
+            if (user.IsNotNull())
+            {
+                return "User already exists.";
+            }
+
+            return await UserDAL.InsertUserAsync(cmd.User).ConfigureAwait(false);
+        }
+
         public async Task<string> SaveProfileAsync(SaveUserProfileCommand cmd)
         {
+            var msgCode = CheckUserDTO(cmd.User);
+            if (!msgCode.IsSuccess()) return msgCode;
+            // ^^^^^^^^^^
+
             if (cmd.Identity.UserID() != cmd.User.ID) return MsgCodes.SecurityCheckFailed;
             // ^^^^^^^^^^   必须本人
 
@@ -62,6 +82,25 @@ namespace SyncSoft.StylesDelivered.Domain.User
             user.Phone = cmd.User.Phone;
 
             return await UserDAL.UpdateUserProfileAsync(user).ConfigureAwait(false);
+        }
+
+        public async Task<string> DeleteProfileAsync(DeleteUserProfileCommand cmd)
+        {
+            return await UserDAL.DeleteUserAsync(cmd.ID).ConfigureAwait(false);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  Utilities  -
+
+        private string CheckUserDTO(UserDTO dto)
+        {
+            if (dto.ID.IsNull()) return MsgCodes.IDCannotBeEmpty;
+
+            if (dto.Phone.IsNotNull() && dto.Phone.Length > 50) return MsgCodes.InvalidPhoneLength;
+            if (dto.Email.IsNotNull() && dto.Email.Length > 100) return MsgCodes.InvalidEmailLength;
+
+            return MsgCodes.SUCCESS;
         }
 
         #endregion

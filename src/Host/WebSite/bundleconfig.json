@@ -40,5 +40,17 @@
         "inputFiles": [
             "Areas/Admin/Views/Product/Items.js"
         ]
+    },
+    {
+        "outputFileName": "wwwroot/js/admin/user/list.js",
+        "inputFiles": [
+            "Areas/Admin/Views/User/List.js"
+        ]
+    },
+    {
+        "outputFileName": "wwwroot/js/admin/user/save.js",
+        "inputFiles": [
+            "Areas/Admin/Views/User/Save.js"
+        ]
     }
 ]

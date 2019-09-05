@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Consumer
 {
-    public class UserCommandConsumers : 
+    public class UserCommandConsumers :
           IConsumer<RemoveAddressCommand>
         , IConsumer<SaveAddressCommand>
+        , IConsumer<CreateUserProfileCommand>
         , IConsumer<SaveUserProfileCommand>
+        , IConsumer<DeleteUserProfileCommand>
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
@@ -38,9 +40,19 @@ namespace SyncSoft.StylesDelivered.Consumer
         // *******************************************************************************************************************************
         #region -  User  -
 
+        public async Task<object> HandleAsync(IContext<CreateUserProfileCommand> context)
+        {
+            return await UserService.CreateProfileAsync(context.Message).ConfigureAwait(false);
+        }
+
         public async Task<object> HandleAsync(IContext<SaveUserProfileCommand> context)
         {
             return await UserService.SaveProfileAsync(context.Message).ConfigureAwait(false);
+        }
+
+        public async Task<object> HandleAsync(IContext<DeleteUserProfileCommand> context)
+        {
+            return await UserService.DeleteProfileAsync(context.Message).ConfigureAwait(false);
         }
 
         #endregion

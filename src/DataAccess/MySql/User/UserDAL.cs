@@ -1,10 +1,13 @@
-﻿using SyncSoft.ECP.MySql;
+﻿using SyncSoft.ECP.DTOs;
+using SyncSoft.ECP.MySql;
 using SyncSoft.StylesDelivered.DataAccess;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.DTO.Common;
 using SyncSoft.StylesDelivered.DTO.User;
+using SyncSoft.StylesDelivered.Query.User;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.MySql.User
@@ -28,14 +31,9 @@ namespace SyncSoft.StylesDelivered.MySql.User
 VALUES(@ID, @Phone, @Email, @Status, @Roles)", user);
         }
 
-        public Task<UserDTO> GetUserAsync(Guid userId)
-        {
-            return base.QueryFirstOrDefaultAsync<UserDTO>("SELECT * FROM User WHERE ID = @UserID", new { UserID = userId });
-        }
-
         public Task<string> UpdateUserAsync(UserDTO user)
         {
-            throw new NotImplementedException();
+            return base.TryExecuteAsync(@"UPDATE User SET Email = @Email, Phone = @Phone, Status = @Status, Roles = @Roles WHERE ID = @ID", user);
         }
 
         public Task<string> UpdateUserProfileAsync(UserDTO user)
@@ -47,6 +45,35 @@ VALUES(@ID, @Phone, @Email, @Status, @Roles)", user);
         {
             return base.TryExecuteAsync("DELETE FROM User WHERE ID = @ID", new { ID = id });
         }
+
+        public Task<UserDTO> GetUserAsync(Guid userId)
+        {
+            return base.QueryFirstOrDefaultAsync<UserDTO>("SELECT * FROM User WHERE ID = @UserID", new { UserID = userId });
+        }
+
+        public Task<PagedList<UserDTO>> GetUsersAsync(GetUsersQuery query)
+        {
+            var where = new StringBuilder();
+
+            if (query.Keyword.IsPresent())
+            {
+                where.AppendFormat(" AND (ID LIKE '%{0}%' OR Email LIKE '%{0}%')", query.Keyword);
+            }
+
+            string orderBy = "ID";
+
+            switch (query.OrderBy.GetValueOrDefault())
+            {
+                case 1:
+                    orderBy = "Email";
+                    break;
+            }
+
+            orderBy += " " + query.SortDirection;
+
+            return base.GetPagedListAsync<UserDTO>(query.PageSize, query.PageIndex, "User", "*", where.ToString(), orderBy);
+        }
+
 
         #endregion
         // *******************************************************************************************************************************
