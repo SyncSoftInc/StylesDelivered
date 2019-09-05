@@ -10,5 +10,6 @@ namespace SyncSoft.StylesDelivered.DataAccess.Inventory
         Task<IDictionary<string, int>> GetItemInventoriesAsync(params string[] itemNos);
         //Task SetItemInventoriesAsync(params (string, int)[] inventories);
         void SetItemInventories(params (string, int)[] inventories);
+        Task CleanInventoriesAsync();
     }
 }

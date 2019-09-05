@@ -50,5 +50,16 @@ namespace SyncSoft.StylesDelivered.Redis.Inventory
             var data = inventories.Select(x => new KeyValuePair<string, object>(x.Item1, x.Item2)).ToArray();
             _db.HMSet(_Key, data);
         }
+
+        public async Task CleanInventoriesAsync()
+        {
+            var inventories = await this.GetItemInventoriesAsync().ConfigureAwait(false);
+            var items = inventories.Where(x => x.Value <= 0).Select(x => x.Key).ToArray();
+
+            if (items.IsPresent())
+            {
+                await _db.HDelAsync(_Key, items).ConfigureAwait(false);
+            }
+        }
     }
 }
