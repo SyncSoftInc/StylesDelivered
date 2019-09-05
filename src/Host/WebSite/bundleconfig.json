@@ -36,9 +36,9 @@
         ]
     },
     {
-        "outputFileName": "wwwroot/js/admin/product/items.js",
+        "outputFileName": "wwwroot/js/admin/product/index.js",
         "inputFiles": [
-            "Areas/Admin/Views/Product/Items.js"
+            "Areas/Admin/Views/Product/index.js"
         ]
     },
     {

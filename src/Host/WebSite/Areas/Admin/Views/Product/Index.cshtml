@@ -1,7 +1,7 @@
 ﻿<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="~/">Home</a></li>
-        <li class="breadcrumb-item"><a>Admin</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Admin</a></li>
         <li class="breadcrumb-item active" aria-current="page">Products</li>
     </ol>
 </nav>
@@ -25,5 +25,5 @@
 </table>
 
 @section Scripts{
-    <partial name="Script" model='"admin/product/items"' />
+    <partial name="Script" model='"admin/product/index"' />
 }

@@ -9,10 +9,14 @@ namespace SyncSoft.StylesDelivered.WebSite.Areas.Product.Controllers
         // *******************************************************************************************************************************
         #region -  Items  -
 
-        public IActionResult Items()
+        public IActionResult Index()
         {
             return View();
         }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  Save  -
 
         public IActionResult Save()
         {
