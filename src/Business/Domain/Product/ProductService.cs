@@ -1,9 +1,12 @@
 ﻿using SyncSoft.App;
 using SyncSoft.App.Components;
+using SyncSoft.App.Messaging;
 using SyncSoft.App.Securities;
 using SyncSoft.StylesDelivered.Command.Product;
+using SyncSoft.StylesDelivered.DataAccess.Inventory;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
+using SyncSoft.StylesDelivered.Event.Inventory;
 using SyncSoft.StylesDelivered.Storage;
 using System;
 using System.Threading.Tasks;
@@ -15,7 +18,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         // *******************************************************************************************************************************
         #region -  Field(s)  -
 
-        private const string _urlRoot = "https://eec.oss-us-west-1.aliyuncs.com/";
+        private const string _imageRoot = "https://eec.oss-us-west-1.aliyuncs.com/";
 
         #endregion
         // *******************************************************************************************************************************
@@ -26,6 +29,12 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         private static readonly Lazy<IStorage> _lazyStorage = ObjectContainer.LazyResolve<IStorage>();
         private IStorage Storage => _lazyStorage.Value;
+
+        private static readonly Lazy<IInventoryDAL> _lazyInventoryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
+        private IInventoryDAL InventoryDAL => _lazyInventoryDAL.Value;
+
+        private static readonly Lazy<IMessageDispatcher> _lazyMessageDispatcher = ObjectContainer.LazyResolve<IMessageDispatcher>();
+        private IMessageDispatcher MessageDispatcher => _lazyMessageDispatcher.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -53,7 +62,15 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             if (!msgCode.IsSuccess()) return msgCode;
             // ^^^^^^^^^^
 
-            return await ProductDAL.UpdateItemAsync(dto).ConfigureAwait(false);
+            msgCode = await ProductDAL.UpdateItemAsync(dto).ConfigureAwait(false);
+
+            if (msgCode.IsSuccess())
+            {
+                // 抛出库存更改事件
+                _ = MessageDispatcher.PublishAsync(new ItemInventoryChangedEvent(dto.ItemNo, dto.InvQty));
+            }
+
+            return msgCode;
         }
 
         public async Task<string> DeleteItemAsync(string itemNo)
@@ -75,11 +92,21 @@ namespace SyncSoft.StylesDelivered.Domain.Product
                 var msgCode = await Storage.SaveAsync(key, cmd.PictureData).ConfigureAwait(false);
                 if (!msgCode.IsSuccess()) return new MsgResult<ProductItemDTO>(MsgCodes.SaveFileToCloudFailed);
 
-                dto.ImageUrl = _urlRoot + key;
+                dto.ImageUrl = _imageRoot + key;
                 await ProductDAL.UpdateItemImageAsync(dto).ConfigureAwait(false);
             }
 
             return new MsgResult<ProductItemDTO>(dto);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  SyncInventoriesAsync  -
+
+        public async Task<string> SyncInventoriesAsync()
+        {
+            var inventories = await InventoryDAL.GetItemInventoriesAsync().ConfigureAwait(false);
+            return await ProductDAL.SetItemInventoriesAsync(inventories).ConfigureAwait(false);
         }
 
         #endregion

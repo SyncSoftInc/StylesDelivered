@@ -1,6 +1,6 @@
 ﻿using SyncSoft.App.Redis;
 
-namespace SyncSoft.StylesDelivered.Redis.Product.Inventory
+namespace SyncSoft.StylesDelivered.Redis.Inventory
 {
     public class InventoryDB : RedisDB, IInventoryDB
     {

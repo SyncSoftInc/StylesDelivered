@@ -1,10 +1,14 @@
-﻿using SyncSoft.ECP.DTOs;
+﻿using Dapper;
+using SyncSoft.ECP.DTOs;
 using SyncSoft.ECP.MySql;
 using SyncSoft.StylesDelivered.DataAccess;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Query.Product;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -71,6 +75,21 @@ WHERE ItemNo = @ItemNo", dto);
 UPDATE ProductItem SET 
 ImageUrl = @ImageUrl
 WHERE ItemNo = @ItemNo", dto);
+        }
+
+        public Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories)
+        {
+            var parameters = inventories.Select(x =>
+            {
+                var para = new DynamicParameters();
+
+                para.Add("ItemNo", x.Key, DbType.String);
+                para.Add("InvQty", x.Value, DbType.Int32);
+
+                return para;
+            }).ToArray();
+
+            return base.TryExecuteAsync("SP_SetItemInventory", parameters, commandType: CommandType.StoredProcedure);
         }
     }
 }
