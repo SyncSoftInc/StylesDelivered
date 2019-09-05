@@ -11,12 +11,12 @@
     methods: {
         loadData: function () {
             var self = this;
-            self.isNew = self.itemNo == "";
-            self.title = self.isNew ? "Edit" : "New";
+            self.isNew = $.isNW(self.itemNo);
+            self.title = !self.isNew ? "Edit" : "New";
 
-            if (self.itemNo != "") {
+            if (!$.isNW(self.itemNo)) {
                 $.get("/api/product/item/" + self.itemNo, function (rs) {
-                    rs.imageUrl = $.pic(rs.imageUrl);
+                    rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 100, 100) : $.pic(rs.imageUrl);
                     self.productItem = rs;
                 });
             }
@@ -37,7 +37,6 @@
                         bootbox.alert("Save successfully.", function () {
                             window.location = "/admin/product/Save/" + self.itemNo;
                         });
-
                     }
                     else {
                         bootbox.alert(rs);

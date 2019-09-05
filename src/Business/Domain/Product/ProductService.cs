@@ -33,6 +33,10 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> CreateItemAsync(ProductItemDTO dto)
         {
+            var msgCode = CheckItemDTO(dto);
+            if (!msgCode.IsSuccess()) return msgCode;
+            // ^^^^^^^^^^
+
             var existsItem = await ProductDAL.GetProductItemAsync(dto.ItemNo).ConfigureAwait(false);
             if (existsItem.IsNotNull())
             {
@@ -45,6 +49,10 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> UpdateItemAsync(ProductItemDTO dto)
         {
+            var msgCode = CheckItemDTO(dto);
+            if (!msgCode.IsSuccess()) return msgCode;
+            // ^^^^^^^^^^
+
             return await ProductDAL.UpdateItemAsync(dto).ConfigureAwait(false);
         }
 
@@ -72,6 +80,25 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             }
 
             return new MsgResult<ProductItemDTO>(dto);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  Utilities  -
+
+        private string CheckItemDTO(ProductItemDTO dto)
+        {
+            if (dto.ItemNo.IsNull()) return MsgCodes.ItemNoCannotBeEmpty;
+            if (dto.ProductName.IsNull()) return MsgCodes.ProductNameCannotBeEmpty;
+
+            if (dto.ItemNo.IsNotNull() && dto.ItemNo.Length > 20) return MsgCodes.InvalidItemNoLength;
+            if (dto.ProductName.IsNotNull() && dto.ProductName.Length > 50) return MsgCodes.InvalidProductNameLength;
+            if (dto.Description.IsNotNull() && dto.Description.Length > 1000) return MsgCodes.InvalidDescriptionLength;
+            if (dto.ImageUrl.IsNotNull() && dto.ImageUrl.Length > 200) return MsgCodes.InvalidImageUrlLength;
+
+            if (dto.InvQty < 0) return MsgCodes.InvalidInventoryQuantity;
+
+            return MsgCodes.SUCCESS;
         }
 
         #endregion

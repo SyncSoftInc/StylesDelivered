@@ -62,7 +62,12 @@ $.getWindowHeight = function () {
 };
 
 $.pic = function (url, width = 350, height = 350) {
-    return url + "?x-oss-process=image/resize,m_lfit,h_" + height + ",w_" + width;
+    if (!$.isNW(url)) {
+        return url + "?x-oss-process=image/resize,m_lfit,h_" + height + ",w_" + width;
+    }
+    else {
+        return "https://eec.oss-us-west-1.aliyuncs.com/r/nopic.png?x-oss-process=image/resize,m_lfit,h_" + height + ",w_" + width;
+    }
 };
 
 Vue.component("itembox", {

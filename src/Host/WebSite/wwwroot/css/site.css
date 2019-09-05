@@ -19,7 +19,16 @@ code {
     font-size: 80%;
 }
 
-.pic_m{
-    max-width:350px;
-    max-height:350px;
+.pic_m {
+    max-width: 350px;
+    max-height: 350px;
+}
+
+.pic_s {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.pointer {
+    cursor: pointer;
 }

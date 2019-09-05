@@ -5,6 +5,8 @@ namespace SyncSoft.StylesDelivered
 {
     public static class Utils
     {
+        public static readonly Guid Permission_AllowAdmin = new Guid("47dadb0c-3d3e-45bb-bf93-54c20b6b766d");
+
         private const string _space = " ";
 
         public static string RemoveExtraSpaces(string str)

@@ -11,5 +11,14 @@ namespace SyncSoft.StylesDelivered
         public const string DeleteFileOnCloudFailed = nameof(DeleteFileOnCloudFailed);
         public const string SecurityCheckFailed = nameof(SecurityCheckFailed);
         public const string CreateShoppingCartFailed = nameof(CreateShoppingCartFailed);
+
+        // Validation
+        public const string ItemNoCannotBeEmpty = nameof(ItemNoCannotBeEmpty);
+        public const string ProductNameCannotBeEmpty = nameof(ProductNameCannotBeEmpty);
+        public const string InvalidItemNoLength = nameof(InvalidItemNoLength);
+        public const string InvalidProductNameLength = nameof(InvalidProductNameLength);
+        public const string InvalidDescriptionLength = nameof(InvalidDescriptionLength);
+        public const string InvalidImageUrlLength = nameof(InvalidImageUrlLength);
+        public const string InvalidInventoryQuantity = nameof(InvalidInventoryQuantity);
     }
 }

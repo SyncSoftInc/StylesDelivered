@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using SyncSoft.App.Components;
-using SyncSoft.StylesDelivered.Command.Product;
+using SyncSoft.StylesDelivered.Command.ShoppingCart;
 using SyncSoft.StylesDelivered.DataAccess.ShoppingCart;
 using SyncSoft.StylesDelivered.Domain.ShoppingCart;
 using SyncSoft.StylesDelivered.DTO.ShoppingCart;
