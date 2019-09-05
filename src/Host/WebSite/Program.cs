@@ -1,4 +1,5 @@
 ﻿using SyncSoft.App;
+using SyncSoft.App.Securities;
 using SyncSoft.ECP.Quartz.Hosting;
 
 namespace SyncSoft.StylesDelivered.WebSite
@@ -11,6 +12,11 @@ namespace SyncSoft.StylesDelivered.WebSite
                 .UseEcpHostQuickSettings(o =>
                 {
                     o.ProjectName = "styd";
+
+                    o.ConfigECPSecurityComponentsOptions = a =>
+                    {
+                        a.CoreCertProviderType = typeof(ConfigurationCoreCertProvider);
+                    };
                 })
                 .UseMessageQueue()
                 .UseDefaultMessageComponents()
