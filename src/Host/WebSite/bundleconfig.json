@@ -42,9 +42,9 @@
         ]
     },
     {
-        "outputFileName": "wwwroot/js/admin/user/list.js",
+        "outputFileName": "wwwroot/js/admin/user/index.js",
         "inputFiles": [
-            "Areas/Admin/Views/User/List.js"
+            "Areas/Admin/Views/User/Index.js"
         ]
     },
     {
