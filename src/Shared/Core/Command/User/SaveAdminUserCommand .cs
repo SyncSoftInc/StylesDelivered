@@ -3,7 +3,7 @@ using SyncSoft.StylesDelivered.DTO.User;
 
 namespace SyncSoft.StylesDelivered.Command.User
 {
-    public class CreateUserProfileCommand : RequestCommand
+    public class SaveAdminUserCommand : RequestCommand
     {
         public UserDTO User { get; set; }
     }

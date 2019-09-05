@@ -12,6 +12,6 @@ namespace SyncSoft.StylesDelivered.DataAccess.User
     {
         Task<IList<AddressDTO>> GetUserAddressesAsync(Guid userId);
         Task<UserDTO> GetUserAsync(Guid userId);
-        Task<PagedList<UserDTO>> GetUserAsync(GetUsersQuery query);
+        Task<PagedList<UserDTO>> GetUsersAsync(GetUsersQuery query);
     }
 }

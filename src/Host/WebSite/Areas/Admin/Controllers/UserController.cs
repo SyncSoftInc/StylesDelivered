@@ -9,7 +9,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Areas.Product.Controllers
         // *******************************************************************************************************************************
         #region -  Items  -
 
-        public IActionResult List()
+        public IActionResult Index()
         {
             return View();
         }

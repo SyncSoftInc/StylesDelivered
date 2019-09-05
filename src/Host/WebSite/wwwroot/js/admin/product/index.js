@@ -56,7 +56,7 @@ $(function () {
                     type: 'DELETE',
                     success: function (rs) {
                         if ($.isSuccess(rs)) {
-                            window.location = "/admin/product/items";
+                            window.location = "/admin/product";
                         }
                         else {
                             bootbox.alert(rs);

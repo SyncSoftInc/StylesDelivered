@@ -1,7 +1,7 @@
 ﻿<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="~/">Home</a></li>
-        <li class="breadcrumb-item"><a>Admin</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Admin</a></li>
         <li class="breadcrumb-item active" aria-current="page">Users</li>
     </ol>
 </nav>
@@ -16,6 +16,7 @@
     <thead>
         <tr>
             <th>ID</th>
+            <th>Username</th>
             <th>Email</th>
             <th>Status</th>
             <th>Roles</th>
@@ -25,5 +26,5 @@
 </table>
 
 @section Scripts{
-    <partial name="Script" model='"admin/user/list"' />
+    <partial name="Script" model='"admin/user/index"' />
 }

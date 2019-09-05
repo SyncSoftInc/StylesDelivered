@@ -23,6 +23,8 @@ namespace SyncSoft.StylesDelivered
 
         // User Validation
         public const string IDCannotBeEmpty = nameof(IDCannotBeEmpty);
+        public const string UsernameCannotBeEmpty = nameof(UsernameCannotBeEmpty);
+        public const string InvalidUsernameLength = nameof(InvalidUsernameLength);
         public const string InvalidPhoneLength = nameof(InvalidPhoneLength);
         public const string InvalidEmailLength = nameof(InvalidEmailLength);
 

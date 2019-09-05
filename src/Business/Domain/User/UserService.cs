@@ -50,21 +50,6 @@ namespace SyncSoft.StylesDelivered.Domain.User
         // *******************************************************************************************************************************
         #region -  User  -
 
-        public async Task<string> CreateProfileAsync(CreateUserProfileCommand cmd)
-        {
-            var msgCode = CheckUserDTO(cmd.User);
-            if (!msgCode.IsSuccess()) return msgCode;
-            // ^^^^^^^^^^
-
-            var user = await UserDAL.GetUserAsync(cmd.User.ID).ConfigureAwait(false);
-            if (user.IsNotNull())
-            {
-                return "User already exists.";
-            }
-
-            return await UserDAL.InsertUserAsync(cmd.User).ConfigureAwait(false);
-        }
-
         public async Task<string> SaveProfileAsync(SaveUserProfileCommand cmd)
         {
             var msgCode = CheckUserDTO(cmd.User);
@@ -84,7 +69,41 @@ namespace SyncSoft.StylesDelivered.Domain.User
             return await UserDAL.UpdateUserProfileAsync(user).ConfigureAwait(false);
         }
 
-        public async Task<string> DeleteProfileAsync(DeleteUserProfileCommand cmd)
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  AdminUser  -
+
+        public async Task<string> CreateAdminUserAsync(CreateAdminUserCommand cmd)
+        {
+            var msgCode = CheckUserDTO(cmd.User);
+            if (!msgCode.IsSuccess()) return msgCode;
+            // ^^^^^^^^^^
+
+            // TODO: call passport account api
+
+            var user = await UserDAL.GetUserAsync(cmd.User.ID).ConfigureAwait(false);
+            if (user.IsNotNull())
+            {
+                return "User already exists.";
+            }
+
+            return await UserDAL.InsertUserAsync(cmd.User).ConfigureAwait(false);
+        }
+
+        public async Task<string> UpdateAdminUserAsync(SaveAdminUserCommand cmd)
+        {
+            var msgCode = CheckUserDTO(cmd.User);
+            if (!msgCode.IsSuccess()) return msgCode;
+            // ^^^^^^^^^^
+
+            var user = await UserDAL.GetUserAsync(cmd.User.ID).ConfigureAwait(false);
+            if (user.IsNull()) return MsgCodes.UserNotExists;
+            // ^^^^^^^^^^
+
+            return await UserDAL.UpdateUserAsync(cmd.User).ConfigureAwait(false);
+        }
+
+        public async Task<string> DeleteAdminUserAsync(DeleteAdminUserCommand cmd)
         {
             return await UserDAL.DeleteUserAsync(cmd.ID).ConfigureAwait(false);
         }
@@ -96,7 +115,9 @@ namespace SyncSoft.StylesDelivered.Domain.User
         private string CheckUserDTO(UserDTO dto)
         {
             if (dto.ID.IsNull()) return MsgCodes.IDCannotBeEmpty;
+            if (dto.Username.IsNull()) return MsgCodes.UsernameCannotBeEmpty;
 
+            if (dto.Username.IsNotNull() && dto.Username.Length > 50) return MsgCodes.InvalidUsernameLength;
             if (dto.Phone.IsNotNull() && dto.Phone.Length > 50) return MsgCodes.InvalidPhoneLength;
             if (dto.Email.IsNotNull() && dto.Email.Length > 100) return MsgCodes.InvalidEmailLength;
 

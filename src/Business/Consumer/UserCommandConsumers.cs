@@ -10,9 +10,10 @@ namespace SyncSoft.StylesDelivered.Consumer
     public class UserCommandConsumers :
           IConsumer<RemoveAddressCommand>
         , IConsumer<SaveAddressCommand>
-        , IConsumer<CreateUserProfileCommand>
         , IConsumer<SaveUserProfileCommand>
-        , IConsumer<DeleteUserProfileCommand>
+        , IConsumer<CreateAdminUserCommand>
+        , IConsumer<SaveAdminUserCommand>
+        , IConsumer<DeleteAdminUserCommand>
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
@@ -40,19 +41,28 @@ namespace SyncSoft.StylesDelivered.Consumer
         // *******************************************************************************************************************************
         #region -  User  -
 
-        public async Task<object> HandleAsync(IContext<CreateUserProfileCommand> context)
-        {
-            return await UserService.CreateProfileAsync(context.Message).ConfigureAwait(false);
-        }
-
         public async Task<object> HandleAsync(IContext<SaveUserProfileCommand> context)
         {
             return await UserService.SaveProfileAsync(context.Message).ConfigureAwait(false);
         }
 
-        public async Task<object> HandleAsync(IContext<DeleteUserProfileCommand> context)
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  AdminUser  -
+
+        public async Task<object> HandleAsync(IContext<CreateAdminUserCommand> context)
         {
-            return await UserService.DeleteProfileAsync(context.Message).ConfigureAwait(false);
+            return await UserService.CreateAdminUserAsync(context.Message).ConfigureAwait(false);
+        }
+
+        public async Task<object> HandleAsync(IContext<SaveAdminUserCommand> context)
+        {
+            return await UserService.UpdateAdminUserAsync(context.Message).ConfigureAwait(false);
+        }
+
+        public async Task<object> HandleAsync(IContext<DeleteAdminUserCommand> context)
+        {
+            return await UserService.DeleteAdminUserAsync(context.Message).ConfigureAwait(false);
         }
 
         #endregion

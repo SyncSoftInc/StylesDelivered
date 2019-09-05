@@ -11,8 +11,8 @@ namespace SyncSoft.StylesDelivered.DataAccess.User
     public interface IUserDAL
     {
         Task<string> InsertUserAsync(UserDTO user);
-        Task<string> UpdateUserProfileAsync(UserDTO user);
         Task<string> UpdateUserAsync(UserDTO user);
+        Task<string> UpdateUserProfileAsync(UserDTO user);
         Task<string> DeleteUserAsync(Guid id);
         Task<UserDTO> GetUserAsync(Guid userId);
         Task<PagedList<UserDTO>> GetUsersAsync(GetUsersQuery query);

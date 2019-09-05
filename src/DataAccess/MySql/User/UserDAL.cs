@@ -27,13 +27,15 @@ namespace SyncSoft.StylesDelivered.MySql.User
 
         public Task<string> InsertUserAsync(UserDTO user)
         {
-            return base.TryExecuteAsync(@"INSERT INTO User(ID, Phone, Email, Status, Roles)
-VALUES(@ID, @Phone, @Email, @Status, @Roles)", user);
+            return base.TryExecuteAsync(@"INSERT INTO User(ID, Username, Phone, Email, Status, Roles)
+VALUES(@ID, @Username, @Phone, @Email, @Status, @Roles)", user);
         }
 
         public Task<string> UpdateUserAsync(UserDTO user)
         {
-            return base.TryExecuteAsync(@"UPDATE User SET Email = @Email, Phone = @Phone, Status = @Status, Roles = @Roles WHERE ID = @ID", user);
+            return base.TryExecuteAsync(@"UPDATE User 
+SET Email = @Email, Username = @Username, Phone = @Phone, Status = @Status, Roles = @Roles 
+WHERE ID = @ID", user);
         }
 
         public Task<string> UpdateUserProfileAsync(UserDTO user)
@@ -57,7 +59,7 @@ VALUES(@ID, @Phone, @Email, @Status, @Roles)", user);
 
             if (query.Keyword.IsPresent())
             {
-                where.AppendFormat(" AND (ID LIKE '%{0}%' OR Email LIKE '%{0}%')", query.Keyword);
+                where.AppendFormat(" AND (Username LIKE '%{0}%' OR Email LIKE '%{0}%')", query.Keyword);
             }
 
             string orderBy = "ID";
@@ -65,6 +67,9 @@ VALUES(@ID, @Phone, @Email, @Status, @Roles)", user);
             switch (query.OrderBy.GetValueOrDefault())
             {
                 case 1:
+                    orderBy = "Username";
+                    break;
+                case 2:
                     orderBy = "Email";
                     break;
             }

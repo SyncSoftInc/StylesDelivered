@@ -3,7 +3,7 @@ using System;
 
 namespace SyncSoft.StylesDelivered.Command.User
 {
-    public class DeleteUserProfileCommand : RequestCommand
+    public class DeleteAdminUserCommand : RequestCommand
     {
         public Guid ID { get; set; }
     }

@@ -21,7 +21,7 @@ namespace SyncSoft.StylesDelivered.DataFacade.User
         public Task<UserDTO> GetUserAsync(Guid userId)
             => UserDAL.GetUserAsync(userId);
 
-        public Task<PagedList<UserDTO>> GetUserAsync(GetUsersQuery query)
+        public Task<PagedList<UserDTO>> GetUsersAsync(GetUsersQuery query)
             => UserDAL.GetUsersAsync(query);
     }
 }
