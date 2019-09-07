@@ -29,6 +29,7 @@ namespace SyncSoft.App
                 {
                     ObjectContainer.Register<IMasterDB>(() => new MasterDB(options.DBConnStrName), LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IProductDAL, ProductDAL>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IProductItemDAL, ProductItemDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserDAL, UserDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IShoppingCartDAL, ShoppingCartDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<ICommonDAL, CommonDAL>(LifeCycleEnum.Singleton);

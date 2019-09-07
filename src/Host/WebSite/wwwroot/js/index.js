@@ -12,7 +12,7 @@ var homeVM = new Vue({
 
             var cursor = (self.pageIndex - 1) * self.pageSize;
 
-            return $.get("/api/product/items?length=" + self.pageSize + "&start=" + cursor, function (dt) {
+            return $.get("/api/products?length=" + self.pageSize + "&start=" + cursor, function (dt) {
                 self.totalPage = dt.totalPage;
                 $.each(dt.data, function (i, x) {
                     x.imageUrl = $.pic(x.imageUrl);

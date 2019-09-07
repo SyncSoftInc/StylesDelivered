@@ -1,7 +1,6 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.ECP.DTOs;
 using SyncSoft.StylesDelivered.DataAccess.Product;
-using SyncSoft.StylesDelivered.Domain.Inventory;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Query.Product;
 using System;
@@ -17,33 +16,20 @@ namespace SyncSoft.StylesDelivered.DataFacade.Product
         private static readonly Lazy<IProductDAL> _lazyProductDAL = ObjectContainer.LazyResolve<IProductDAL>();
         private IProductDAL ProductDAL => _lazyProductDAL.Value;
 
-        private static readonly Lazy<IItemInventoryFactory> _lazyItemInventoryFactory = ObjectContainer.LazyResolve<IItemInventoryFactory>();
-        private IItemInventoryFactory ItemInventoryFactory => _lazyItemInventoryFactory.Value;
-
         #endregion
+        // *******************************************************************************************************************************
+        #region -  Get  -
 
-        public async Task<ProductItemDTO> GetItemAsync(string itemNo)
+        public async Task<ProductDTO> GetProductAsync(string asin)
         {
-            var dto = await ProductDAL.GetProductItemAsync(itemNo).ConfigureAwait(false);
-            FillInvQty(dto);
+            var dto = await ProductDAL.GetProductAsync(asin).ConfigureAwait(false);
             return dto;
         }
 
-        public async Task<PagedList<ProductItemDTO>> GetProductItemsAsync(GetProductsQuery query)
+        public async Task<PagedList<ProductDTO>> GetProductsAsync(GetProductsQuery query)
         {
-            var rs = await ProductDAL.GetProductItemsAsync(query).ConfigureAwait(false);
+            var rs = await ProductDAL.GetProductsAsync(query).ConfigureAwait(false);
             return rs;
-        }
-        // *******************************************************************************************************************************
-        #region -  FillInvQty  -
-
-        private void FillInvQty(ProductItemDTO dto)
-        {
-            if (dto.IsNotNull())
-            {
-                var inventory = ItemInventoryFactory.Create(dto.ItemNo);
-                dto.InvQty = inventory.Get();
-            }
         }
 
         #endregion

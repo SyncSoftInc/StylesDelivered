@@ -22,6 +22,7 @@ namespace SyncSoft.App
                 configurator.Engine.Starting += (o, e) =>
                 {
                     ObjectContainer.Register<IProductDF, ProductDF>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IProductItemDF, ProductItemDF>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserDF, UserDF>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IShoppingCartDF, ShoppingCartDF>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<ICommonDF, CommonDF>(LifeCycleEnum.Singleton);

@@ -27,55 +27,57 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         #region -  CURD  -
 
         /// <summary>
-        /// 创建Item
+        /// 创建Product
         /// </summary>
-        [HttpPost("api/product/item")]
-        public Task<string> CreateItemAsync(CreateProductItemCommand cmd) => base.RequestAsync(cmd);
+        [HttpPost("api/product")]
+        public Task<string> CreateItemAsync(CreateProductCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
-        /// Upadte Item
+        /// Upadte Product
         /// </summary>
-        [HttpPut("api/product/item")]
-        public Task<string> UpdateItemAsync(UpdateProductItemCommand cmd) => base.RequestAsync(cmd);
+        [HttpPut("api/product")]
+        public Task<string> UpdateItemAsync(UpdateProductCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
-        /// 获取Item
+        /// 删除Product
         /// </summary>
-        [HttpGet("api/product/item/{itemNo}")]
-        public Task<ProductItemDTO> GetItemAsync(string itemNo) => ProductDF.GetItemAsync(itemNo);
+        [HttpDelete("api/product/{asin}")]
+        public Task<string> DeleteItemAsync(DeleteProductCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
-        /// 删除Item
+        /// 获取Product
         /// </summary>
-        [HttpDelete("api/product/item/{itemNo}")]
-        public Task<string> DeleteItemAsync(DeleteProductItemCommand cmd) => base.RequestAsync(cmd);
+        [HttpGet("api/product/{asin}")]
+        public Task<ProductDTO> GetItemAsync(string asin) => ProductDF.GetProductAsync(asin);
 
         /// <summary>
-        /// Upadte Item Image
+        /// Upadte Product Image
         /// </summary>
         [HttpPost("api/product/upload")]
-        public Task<MsgResult<ProductItemDTO>> UploadImageAsync(UploadProductImageCommand cmd)
+        public Task<MsgResult<ProductDTO>> UploadImageAsync(UploadProductImageCommand cmd)
         {
             using (var stream = Request.Form.Files[0].OpenReadStream())
             {
-                var itemNo = Request.Form["PostData[ItemNo]"].ToString();
-                if (itemNo.IsNotNull())
+                var asin = Request.Form["PostData[ASIN]"].ToString();
+                if (asin.IsNotNull())
                 {
-                    cmd.ItemNo = itemNo;
+                    cmd.asin = asin;
                     cmd.PictureData = stream.ToBytes();
                 }
             }
 
-            return base.RequestAsync<UploadProductImageCommand, MsgResult<ProductItemDTO>>(cmd);
+            return base.RequestAsync<UploadProductImageCommand, MsgResult<ProductDTO>>(cmd);
         }
+
         #endregion
         // *******************************************************************************************************************************
         #region -  GetProducts  -
+
         /// <summary>
-        /// 获取分页Item数据
+        /// 获取分页Product数据
         /// </summary>
-        [HttpGet("api/product/items")]
-        public async Task<DataTables<ProductItemDTO>> GetProductsAsync(DataTableModel model)
+        [HttpGet("api/products")]
+        public async Task<DataTables<ProductDTO>> GetProductsAsync(DataTableModel model)
         {
             var query = new GetProductsQuery
             {
@@ -88,8 +90,8 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
             };
             query.SetContext(User.Identity);
 
-            var plist = await ProductDF.GetProductItemsAsync(query).ConfigureAwait(false);
-            return new DataTables<ProductItemDTO>(query.Draw, plist);
+            var plist = await ProductDF.GetProductsAsync(query).ConfigureAwait(false);
+            return new DataTables<ProductDTO>(query.Draw, plist);
         }
 
         #endregion
