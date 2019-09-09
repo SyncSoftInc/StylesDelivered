@@ -24,7 +24,7 @@ namespace SyncSoft.StylesDelivered.Consumer
         {
             var msg = context.Message;
 
-            var msgCode = await ProductService.RefreshItemsAsync(msg.ASIN);
+            var msgCode = await ProductService.RefreshItemsJsonAsync(msg.ASIN);
 
             return Task.FromResult<object>(msgCode);
         }

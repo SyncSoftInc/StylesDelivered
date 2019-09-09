@@ -53,7 +53,7 @@ $(function () {
             var self = this;
             var url = window.location.href;
             var last = url.substring(url.lastIndexOf('/') + 1);
-            if (last != "Save") self.product.asin = last;
+            if (last !== "Save") self.product.asin = last;
 
             self.loadData();
         }
@@ -65,7 +65,7 @@ $(function () {
             isNew: true,
             item: {
                 sku: null,
-                invQty: 0,
+                invQty: 0
             }
         },
         methods: {
@@ -145,7 +145,7 @@ $(function () {
             }
         ],
         columnDefs: [
-            { "className": "text-center", "targets": [-1] },
+            { "className": "text-center", "targets": [-1] }
         ],
         order: [[1, "DESC"]]
     });
@@ -211,7 +211,7 @@ $(function () {
                 if (myDropzone.files.length > 0) {
                     $('#uploadBtn').attr('disabled', false);
                 }
-                if (myDropzone.files[1] != null) {
+                if (myDropzone.files[1] !== null) {
                     myDropzone.removeFile(myDropzone.files[0]);
                 }
             });

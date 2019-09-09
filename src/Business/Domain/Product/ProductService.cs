@@ -1,12 +1,13 @@
 ﻿using SyncSoft.App;
 using SyncSoft.App.Components;
-using SyncSoft.App.Messaging;
+using SyncSoft.App.Json;
 using SyncSoft.App.Securities;
 using SyncSoft.StylesDelivered.Command.Product;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Storage;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Product
@@ -31,8 +32,8 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         private static readonly Lazy<IStorage> _lazyStorage = ObjectContainer.LazyResolve<IStorage>();
         private IStorage Storage => _lazyStorage.Value;
 
-        private static readonly Lazy<IMessageDispatcher> _lazyMessageDispatcher = ObjectContainer.LazyResolve<IMessageDispatcher>();
-        private IMessageDispatcher MessageDispatcher => _lazyMessageDispatcher.Value;
+        private static readonly Lazy<IJsonSerializer> _lazyJsonSerializer = ObjectContainer.LazyResolve<IJsonSerializer>();
+        private IJsonSerializer JsonSerializer => _lazyJsonSerializer.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -90,6 +91,29 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             }
 
             return new MsgResult<ProductDTO>(dto);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  RefreshItemsJson  -
+
+        public async Task<string> RefreshItemsJsonAsync(string asin)
+        {
+            var items = await ProductItemDAL.GetItemsAsync(asin).ConfigureAwait(false);
+            if (items.IsPresent())
+            {
+                var baseItems = items.Select(x => new ProductItemBaseDTO
+                {
+                    SKU = x.SKU,
+                    Color = x.Color,
+                    Size = x.Size,
+                });
+                var json = JsonSerializer.Serialize(baseItems);
+                var msgCode = await ProductDAL.UpdateItemsJsonAsync(asin, json).ConfigureAwait(false);
+                return msgCode;
+            }
+
+            return MsgCodes.SUCCESS;
         }
 
         #endregion

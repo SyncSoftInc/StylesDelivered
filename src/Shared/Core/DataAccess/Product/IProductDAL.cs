@@ -14,6 +14,7 @@ namespace SyncSoft.StylesDelivered.DataAccess.Product
 
         Task<ProductDTO> GetProductAsync(string asin);
         Task<PagedList<ProductDTO>> GetProductsAsync(GetProductsQuery query);
+        Task<string> UpdateItemsJsonAsync(string asin, string json);
 
         //Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories);
     }
