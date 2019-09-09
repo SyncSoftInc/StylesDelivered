@@ -52,6 +52,29 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
                 , new { SKU = sku, ASIN = asin });
         }
 
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  SetItemInventories  -
+
+        public Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories)
+        {
+            var parameters = inventories.Select(x =>
+            {
+                var para = new DynamicParameters();
+
+                para.Add("SKU", x.Key, DbType.String);
+                para.Add("InvQty", x.Value, DbType.Int32);
+
+                return para;
+            }).ToArray();
+
+            return base.TryExecuteAsync("SP_SetItemInventory", parameters, commandType: CommandType.StoredProcedure);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  GetItems  -
+
         public Task<PagedList<ProductItemDTO>> GetItemsAsync(GetProductItemsQuery query)
         {
             var where = new StringBuilder();
@@ -82,25 +105,6 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
         public Task<IList<ProductItemDTO>> GetItemsAsync(string productASIN)
         {
             return base.QueryListAsync<ProductItemDTO>("CALL SP_GetProductItems", new { ASIN = productASIN });
-        }
-
-        #endregion
-        // *******************************************************************************************************************************
-        #region -  SetItemInventories  -
-
-        public Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories)
-        {
-            var parameters = inventories.Select(x =>
-            {
-                var para = new DynamicParameters();
-
-                para.Add("SKU", x.Key, DbType.String);
-                para.Add("InvQty", x.Value, DbType.Int32);
-
-                return para;
-            }).ToArray();
-
-            return base.TryExecuteAsync("SP_SetItemInventory", parameters, commandType: CommandType.StoredProcedure);
         }
 
         #endregion

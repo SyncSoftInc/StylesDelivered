@@ -60,51 +60,57 @@ $(function () {
     });
 
     var itemVM = new Vue({
-        el: "#itemsModal",
+        el: "#itemModal",
         data: {
+            isNew: true,
             item: {
-                sku: null
+                sku: null,
+                invQty: 0,
             }
         },
         methods: {
             loadData: function () {
                 var self = this;
+                self.isNew = $.isNW(self.item.sku);
 
-                if (!$.isNW(self.item.sku)) {
+                if (!self.isNew) {
                     $.get("/api/product/item", { asin: saveVM.product.asin, sku: self.item.sku }, function (rs) {
                         self.item = rs;
                     });
                 }
             },
             save: function () {
-                //var self = this;
-                //var actionType = self.isNew ? 'POST' : 'PUT';
+                var self = this;
+                var actionType = self.isNew ? 'POST' : 'PUT';
 
-                //$.ajax({
-                //    url: '/api/product',
-                //    type: actionType,
-                //    data: {
-                //        Product: self.product
-                //    },
-                //    success: function (rs) {
-                //        if ($.isSuccess(rs)) {
-                //            bootbox.alert("Save successfully.", function () {
-                //                window.location = "/admin/product/Save/" + self.product.asin;
-                //            });
-                //        }
-                //        else {
-                //            bootbox.alert(rs);
-                //        }
-                //    }
-                //});
+                $.ajax({
+                    url: '/api/product/item',
+                    type: actionType,
+                    data: {
+                        ProductItem: self.item
+                    },
+                    success: function (rs) {
+                        if ($.isSuccess(rs)) {
+                            bootbox.alert("Save successfully.", function () {
+                                window.location = "/admin/product/Save/" + saveVM.product.asin;
+                            });
+                        }
+                        else {
+                            bootbox.alert(rs);
+                        }
+                    }
+                });
 
-                //return false;
+                return false;
+            },
+            show: function () {
+                bootbox.alert("aaa");
             }
         },
         beforeMount: function () {
             var self = this;
             self.item.asin = saveVM.product.asin;
-            self.loadData();
+            //self.loadData();
         }
     });
 
@@ -133,7 +139,7 @@ $(function () {
                 width: 120,
                 orderable: false,
                 render: function (id, display, item) {
-                    return '<button class="btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemsModal">Edit</a>' +
+                    return '<button class="editBtn btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemModal" data-id="' + item['sku'] + '">Edit</a>' +
                         '<button class="delBtn btn btn-sm btn-danger" type="button" data-id="' + item['asin'] + '">Delete</button>';
                 }
             }
@@ -144,6 +150,13 @@ $(function () {
         order: [[1, "DESC"]]
     });
 
+    $('#itemsTable').on('click', '.editBtn', function () {
+        var btn = $(this);
+        var sku = btn.data('id');
+        itemVM.item.sku = sku;
+        itemVM.loadData();
+    });
+
     $('#itemsTable').on('click', '.delBtn', function () {
         var btn = $(this);
         bootbox.confirm("Delete product?", function (confirm) {
@@ -151,11 +164,11 @@ $(function () {
                 var asin = btn.data('id');
 
                 $.ajax({
-                    url: '/api/product/' + asin,
+                    url: '/api/product/item' + asin,
                     type: 'DELETE',
                     success: function (rs) {
                         if ($.isSuccess(rs)) {
-                            window.location = "/admin/product";
+                            window.location = "/admin/product/item";
                         }
                         else {
                             bootbox.alert(rs);

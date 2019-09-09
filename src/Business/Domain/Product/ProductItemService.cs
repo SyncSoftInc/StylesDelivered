@@ -4,6 +4,7 @@ using SyncSoft.StylesDelivered.DataAccess.Inventory;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Event.Inventory;
+using SyncSoft.StylesDelivered.Event.Product;
 using System;
 using System.Threading.Tasks;
 
@@ -45,7 +46,14 @@ namespace SyncSoft.StylesDelivered.Domain.Product
                 return "Item already exists.";
             }
 
-            return await ProductItemDAL.InsertItemAsync(dto).ConfigureAwait(false);
+            msgCode = await ProductItemDAL.InsertItemAsync(dto).ConfigureAwait(false);
+            if (msgCode.IsSuccess())
+            {
+                // 抛出Item更改事件
+                _ = MessageDispatcher.PublishAsync(new ProductItemChangedEvent(dto.ASIN));
+            }
+
+            return msgCode;
         }
 
         public async Task<string> UpdateItemAsync(ProductItemDTO dto)
@@ -59,6 +67,8 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             {
                 // 抛出库存更改事件
                 _ = MessageDispatcher.PublishAsync(new ItemInventoryChangedEvent(dto.SKU, dto.InvQty));
+                // 抛出Item更改事件
+                _ = MessageDispatcher.PublishAsync(new ProductItemChangedEvent(dto.ASIN));
             }
 
             return msgCode;
@@ -66,7 +76,14 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> DeleteItemAsync(string asin, string sku)
         {
-            return await ProductItemDAL.DeleteItemAsync(asin, sku).ConfigureAwait(false);
+            var msgCode = await ProductItemDAL.DeleteItemAsync(asin, sku).ConfigureAwait(false);
+            if (msgCode.IsSuccess())
+            {
+                // 抛出Item更改事件
+                _ = MessageDispatcher.PublishAsync(new ProductItemChangedEvent(asin));
+            }
+
+            return msgCode;
         }
 
         #endregion
