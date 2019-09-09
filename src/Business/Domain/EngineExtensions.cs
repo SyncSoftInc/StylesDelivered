@@ -18,6 +18,7 @@ namespace SyncSoft.App
                 configurator.Engine.Starting += (o, e) =>
                 {
                     ObjectContainer.Register<IProductService, ProductService>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IProductItemService, ProductItemService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserService, UserService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IShoppingCartService, ShoppingCartService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IInventoryService, InventoryService>(LifeCycleEnum.Singleton);

@@ -8,13 +8,13 @@ namespace Product
 {
     public class Item
     {
-        private static readonly Lazy<IProductService> _lazyProductService = ObjectContainer.LazyResolve<IProductService>();
-        private IProductService ProductService => _lazyProductService.Value;
+        private static readonly Lazy<IProductItemService> _lazyProductItemService = ObjectContainer.LazyResolve<IProductItemService>();
+        private IProductItemService ProductItemService => _lazyProductItemService.Value;
 
         [Test]
         public async Task SyncInventories()
         {
-            var msgCode = await ProductService.SyncInventoriesAsync().ConfigureAwait(false);
+            var msgCode = await ProductItemService.SyncInventoriesAsync().ConfigureAwait(false);
 
             Assert.IsTrue(msgCode.IsSuccess());
         }

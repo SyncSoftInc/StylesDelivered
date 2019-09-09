@@ -1,21 +1,20 @@
 ﻿using SyncSoft.ECP.DTOs;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Query.Product;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.DataAccess.Product
 {
     public interface IProductDAL
     {
-        Task<string> InsertItemAsync(ProductItemDTO dto);
-        Task<string> UpdateItemAsync(ProductItemDTO dto);
-        Task<string> UpdateItemImageAsync(ProductItemDTO dto);
-        Task<string> DeleteProductItemAsync(string itemNo);
+        Task<string> InsertProductAsync(ProductDTO dto);
+        Task<string> UpdateProductAsync(ProductDTO dto);
+        Task<string> UpdateProductImageAsync(ProductDTO dto);
+        Task<string> DeleteProductAsync(string asin);
 
-        Task<PagedList<ProductItemDTO>> GetProductItemsAsync(GetProductsQuery query);
-        Task<ProductItemDTO> GetProductItemAsync(string itemNo);
+        Task<ProductDTO> GetProductAsync(string asin);
+        Task<PagedList<ProductDTO>> GetProductsAsync(GetProductsQuery query);
 
-        Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories);
+        //Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories);
     }
 }

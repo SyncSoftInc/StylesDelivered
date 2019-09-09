@@ -12,14 +12,21 @@ namespace SyncSoft.StylesDelivered
         public const string CreateShoppingCartFailed = nameof(CreateShoppingCartFailed);
 
         // Product
-        public const string ItemNoCannotBeEmpty = nameof(ItemNoCannotBeEmpty);
+        public const string ProductNotExists = nameof(ProductNotExists);
+        public const string ASINCannotBeEmpty = nameof(ASINCannotBeEmpty);
         public const string ProductNameCannotBeEmpty = nameof(ProductNameCannotBeEmpty);
-        public const string InvalidItemNoLength = nameof(InvalidItemNoLength);
+        public const string InvalidASINLength = nameof(InvalidASINLength);
         public const string InvalidProductNameLength = nameof(InvalidProductNameLength);
         public const string InvalidDescriptionLength = nameof(InvalidDescriptionLength);
         public const string InvalidImageUrlLength = nameof(InvalidImageUrlLength);
-        public const string InvalidInventoryQuantity = nameof(InvalidInventoryQuantity);
 
+        //ProductItem
+        public const string SKUCannotBeEmpty = nameof(SKUCannotBeEmpty);
+        public const string InvalidSKULength = nameof(InvalidSKULength);
+        public const string InvalidAliasLength = nameof(InvalidAliasLength);
+        public const string InvalidColorLength = nameof(InvalidColorLength);
+        public const string InvalidSizeLength = nameof(InvalidSizeLength);
+        public const string InvalidInventoryQuantity = nameof(InvalidInventoryQuantity);
         // User
         public const string UserNotExists = nameof(UserNotExists);
         public const string AddressExists = nameof(AddressExists);

@@ -18,8 +18,8 @@ namespace SyncSoft.StylesDelivered.WebSite.Services
         private static readonly Lazy<ILogger> _lazyLogger = ObjectContainer.LazyResolveLogger<MaintainInventoryService>();
         protected override ILogger Logger => _lazyLogger.Value;
 
-        private static readonly Lazy<IProductService> _lazyProductService = ObjectContainer.LazyResolve<IProductService>();
-        private IProductService ProductService => _lazyProductService.Value;
+        private static readonly Lazy<IProductItemService> _lazyProductItemService = ObjectContainer.LazyResolve<IProductItemService>();
+        private IProductItemService ProductItemService => _lazyProductItemService.Value;
 
         private static readonly Lazy<IInventoryService> _lazyInventoryService = ObjectContainer.LazyResolve<IInventoryService>();
         private IInventoryService InventoryService => _lazyInventoryService.Value;
@@ -31,7 +31,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Services
             var msgCode = await InventoryService.CleanInventoriesAsync().ConfigureAwait(false);
             if (msgCode.IsSuccess())
             {
-                msgCode = await ProductService.SyncInventoriesAsync().ConfigureAwait(false);
+                msgCode = await ProductItemService.SyncInventoriesAsync().ConfigureAwait(false);
             }
             return msgCode;
         }

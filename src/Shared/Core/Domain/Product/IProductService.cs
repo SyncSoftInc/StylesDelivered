@@ -7,10 +7,9 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 {
     public interface IProductService
     {
-        Task<string> CreateItemAsync(ProductItemDTO dto);
-        Task<string> UpdateItemAsync(ProductItemDTO dto);
-        Task<string> DeleteItemAsync(string itemNo);
-        Task<MsgResult<ProductItemDTO>> UploadImageAsync(UploadProductImageCommand cmd);
-        Task<string> SyncInventoriesAsync();
+        Task<string> CreateProductAsync(ProductDTO dto);
+        Task<string> UpdateProductAsync(ProductDTO dto);
+        Task<string> DeleteProductAsync(string asin);
+        Task<MsgResult<ProductDTO>> UploadImageAsync(UploadProductImageCommand cmd);
     }
 }

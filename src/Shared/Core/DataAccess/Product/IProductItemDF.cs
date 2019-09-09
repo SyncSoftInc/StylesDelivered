@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.DataAccess.Product
 {
-    public interface IProductDF
+    public interface IProductItemDF
     {
-        Task<ProductDTO> GetProductAsync(string asin);
-        Task<PagedList<ProductDTO>> GetProductsAsync(GetProductsQuery query);
+        Task<ProductItemDTO> GetItemAsync(string asin, string sku);
+        Task<PagedList<ProductItemDTO>> GetItemsAsync(GetProductItemsQuery query);
     }
 }

@@ -6,7 +6,7 @@ $(function () {
         searchDelay: 500,
         lengthMenu: [5, 10, 25],
         ajax: {
-            url: '/api/product/items'
+            url: '/api/products'
         },
         columns: [
             {
@@ -17,7 +17,7 @@ $(function () {
                 }
             },
             {
-                data: "itemNo"
+                data: "asin"
             },
             {
                 data: "productName"
@@ -33,8 +33,8 @@ $(function () {
                 width: 120,
                 orderable: false,
                 render: function (id, display, item) {
-                    return '<a class="btn btn-sm btn-primary mr-2" href="/admin/product/Save/' + item['itemNo'] + '">Edit</a>' +
-                        '<button class="delBtn btn btn-sm btn-secondary" type="button" data-id="' + item['itemNo'] + '">Delete</button>';
+                    return '<a class="btn btn-sm btn-primary mr-2" href="/admin/product/Save/' + item['asin'] + '">Edit</a>' +
+                        '<button class="delBtn btn btn-sm btn-danger" type="button" data-id="' + item['asin'] + '">Delete</button>';
                 }
             }
         ],
@@ -47,12 +47,12 @@ $(function () {
 
     $('#mainTable').on('click', '.delBtn', function () {
         var btn = $(this);
-        bootbox.confirm("Delete item?", function (confirm) {
+        bootbox.confirm("Delete product?", function (confirm) {
             if (confirm) {
-                var itemNo = btn.data('id');
+                var asin = btn.data('id');
 
                 $.ajax({
-                    url: '/api/product/item/' + itemNo,
+                    url: '/api/product/' + asin,
                     type: 'DELETE',
                     success: function (rs) {
                         if ($.isSuccess(rs)) {

@@ -3,10 +3,8 @@ using SyncSoft.App.Components;
 using SyncSoft.App.Messaging;
 using SyncSoft.App.Securities;
 using SyncSoft.StylesDelivered.Command.Product;
-using SyncSoft.StylesDelivered.DataAccess.Inventory;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
-using SyncSoft.StylesDelivered.Event.Inventory;
 using SyncSoft.StylesDelivered.Storage;
 using System;
 using System.Threading.Tasks;
@@ -27,11 +25,11 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         private static readonly Lazy<IProductDAL> _lazyProductDAL = ObjectContainer.LazyResolve<IProductDAL>();
         private IProductDAL ProductDAL => _lazyProductDAL.Value;
 
+        private static readonly Lazy<IProductItemDAL> _lazyProductItemDAL = ObjectContainer.LazyResolve<IProductItemDAL>();
+        private IProductItemDAL ProductItemDAL => _lazyProductItemDAL.Value;
+
         private static readonly Lazy<IStorage> _lazyStorage = ObjectContainer.LazyResolve<IStorage>();
         private IStorage Storage => _lazyStorage.Value;
-
-        private static readonly Lazy<IInventoryDAL> _lazyInventoryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
-        private IInventoryDAL InventoryDAL => _lazyInventoryDAL.Value;
 
         private static readonly Lazy<IMessageDispatcher> _lazyMessageDispatcher = ObjectContainer.LazyResolve<IMessageDispatcher>();
         private IMessageDispatcher MessageDispatcher => _lazyMessageDispatcher.Value;
@@ -40,90 +38,73 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         // *******************************************************************************************************************************
         #region -  CRUD  -
 
-        public async Task<string> CreateItemAsync(ProductItemDTO dto)
+        public async Task<string> CreateProductAsync(ProductDTO dto)
         {
-            var msgCode = CheckItemDTO(dto);
+            var msgCode = CheckProductDTO(dto);
             if (!msgCode.IsSuccess()) return msgCode;
             // ^^^^^^^^^^
 
-            var existsItem = await ProductDAL.GetProductItemAsync(dto.ItemNo).ConfigureAwait(false);
-            if (existsItem.IsNotNull())
+            var exists = await ProductDAL.GetProductAsync(dto.ASIN).ConfigureAwait(false);
+            if (exists.IsNotNull())
             {
-                return "ItemNo already exists.";
+                return "ASIN already exists.";
             }
 
             dto.CreatedOnUtc = DateTime.UtcNow;
-            return await ProductDAL.InsertItemAsync(dto).ConfigureAwait(false);
+            return await ProductDAL.InsertProductAsync(dto).ConfigureAwait(false);
         }
 
-        public async Task<string> UpdateItemAsync(ProductItemDTO dto)
+        public async Task<string> UpdateProductAsync(ProductDTO dto)
         {
-            var msgCode = CheckItemDTO(dto);
+            var msgCode = CheckProductDTO(dto);
             if (!msgCode.IsSuccess()) return msgCode;
+
+            var product = await ProductDAL.GetProductAsync(dto.ASIN).ConfigureAwait(false);
+            if (product.IsNull()) return MsgCodes.ProductNotExists;
             // ^^^^^^^^^^
 
-            msgCode = await ProductDAL.UpdateItemAsync(dto).ConfigureAwait(false);
-
-            if (msgCode.IsSuccess())
-            {
-                // 抛出库存更改事件
-                _ = MessageDispatcher.PublishAsync(new ItemInventoryChangedEvent(dto.ItemNo, dto.InvQty));
-            }
-
-            return msgCode;
+            return await ProductDAL.UpdateProductAsync(dto).ConfigureAwait(false);
         }
 
-        public async Task<string> DeleteItemAsync(string itemNo)
+        public async Task<string> DeleteProductAsync(string asin)
         {
-            return await ProductDAL.DeleteProductItemAsync(itemNo).ConfigureAwait(false);
+            return await ProductDAL.DeleteProductAsync(asin).ConfigureAwait(false);
         }
 
         #endregion
         // *******************************************************************************************************************************
         #region -  UploadImageAsync  -
 
-        public async Task<MsgResult<ProductItemDTO>> UploadImageAsync(UploadProductImageCommand cmd)
+        public async Task<MsgResult<ProductDTO>> UploadImageAsync(UploadProductImageCommand cmd)
         {
-            var dto = await ProductDAL.GetProductItemAsync(cmd.ItemNo).ConfigureAwait(false);
+            var dto = await ProductDAL.GetProductAsync(cmd.asin).ConfigureAwait(false);
             if (dto.IsNotNull())
             {
                 var sha1 = cmd.PictureData.ToSha1String();
                 var key = $"p/{ DateTime.Now:yyyy'/'MM'/'dd}/{sha1}.jpg";
                 var msgCode = await Storage.SaveAsync(key, cmd.PictureData).ConfigureAwait(false);
-                if (!msgCode.IsSuccess()) return new MsgResult<ProductItemDTO>(MsgCodes.SaveFileToCloudFailed);
+                if (!msgCode.IsSuccess()) return new MsgResult<ProductDTO>(MsgCodes.SaveFileToCloudFailed);
 
                 dto.ImageUrl = _imageRoot + key;
-                await ProductDAL.UpdateItemImageAsync(dto).ConfigureAwait(false);
+                await ProductDAL.UpdateProductImageAsync(dto).ConfigureAwait(false);
             }
 
-            return new MsgResult<ProductItemDTO>(dto);
-        }
-
-        #endregion
-        // *******************************************************************************************************************************
-        #region -  SyncInventoriesAsync  -
-
-        public async Task<string> SyncInventoriesAsync()
-        {
-            var inventories = await InventoryDAL.GetItemInventoriesAsync().ConfigureAwait(false);
-            return await ProductDAL.SetItemInventoriesAsync(inventories).ConfigureAwait(false);
+            return new MsgResult<ProductDTO>(dto);
         }
 
         #endregion
         // *******************************************************************************************************************************
         #region -  Utilities  -
 
-        private string CheckItemDTO(ProductItemDTO dto)
+        private string CheckProductDTO(ProductDTO dto)
         {
-            if (dto.ItemNo.IsNull()) return MsgCodes.ItemNoCannotBeEmpty;
+            if (dto.ASIN.IsNull()) return MsgCodes.ASINCannotBeEmpty;
             if (dto.ProductName.IsNull()) return MsgCodes.ProductNameCannotBeEmpty;
 
-            if (dto.ItemNo.IsNotNull() && dto.ItemNo.Length > 20) return MsgCodes.InvalidItemNoLength;
-            if (dto.ProductName.IsNotNull() && dto.ProductName.Length > 50) return MsgCodes.InvalidProductNameLength;
-            if (dto.Description.IsNotNull() && dto.Description.Length > 1000) return MsgCodes.InvalidDescriptionLength;
+            if (dto.ASIN.IsNotNull() && dto.ASIN.Length > 20) return MsgCodes.InvalidASINLength;
+            if (dto.ProductName.IsNotNull() && dto.ProductName.Length > 200) return MsgCodes.InvalidProductNameLength;
+            if (dto.Description.IsNotNull() && dto.Description.Length > 2000) return MsgCodes.InvalidDescriptionLength;
             if (dto.ImageUrl.IsNotNull() && dto.ImageUrl.Length > 200) return MsgCodes.InvalidImageUrlLength;
-
-            if (dto.InvQty < 0) return MsgCodes.InvalidInventoryQuantity;
 
             return MsgCodes.SUCCESS;
         }

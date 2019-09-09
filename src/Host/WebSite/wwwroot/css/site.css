@@ -32,3 +32,9 @@ code {
 .pointer {
     cursor: pointer;
 }
+
+@media only screen and (max-width: 770px) {
+    .img_center {
+        justify-content: center !important
+    }
+}
