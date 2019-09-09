@@ -1,119 +1,119 @@
 ﻿var itemsTable;
 Dropzone.autoDiscover = false;
 
+var saveVM = new Vue({
+    el: "#app",
+    data: {
+        isNew: true,
+        title: "New",
+        product: {
+            asin: null
+        }
+    },
+    methods: {
+        loadData: function () {
+            var self = this;
+            self.isNew = $.isNW(self.product.asin);
+            self.title = self.isNew ? "New" : "Edit";
+
+            if (!self.isNew) {
+                $.get("/api/product/" + self.product.asin, function (rs) {
+                    rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 100, 100) : $.pic(rs.imageUrl);
+                    self.product = rs;
+                });
+            }
+        },
+        save: function () {
+            var self = this;
+            var actionType = self.isNew ? 'POST' : 'PUT';
+
+            $.ajax({
+                url: '/api/product',
+                type: actionType,
+                data: {
+                    Product: self.product
+                },
+                success: function (rs) {
+                    if ($.isSuccess(rs)) {
+                        bootbox.alert("Save successfully.", function () {
+                            window.location = "/admin/product/Save/" + self.product.asin;
+                        });
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                }
+            });
+
+            return false;
+        }
+    },
+    beforeMount: function () {
+        var self = this;
+        var url = window.location.href;
+        var last = url.substring(url.lastIndexOf('/') + 1);
+        if (last !== "Save") self.product.asin = last;
+
+        self.loadData();
+    }
+});
+
+var itemVM = new Vue({
+    el: "#itemModal",
+    data: {
+        isNew: true,
+        item: {
+            sku: null,
+            invQty: 0
+        }
+    },
+    methods: {
+        loadData: function () {
+            var self = this;
+            self.isNew = $.isNW(self.item.sku);
+
+            if (!self.isNew) {
+                $.get("/api/product/item", { asin: saveVM.product.asin, sku: self.item.sku }, function (rs) {
+                    self.item = rs;
+                });
+            }
+        },
+        save: function () {
+            var self = this;
+            var actionType = self.isNew ? 'POST' : 'PUT';
+
+            $.ajax({
+                url: '/api/product/item',
+                type: actionType,
+                data: {
+                    ProductItem: self.item
+                },
+                success: function (rs) {
+                    if ($.isSuccess(rs)) {
+                        bootbox.alert("Save successfully.", function () {
+                            window.location = "/admin/product/Save/" + saveVM.product.asin;
+                        });
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                }
+            });
+
+            return false;
+        },
+        show: function () {
+            bootbox.alert("aaa");
+        }
+    },
+    beforeMount: function () {
+        var self = this;
+        self.item.asin = saveVM.product.asin;
+        //self.loadData();
+    }
+});
+
 $(function () {
-    var saveVM = new Vue({
-        el: "#app",
-        data: {
-            isNew: true,
-            title: "New",
-            product: {
-                asin: null
-            }
-        },
-        methods: {
-            loadData: function () {
-                var self = this;
-                self.isNew = $.isNW(self.product.asin);
-                self.title = self.isNew ? "New" : "Edit";
-
-                if (!self.isNew) {
-                    $.get("/api/product/" + self.product.asin, function (rs) {
-                        rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 100, 100) : $.pic(rs.imageUrl);
-                        self.product = rs;
-                    });
-                }
-            },
-            save: function () {
-                var self = this;
-                var actionType = self.isNew ? 'POST' : 'PUT';
-
-                $.ajax({
-                    url: '/api/product',
-                    type: actionType,
-                    data: {
-                        Product: self.product
-                    },
-                    success: function (rs) {
-                        if ($.isSuccess(rs)) {
-                            bootbox.alert("Save successfully.", function () {
-                                window.location = "/admin/product/Save/" + self.product.asin;
-                            });
-                        }
-                        else {
-                            bootbox.alert(rs);
-                        }
-                    }
-                });
-
-                return false;
-            }
-        },
-        beforeMount: function () {
-            var self = this;
-            var url = window.location.href;
-            var last = url.substring(url.lastIndexOf('/') + 1);
-            if (last !== "Save") self.product.asin = last;
-
-            self.loadData();
-        }
-    });
-
-    var itemVM = new Vue({
-        el: "#itemModal",
-        data: {
-            isNew: true,
-            item: {
-                sku: null,
-                invQty: 0
-            }
-        },
-        methods: {
-            loadData: function () {
-                var self = this;
-                self.isNew = $.isNW(self.item.sku);
-
-                if (!self.isNew) {
-                    $.get("/api/product/item", { asin: saveVM.product.asin, sku: self.item.sku }, function (rs) {
-                        self.item = rs;
-                    });
-                }
-            },
-            save: function () {
-                var self = this;
-                var actionType = self.isNew ? 'POST' : 'PUT';
-
-                $.ajax({
-                    url: '/api/product/item',
-                    type: actionType,
-                    data: {
-                        ProductItem: self.item
-                    },
-                    success: function (rs) {
-                        if ($.isSuccess(rs)) {
-                            bootbox.alert("Save successfully.", function () {
-                                window.location = "/admin/product/Save/" + saveVM.product.asin;
-                            });
-                        }
-                        else {
-                            bootbox.alert(rs);
-                        }
-                    }
-                });
-
-                return false;
-            },
-            show: function () {
-                bootbox.alert("aaa");
-            }
-        },
-        beforeMount: function () {
-            var self = this;
-            self.item.asin = saveVM.product.asin;
-            //self.loadData();
-        }
-    });
-
     // Items Table
     itemsTable = $('#itemsTable').DataTable({
         serverSide: true,
