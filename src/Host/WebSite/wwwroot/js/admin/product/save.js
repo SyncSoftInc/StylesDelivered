@@ -150,6 +150,13 @@ $(function () {
         order: [[1, "DESC"]]
     });
 
+    // Item Modal save
+    $('#itemModal').on('click', '#itemSaveBtn', function () {
+        var btn = $(this);
+        itemVM.save();
+    });
+
+    // Item edit event
     $('#itemsTable').on('click', '.editBtn', function () {
         var btn = $(this);
         var sku = btn.data('id');
@@ -157,6 +164,7 @@ $(function () {
         itemVM.loadData();
     });
 
+    // Item delete event
     $('#itemsTable').on('click', '.delBtn', function () {
         var btn = $(this);
         bootbox.confirm("Delete product?", function (confirm) {
