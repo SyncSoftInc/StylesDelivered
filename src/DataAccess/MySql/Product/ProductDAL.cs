@@ -6,6 +6,7 @@ using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Query.Product;
 using System;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
@@ -96,6 +97,15 @@ VALUES
             orderBy += " " + query.SortDirection;
 
             return base.GetPagedListAsync<ProductDTO>(query.PageSize, query.PageIndex, "Product", "*", where.ToString(), orderBy);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  UpdateItemsJson  -
+
+        public Task<string> UpdateItemsJsonAsync(string asin, string json)
+        {
+            return base.TryExecuteAsync("SP_UpdateProductItemsJson", new { ASIN = asin, ItemsJson = json }, commandType: CommandType.StoredProcedure);
         }
 
         #endregion

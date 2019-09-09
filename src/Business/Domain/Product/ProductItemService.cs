@@ -6,6 +6,7 @@ using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Event.Inventory;
 using SyncSoft.StylesDelivered.Event.Product;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Product
@@ -93,7 +94,11 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         public async Task<string> SyncInventoriesAsync()
         {
             var inventories = await InventoryDAL.GetItemInventoriesAsync().ConfigureAwait(false);
-            return await ProductItemDAL.SetItemInventoriesAsync(inventories).ConfigureAwait(false);
+            if (inventories.IsPresent())
+            {
+                return await ProductItemDAL.SetItemInventoriesAsync(inventories).ConfigureAwait(false);
+            }
+            return MsgCodes.SUCCESS;
         }
 
         #endregion

@@ -68,7 +68,7 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
                 return para;
             }).ToArray();
 
-            return base.TryExecuteAsync("SP_SetItemInventory", parameters, commandType: CommandType.StoredProcedure);
+            return base.TryExecuteAsync("SP_SetProductItemInventory", parameters, commandType: CommandType.StoredProcedure);
         }
 
         #endregion
@@ -104,7 +104,7 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
 
         public Task<IList<ProductItemDTO>> GetItemsAsync(string productASIN)
         {
-            return base.QueryListAsync<ProductItemDTO>("CALL SP_GetProductItems", new { ASIN = productASIN });
+            return base.QueryListAsync<ProductItemDTO>("SP_GetProductItems", new { ASIN = productASIN }, commandType: CommandType.StoredProcedure);
         }
 
         #endregion
