@@ -1,9 +1,12 @@
 ﻿<div id="app">
 
-    <div class="card-columns">
-        <div class="card w-75" v-for="item in items">
-            <itembox :item="item"></itembox>
-        </div>
+    @*<div class="card-columns">
+            <div class="card w-75" v-for="item in items">
+                <itembox :item="item"></itembox>
+            </div>
+        </div>*@
+    <div class="card mb-3" v-for="item in items">
+        <itembox :item="item"></itembox>
     </div>
 </div>
 

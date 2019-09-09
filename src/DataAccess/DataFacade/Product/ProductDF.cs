@@ -29,6 +29,7 @@ namespace SyncSoft.StylesDelivered.DataFacade.Product
         public async Task<PagedList<ProductDTO>> GetProductsAsync(GetProductsQuery query)
         {
             var rs = await ProductDAL.GetProductsAsync(query).ConfigureAwait(false);
+
             return rs;
         }
 

@@ -16,15 +16,15 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         // *******************************************************************************************************************************
         #region -  Field(s)  -
 
-        private readonly string _itemNo;
+        private readonly string _sku;
 
         #endregion
         // *******************************************************************************************************************************
         #region -  Constructor(s)  -
 
-        internal ItemInventory(string itemNo)
+        internal ItemInventory(string sku)
         {
-            _itemNo = itemNo;
+            _sku = sku;
         }
 
         #endregion
@@ -33,7 +33,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public bool IsAvailable(int qty)
         {
-            var invQty = InventoryQueryDAL.GetAvailableInventory(_itemNo);
+            var invQty = InventoryQueryDAL.GetAvailableInventory(_sku);
             return invQty >= qty;
         }
 
@@ -43,7 +43,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public int Get()
         {
-            var invQty = InventoryQueryDAL.GetAvailableInventory(_itemNo);
+            var invQty = InventoryQueryDAL.GetAvailableInventory(_sku);
             return invQty;
         }
 
@@ -55,7 +55,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         {
             try
             {
-                InventoryQueryDAL.SetItemInventories((_itemNo, invQty));
+                InventoryQueryDAL.SetItemInventories((_sku, invQty));
                 return MsgCodes.SUCCESS;
             }
             catch (Exception ex)

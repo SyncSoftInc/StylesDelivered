@@ -4,19 +4,16 @@ $.isNW = function (obj) {
 };
 
 // 格式化成时间
-$.timeFormat = function (value, timeformat) {
+$.timeFormat = function (value, timeformat = "MM/DD/YYYY hh:mm:ss A") {
     if (!$.isNW(value)) {
-        timeformat = timeformat || "MM/DD/YYYY hh:mm:ss A";
-
         var date = new moment.utc(value).tz('America/Los_Angeles');
         return date.format(timeformat);
     }
 };
 
 // 格式化成日期
-$.dateFormat = function (value, timeformat) {
+$.dateFormat = function (value, timeformat = "MM/DD/YYYY") {
     if (!$.isNW(value)) {
-        timeformat = timeformat || "MM/DD/YYYY";
         var date = new moment.utc(value);
         return date.format(timeformat);
     }
@@ -83,6 +80,9 @@ Vue.component("itembox", {
             }, function (rs) {
 
             });
+        },
+        createdTime: function (item) {
+            return $.timeFormat(item.createdOnUtc);
         }
     }
 });

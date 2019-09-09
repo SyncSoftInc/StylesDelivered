@@ -2,12 +2,12 @@
 {
     public class ItemInventoryChangedEvent : App.Messaging.Event
     {
-        public string ItemNo { get; private set; }
+        public string SKU { get; private set; }
         public int InvQty { get; private set; }
 
-        public ItemInventoryChangedEvent(string itemNo, int invQty)
+        public ItemInventoryChangedEvent(string sku, int invQty)
         {
-            ItemNo = itemNo;
+            SKU = sku;
             InvQty = invQty;
         }
     }

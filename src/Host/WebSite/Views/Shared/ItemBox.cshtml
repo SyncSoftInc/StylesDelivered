@@ -1,13 +1,15 @@
 ﻿<template id="item-box">
-    <div>
-        <div class="text-center"><img v-bind:src="item.imageUrl" class="card-img-top" alt="..."></div>
-        <div class="card-body">
-            <h5 class="card-title">{{item.productName}}</h5>
-            <p class="card-text">{{item.itemNo}} (Stock: {{item.invQty}})</p>
-            @*<p>
-                <input class="form-control" type="number" />
-                <button type="button" class="btn btn-primary" v-on:click="addToCart(item)">Add to Cart</button>
-            </p>*@
+    <div class="row no-gutters">
+        <div class="col-md-2">
+            <img v-bind:src="item.imageUrl" class="card-img-top" alt="..." />
+        </div>
+        <div class="col-md-10">
+            <div class="card-body">
+                <h5 class="card-title">{{item.productName}}</h5>
+                <p class="card-text">{{item.description}}</p>
+                <p class="card-text"><small class="text-muted">Listed on {{createdTime(item)}}</small></p>
+                <p class="text-right"><a href="#" class="btn btn-primary">Apply</a></p>
+            </div>
         </div>
     </div>
 </template>

@@ -99,20 +99,5 @@ VALUES
         }
 
         #endregion
-
-        //public Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories)
-        //{
-        //    var parameters = inventories.Select(x =>
-        //    {
-        //        var para = new DynamicParameters();
-
-        //        para.Add("ItemNo", x.Key, DbType.String);
-        //        para.Add("InvQty", x.Value, DbType.Int32);
-
-        //        return para;
-        //    }).ToArray();
-
-        //    return base.TryExecuteAsync("SP_SetItemInventory", parameters, commandType: CommandType.StoredProcedure);
-        //}
     }
 }

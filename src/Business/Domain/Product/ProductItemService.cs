@@ -3,6 +3,7 @@ using SyncSoft.App.Messaging;
 using SyncSoft.StylesDelivered.DataAccess.Inventory;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
+using SyncSoft.StylesDelivered.Event.Inventory;
 using System;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         // *******************************************************************************************************************************
         #region -  Field(s)  -
 
-        private const string _imageRoot = "https://eec.oss-us-west-1.aliyuncs.com/";
+        //private const string _imageRoot = "https://eec.oss-us-west-1.aliyuncs.com/";
 
         #endregion
         // *******************************************************************************************************************************
@@ -54,11 +55,11 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             // ^^^^^^^^^^
 
             msgCode = await ProductItemDAL.UpdateItemAsync(dto).ConfigureAwait(false);
-            //if (msgCode.IsSuccess())
-            //{
-            //    // 抛出库存更改事件
-            //    _ = MessageDispatcher.PublishAsync(new ItemInventoryChangedEvent(dto.ItemNo, dto.InvQty));
-            //}
+            if (msgCode.IsSuccess())
+            {
+                // 抛出库存更改事件
+                _ = MessageDispatcher.PublishAsync(new ItemInventoryChangedEvent(dto.SKU, dto.InvQty));
+            }
 
             return msgCode;
         }
@@ -74,9 +75,8 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> SyncInventoriesAsync()
         {
-            throw new NotImplementedException();
-            //var inventories = await InventoryDAL.GetItemInventoriesAsync().ConfigureAwait(false);
-            //return await ProductItemDAL.SetItemInventoriesAsync(inventories).ConfigureAwait(false);
+            var inventories = await InventoryDAL.GetItemInventoriesAsync().ConfigureAwait(false);
+            return await ProductItemDAL.SetItemInventoriesAsync(inventories).ConfigureAwait(false);
         }
 
         #endregion

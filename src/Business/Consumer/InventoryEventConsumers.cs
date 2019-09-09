@@ -22,7 +22,7 @@ namespace SyncSoft.StylesDelivered.Consumer
         public Task<object> HandleAsync(IContext<ItemInventoryChangedEvent> context)
         {
             var msg = context.Message;
-            var inventory = ItemInventoryFactory.Create(msg.ItemNo);
+            var inventory = ItemInventoryFactory.Create(msg.SKU);
             var msgCode = inventory.Set(msg.InvQty);
 
             return Task.FromResult<object>(msgCode);
