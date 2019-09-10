@@ -131,25 +131,8 @@ function DeleteItem(sku) {
     });
 }
 
-
-$(function () {
-    $('#items-tab').on('click', function () {
-        itemsTable.ajax.reload();
-    });
-
-    // ItemModal events
-    $('#itemModal').on('show.bs.modal', function (e) {
-        var btn = $(e.relatedTarget);
-        itemVM.item.sku = btn.data('id');
-        itemVM.loadData();
-    });
-
-    $('#itemModal').on('click', '#itemSaveBtn', function () {
-        var btn = $(this);
-        itemVM.save();
-    });
-
-    // Items Table
+// Items Table
+function createTable() {
     itemsTable = $('#itemsTable').DataTable({
         serverSide: true,
         searchDelay: 500,
@@ -183,6 +166,26 @@ $(function () {
             { "className": "text-center", "targets": [-1] }
         ],
         order: [[1, "DESC"]]
+    });
+}
+
+$(function () {
+    $('#items-tab').on('shown.bs.tab', function () {
+        if ($.isNW(itemsTable)) {
+            createTable();
+        }
+    });
+
+    // ItemModal events
+    $('#itemModal').on('show.bs.modal', function (e) {
+        var btn = $(e.relatedTarget);
+        itemVM.item.sku = btn.data('id');
+        itemVM.loadData();
+    });
+
+    $('#itemModal').on('click', '#itemSaveBtn', function () {
+        var btn = $(this);
+        itemVM.save();
     });
 
     // Image Upload
