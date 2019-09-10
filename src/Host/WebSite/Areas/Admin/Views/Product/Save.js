@@ -103,9 +103,6 @@ var itemVM = new Vue({
             });
 
             return false;
-        },
-        show: function () {
-            bootbox.alert("aaa");
         }
     }
 });
@@ -124,7 +121,7 @@ function createTable() {
         },
         columns: [
             { data: "sku" },
-            { data: "alias", orderable: false },
+            { data: "alias" },
             { data: "color", orderable: false },
             { data: "size", orderable: false },
             {
@@ -133,7 +130,7 @@ function createTable() {
                 orderable: false
             },
             {
-                width: 150,
+                width: 120,
                 orderable: false,
                 render: function (id, display, item) {
                     return '<button class="editBtn btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemModal"  data-id="' + item['sku'] + '">Edit</a>' +
@@ -144,7 +141,7 @@ function createTable() {
         columnDefs: [
             { "className": "text-center", "targets": [-1] }
         ],
-        order: [[1, "DESC"]]
+        order: [[0, "DESC"]]
     });
 }
 
