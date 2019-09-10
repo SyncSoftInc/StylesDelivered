@@ -142,12 +142,12 @@ function createTable() {
 }
 
 // Item Delete
-function DeleteItem(sku) {
+function DeleteItem(skuIn) {
     bootbox.confirm("Delete product?", function (confirmed) {
         if (confirmed) {
             $.ajax({
                 url: '/api/product/item',
-                data: { asin: productVM.product.asin, sku: sku },
+                data: { asin: productVM.product.asin, sku: skuIn },
                 type: 'DELETE',
                 success: function (rs) {
                     if ($.isSuccess(rs)) {

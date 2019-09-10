@@ -1,5 +1,40 @@
 var mainTable;
 
+function DeleteProduct(asin) {
+    bootbox.confirm("Delete product?", function (confirm) {
+        if (confirm) {
+            $.ajax({
+                url: '/api/product/' + asin,
+                type: 'DELETE',
+                success: function (rs) {
+                    if ($.isSuccess(rs)) {
+                        mainTable.ajax.reload();
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                }
+            });
+        }
+    });
+}
+
+function UpdateProductStatus(asinIn, statusIn) {
+    $.ajax({
+        url: '/api/product',
+        data: { asin: asinIn, status: statusIn },
+        type: 'PATCH',
+        success: function (rs) {
+            if ($.isSuccess(rs)) {
+                mainTable.ajax.reload();
+            }
+            else {
+                bootbox.alert(rs);
+            }
+        }
+    });
+}
+
 $(function () {
     mainTable = $('#mainTable').DataTable({
         serverSide: true,
@@ -16,11 +51,12 @@ $(function () {
                     return '<img src="' + $.pic(item.imageUrl) + '" class="pic_s" />';
                 }
             },
+            { data: "asin" },
+            { data: "productName" },
             {
-                data: "asin"
-            },
-            {
-                data: "productName"
+                data: "status",
+                width: 30,
+                orderable: false
             },
             {
                 data: "createdOnUtc",
@@ -30,40 +66,52 @@ $(function () {
                 }
             },
             {
+                width: 50,
+                orderable: false,
+                render: function (id, display, item) {
+                    if (item['status'] === 1) {
+                        return '<button type="button" class="btn btn-sm btn-primary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 0)">Deactivate</button>';
+                    }
+                    else {
+                        return '<button type="button" class="btn btn-sm btn-primary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 1)">Activate</button>';
+                    }
+                }
+            },
+            {
                 width: 120,
                 orderable: false,
                 render: function (id, display, item) {
                     return '<a class="btn btn-sm btn-primary mr-2" href="/admin/product/Save/' + item['asin'] + '">Edit</a>' +
-                        '<button class="delBtn btn btn-sm btn-danger" type="button" data-id="' + item['asin'] + '">Delete</button>';
+                        '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteProduct(\'' + item['asin'] + '\')">Delete</button>';
                 }
             }
         ],
         columnDefs: [
-            { "className": "text-center align-middle", "targets": [-1, 0] },
+            { "className": "text-center align-middle", "targets": [-1, 0, 3, 5] },
             { "className": "align-middle", "targets": '_all' }
         ],
         order: [[2, "DESC"]]
     });
 
-    $('#mainTable').on('click', '.delBtn', function () {
-        var btn = $(this);
-        bootbox.confirm("Delete product?", function (confirm) {
-            if (confirm) {
-                var asin = btn.data('id');
+    //$('#mainTable').on('click', '.delBtn', function () {
+    //    var btn = $(this);
+    //    bootbox.confirm("Delete product?", function (confirm) {
+    //        if (confirm) {
+    //            var asin = btn.data('id');
 
-                $.ajax({
-                    url: '/api/product/' + asin,
-                    type: 'DELETE',
-                    success: function (rs) {
-                        if ($.isSuccess(rs)) {
-                            mainTable.ajax.reload();
-                        }
-                        else {
-                            bootbox.alert(rs);
-                        }
-                    }
-                });
-            }
-        });
-    });
+    //            $.ajax({
+    //                url: '/api/product/' + asin,
+    //                type: 'DELETE',
+    //                success: function (rs) {
+    //                    if ($.isSuccess(rs)) {
+    //                        mainTable.ajax.reload();
+    //                    }
+    //                    else {
+    //                        bootbox.alert(rs);
+    //                    }
+    //                }
+    //            });
+    //        }
+    //    });
+    //});
 });

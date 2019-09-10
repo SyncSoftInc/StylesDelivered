@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SyncSoft.StylesDelivered.WebSite.Api
 {
     [Area("Api")]
-    public class ProductController : ApiController
+    public class AdminProductController : ApiController
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
@@ -68,6 +68,12 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
 
             return base.RequestAsync<UploadProductImageCommand, MsgResult<ProductDTO>>(cmd);
         }
+
+        /// <summary>
+        /// Upadte Product Status
+        /// </summary>
+        [HttpPatch("api/product")]
+        public Task<string> UpdateStatusAsync(UpdateProductStatusCommand cmd) => base.RequestAsync(cmd);
 
         #endregion
         // *******************************************************************************************************************************

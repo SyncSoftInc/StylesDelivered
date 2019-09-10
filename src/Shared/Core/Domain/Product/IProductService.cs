@@ -11,6 +11,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         Task<string> UpdateProductAsync(ProductDTO dto);
         Task<string> DeleteProductAsync(string asin);
         Task<MsgResult<ProductDTO>> UploadImageAsync(UploadProductImageCommand cmd);
+        Task<string> UpdateStatusAsync(UpdateProductStatusCommand cmd);
         Task<string> RefreshItemsJsonAsync(string asin);
     }
 }

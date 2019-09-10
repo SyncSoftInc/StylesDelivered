@@ -5,6 +5,7 @@ using SyncSoft.App.Securities;
 using SyncSoft.StylesDelivered.Command.Product;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
+using SyncSoft.StylesDelivered.Enum.Product;
 using SyncSoft.StylesDelivered.Storage;
 using System;
 using System.Linq;
@@ -51,6 +52,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
                 return "ASIN already exists.";
             }
 
+            dto.Status = ProductStatusEnum.Active;
             dto.CreatedOnUtc = DateTime.UtcNow;
             return await ProductDAL.InsertProductAsync(dto).ConfigureAwait(false);
         }
@@ -102,6 +104,20 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             }
 
             return new MsgResult<ProductDTO>(dto);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  UploadImageAsync  -
+
+        public async Task<string> UpdateStatusAsync(UpdateProductStatusCommand cmd)
+        {
+            var dto = await ProductDAL.GetProductAsync(cmd.asin).ConfigureAwait(false);
+            if (dto.IsNull()) return MsgCodes.ProductNotExists;
+            // ^^^^^^^^^^
+
+            dto.Status = (ProductStatusEnum)cmd.Status;
+            return await ProductDAL.UpdateProductStatusAsync(dto).ConfigureAwait(false);
         }
 
         #endregion

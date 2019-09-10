@@ -30,9 +30,9 @@ namespace SyncSoft.StylesDelivered.MySql.Product
         public Task<string> InsertProductAsync(ProductDTO dto)
         {
             return base.TryExecuteAsync(@"INSERT INTO Product
-(ASIN, ProductName, Description, ImageUrl, CreatedOnUtc)
+(ASIN, ProductName, Description, ImageUrl, Status, CreatedOnUtc)
 VALUES
-(@ASIN, @ProductName, @Description, @ImageUrl, @CreatedOnUtc)", dto);
+(@ASIN, @ProductName, @Description, @ImageUrl, @Status, @CreatedOnUtc)", dto);
         }
 
         public Task<string> UpdateProductAsync(ProductDTO dto)
@@ -43,6 +43,11 @@ VALUES
         public Task<string> UpdateProductImageAsync(ProductDTO dto)
         {
             return base.TryExecuteAsync(@"UPDATE Product SET ImageUrl = @ImageUrl WHERE ASIN = @ASIN", dto);
+        }
+
+        public Task<string> UpdateProductStatusAsync(ProductDTO dto)
+        {
+            return base.TryExecuteAsync(@"UPDATE Product SET Status = @Status WHERE ASIN = @ASIN", dto);
         }
 
         public async Task<string> DeleteProductAsync(string asin)

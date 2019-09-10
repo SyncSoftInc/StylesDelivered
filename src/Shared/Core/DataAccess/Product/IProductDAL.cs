@@ -10,6 +10,7 @@ namespace SyncSoft.StylesDelivered.DataAccess.Product
         Task<string> InsertProductAsync(ProductDTO dto);
         Task<string> UpdateProductAsync(ProductDTO dto);
         Task<string> UpdateProductImageAsync(ProductDTO dto);
+        Task<string> UpdateProductStatusAsync(ProductDTO dto);
         Task<string> DeleteProductAsync(string asin);
 
         Task<ProductDTO> GetProductAsync(string asin);

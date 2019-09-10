@@ -11,6 +11,7 @@ namespace SyncSoft.StylesDelivered.Consumer
          , IConsumer<CreateProductCommand>
          , IConsumer<UpdateProductCommand>
          , IConsumer<UploadProductImageCommand>
+         , IConsumer<UpdateProductStatusCommand>
     {
         private static readonly Lazy<IProductService> _lazyProductService = ObjectContainer.LazyResolve<IProductService>();
         private IProductService ProductService => _lazyProductService.Value;
@@ -33,6 +34,11 @@ namespace SyncSoft.StylesDelivered.Consumer
         public async Task<object> HandleAsync(IContext<UploadProductImageCommand> context)
         {
             return await ProductService.UploadImageAsync(context.Message).ConfigureAwait(false);
+        }
+
+        public async Task<object> HandleAsync(IContext<UpdateProductStatusCommand> context)
+        {
+            return await ProductService.UpdateStatusAsync(context.Message).ConfigureAwait(false);
         }
     }
 }
