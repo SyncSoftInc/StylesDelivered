@@ -71,16 +71,16 @@ Vue.component("itembox", {
     props: ["item"],
     template: '#item-box',
     methods: {
-        addToCart: function (item) {
-            $.post("/api/shoppingcart/item", {
-                Item: {
-                    ItemNo: item.ItemNo,
-                    Qty: item.Qty
-                }
-            }, function (rs) {
+        //addToCart: function (item) {
+        //    $.post("/api/shoppingcart/item", {
+        //        Item: {
+        //            ItemNo: item.ItemNo,
+        //            Qty: item.Qty
+        //        }
+        //    }, function (rs) {
 
-            });
-        },
+        //    });
+        //},
         createdTime: function (item) {
             return $.timeFormat(item.createdOnUtc);
         }

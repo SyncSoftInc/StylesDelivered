@@ -1,13 +1,13 @@
 ﻿var itemsTable;
 Dropzone.autoDiscover = false;
 
-var saveVM = new Vue({
+var productVM = new Vue({
     el: "#app",
     data: {
         isNew: true,
         title: "New",
         product: {
-            asin: null
+            asin: asinPara
         }
     },
     methods: {
@@ -17,8 +17,8 @@ var saveVM = new Vue({
             self.title = self.isNew ? "New" : "Edit";
 
             if (!self.isNew) {
-                $.get("/api/product/" + self.product.asin, function (rs) {
-                    rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 100, 100) : $.pic(rs.imageUrl);
+                $.get("/api/admin/product/" + self.product.asin, function (rs) {
+                    rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 150, 150) : $.pic(rs.imageUrl);
                     self.product = rs;
                 });
             }
@@ -28,7 +28,7 @@ var saveVM = new Vue({
             var actionType = self.isNew ? 'POST' : 'PUT';
 
             $.ajax({
-                url: '/api/product',
+                url: '/api/admin/product',
                 type: actionType,
                 data: {
                     Product: self.product
@@ -50,10 +50,6 @@ var saveVM = new Vue({
     },
     beforeMount: function () {
         var self = this;
-        var url = window.location.href;
-        var last = url.substring(url.lastIndexOf('/') + 1);
-        if (last !== "Save") self.product.asin = last;
-
         self.loadData();
     }
 });
@@ -73,9 +69,12 @@ var itemVM = new Vue({
             self.isNew = $.isNW(self.item.sku);
 
             if (!self.isNew) {
-                $.get("/api/product/item", { asin: saveVM.product.asin, sku: self.item.sku }, function (rs) {
+                $.get("/api/product/item", { asin: productVM.product.asin, sku: self.item.sku }, function (rs) {
                     self.item = rs;
                 });
+            }
+            else {
+                self.item = { asin: productVM.product.asin, invQty: 0 };
             }
         },
         save: function () {
@@ -90,9 +89,8 @@ var itemVM = new Vue({
                 },
                 success: function (rs) {
                     if ($.isSuccess(rs)) {
-                        bootbox.alert("Save successfully.", function () {
-                            window.location = "/admin/product/Save/" + saveVM.product.asin;
-                        });
+                        $("#itemModal").modal("toggle");
+                        itemsTable.ajax.reload();
                     }
                     else {
                         bootbox.alert(rs);
@@ -101,33 +99,25 @@ var itemVM = new Vue({
             });
 
             return false;
-        },
-        show: function () {
-            bootbox.alert("aaa");
         }
-    },
-    beforeMount: function () {
-        var self = this;
-        self.item.asin = saveVM.product.asin;
-        //self.loadData();
     }
 });
 
-$(function () {
-    // Items Table
+// Items Table
+function createTable() {
     itemsTable = $('#itemsTable').DataTable({
         serverSide: true,
         searchDelay: 500,
-        lengthMenu: [5, 10, 25],
+        lengthMenu: [10, 15, 20],
         ajax: {
             url: '/api/product/items',
             data: {
-                "asin": saveVM.product.asin
+                "asin": productVM.product.asin
             }
         },
         columns: [
             { data: "sku" },
-            { data: "alias", orderable: false },
+            { data: "alias" },
             { data: "color", orderable: false },
             { data: "size", orderable: false },
             {
@@ -139,52 +129,56 @@ $(function () {
                 width: 120,
                 orderable: false,
                 render: function (id, display, item) {
-                    return '<button class="editBtn btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemModal" data-id="' + item['sku'] + '">Edit</a>' +
-                        '<button class="delBtn btn btn-sm btn-danger" type="button" data-id="' + item['asin'] + '">Delete</button>';
+                    return '<button class="editBtn btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemModal"  data-id="' + item['sku'] + '">Edit</a>' +
+                        '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteItem(\'' + item['sku'] + '\')">Delete</button>';
                 }
             }
         ],
         columnDefs: [
             { "className": "text-center", "targets": [-1] }
         ],
-        order: [[1, "DESC"]]
+        order: [[0, "DESC"]]
+    });
+}
+
+// Item Delete
+function DeleteItem(skuIn) {
+    bootbox.confirm("Delete product?", function (confirmed) {
+        if (confirmed) {
+            $.ajax({
+                url: '/api/product/item',
+                data: { asin: productVM.product.asin, sku: skuIn },
+                type: 'DELETE',
+                success: function (rs) {
+                    if ($.isSuccess(rs)) {
+                        itemsTable.ajax.reload();
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                }
+            });
+        }
+    });
+}
+
+$(function () {
+    $('#items-tab').on('shown.bs.tab', function () {
+        if ($.isNW(itemsTable)) {
+            createTable();
+        }
     });
 
-    // Item Modal save
-    $('#itemModal').on('click', '#itemSaveBtn', function () {
-        var btn = $(this);
-        itemVM.save();
-    });
-
-    // Item edit event
-    $('#itemsTable').on('click', '.editBtn', function () {
-        var btn = $(this);
-        var sku = btn.data('id');
-        itemVM.item.sku = sku;
+    // ItemModal events
+    $('#itemModal').on('show.bs.modal', function (e) {
+        var btn = $(e.relatedTarget);
+        itemVM.item.sku = btn.data('id');
         itemVM.loadData();
     });
 
-    // Item delete event
-    $('#itemsTable').on('click', '.delBtn', function () {
+    $('#itemModal').on('click', '#itemSaveBtn', function () {
         var btn = $(this);
-        bootbox.confirm("Delete product?", function (confirm) {
-            if (confirm) {
-                var asin = btn.data('id');
-
-                $.ajax({
-                    url: '/api/product/item' + asin,
-                    type: 'DELETE',
-                    success: function (rs) {
-                        if ($.isSuccess(rs)) {
-                            window.location = "/admin/product/item";
-                        }
-                        else {
-                            bootbox.alert(rs);
-                        }
-                    }
-                });
-            }
-        });
+        itemVM.save();
     });
 
     // Image Upload
@@ -219,17 +213,17 @@ $(function () {
                 if (myDropzone.files.length > 0) {
                     $('#uploadBtn').attr('disabled', false);
                 }
-                if (myDropzone.files[1] !== null) {
+                if (!$.isNW(myDropzone.files[1])) {
                     myDropzone.removeFile(myDropzone.files[0]);
                 }
             });
             myDropzone.on("sending", function (file, xhr, formData) {
                 // post extra data
-                formData.append('PostData[ASIN]', saveVM.product.asin);
+                formData.append('PostData[ASIN]', productVM.product.asin);
             });
             myDropzone.on("success", function (files, response) {
                 if (response.isSuccess) {
-                    saveVM.product.imageUrl = response.result.imageUrl;
+                    productVM.product.imageUrl = response.result.imageUrl;
                 }
                 else {
                     bootbox.alert(respones.msgCode);

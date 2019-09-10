@@ -14,7 +14,7 @@ namespace Product
         [Test]
         public async Task RefreshItemsJson()
         {
-            var msgCode = await ProductService.RefreshItemsJsonAsync("test_aaa").ConfigureAwait(false);
+            var msgCode = await ProductService.RefreshProductAsync("test_aaa").ConfigureAwait(false);
 
             Assert.IsTrue(msgCode.IsSuccess());
         }

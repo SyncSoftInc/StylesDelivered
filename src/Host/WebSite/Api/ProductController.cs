@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SyncSoft.App;
 using SyncSoft.App.Components;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
-using SyncSoft.StylesDelivered.Command.Product;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
+using SyncSoft.StylesDelivered.Enum.Product;
 using SyncSoft.StylesDelivered.Query.Product;
 using SyncSoft.StylesDelivered.WebSite.Models;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.WebSite.Api
@@ -21,53 +19,6 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
 
         private static readonly Lazy<IProductDF> _lazyProductDF = ObjectContainer.LazyResolve<IProductDF>();
         private IProductDF ProductDF => _lazyProductDF.Value;
-
-        #endregion
-        // *******************************************************************************************************************************
-        #region -  CURD  -
-
-        /// <summary>
-        /// 创建Product
-        /// </summary>
-        [HttpPost("api/product")]
-        public Task<string> CreateItemAsync(CreateProductCommand cmd) => base.RequestAsync(cmd);
-
-        /// <summary>
-        /// Upadte Product
-        /// </summary>
-        [HttpPut("api/product")]
-        public Task<string> UpdateItemAsync(UpdateProductCommand cmd) => base.RequestAsync(cmd);
-
-        /// <summary>
-        /// 删除Product
-        /// </summary>
-        [HttpDelete("api/product/{asin}")]
-        public Task<string> DeleteItemAsync(DeleteProductCommand cmd) => base.RequestAsync(cmd);
-
-        /// <summary>
-        /// 获取Product
-        /// </summary>
-        [HttpGet("api/product/{asin}")]
-        public Task<ProductDTO> GetItemAsync(string asin) => ProductDF.GetProductAsync(asin);
-
-        /// <summary>
-        /// Upadte Product Image
-        /// </summary>
-        [HttpPost("api/product/upload")]
-        public Task<MsgResult<ProductDTO>> UploadImageAsync(UploadProductImageCommand cmd)
-        {
-            using (var stream = Request.Form.Files[0].OpenReadStream())
-            {
-                var asin = Request.Form["PostData[ASIN]"].ToString();
-                if (asin.IsNotNull())
-                {
-                    cmd.asin = asin;
-                    cmd.PictureData = stream.ToBytes();
-                }
-            }
-
-            return base.RequestAsync<UploadProductImageCommand, MsgResult<ProductDTO>>(cmd);
-        }
 
         #endregion
         // *******************************************************************************************************************************
@@ -87,6 +38,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
                 Draw = model.Draw,
                 Keyword = model.Keyword,
                 SortDirection = model.SortDirection,
+                Status = ProductStatusEnum.Active
             };
             query.SetContext(User.Identity);
 
@@ -95,6 +47,5 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         }
 
         #endregion
-
     }
 }

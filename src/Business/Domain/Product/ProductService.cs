@@ -5,6 +5,7 @@ using SyncSoft.App.Securities;
 using SyncSoft.StylesDelivered.Command.Product;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
+using SyncSoft.StylesDelivered.Enum.Product;
 using SyncSoft.StylesDelivered.Storage;
 using System;
 using System.Linq;
@@ -51,6 +52,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
                 return "ASIN already exists.";
             }
 
+            dto.Status = ProductStatusEnum.Active;
             dto.CreatedOnUtc = DateTime.UtcNow;
             return await ProductDAL.InsertProductAsync(dto).ConfigureAwait(false);
         }
@@ -69,7 +71,18 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> DeleteProductAsync(string asin)
         {
-            return await ProductDAL.DeleteProductAsync(asin).ConfigureAwait(false);
+            var product = await ProductDAL.GetProductAsync(asin).ConfigureAwait(false);
+            if (product.IsNull()) return MsgCodes.ProductNotExists;
+            // ^^^^^^^^^^
+
+            var msgCode = await ProductDAL.DeleteProductAsync(asin).ConfigureAwait(false);
+            if (msgCode.IsSuccess())
+            {
+                var imageKey = product.ImageUrl.Remove(0, _imageRoot.Length);
+                msgCode = await Storage.DeleteAsync(imageKey).ConfigureAwait(false);
+            }
+
+            return msgCode;
         }
 
         #endregion
@@ -95,9 +108,23 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         #endregion
         // *******************************************************************************************************************************
+        #region -  UploadImageAsync  -
+
+        public async Task<string> UpdateStatusAsync(UpdateProductStatusCommand cmd)
+        {
+            var dto = await ProductDAL.GetProductAsync(cmd.asin).ConfigureAwait(false);
+            if (dto.IsNull()) return MsgCodes.ProductNotExists;
+            // ^^^^^^^^^^
+
+            dto.Status = (ProductStatusEnum)cmd.Status;
+            return await ProductDAL.UpdateProductStatusAsync(dto).ConfigureAwait(false);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
         #region -  RefreshItemsJson  -
 
-        public async Task<string> RefreshItemsJsonAsync(string asin)
+        public async Task<string> RefreshProductAsync(string asin)
         {
             var items = await ProductItemDAL.GetItemsAsync(asin).ConfigureAwait(false);
             if (items.IsPresent())
@@ -110,10 +137,25 @@ namespace SyncSoft.StylesDelivered.Domain.Product
                 });
                 var json = JsonSerializer.Serialize(baseItems);
                 var msgCode = await ProductDAL.UpdateItemsJsonAsync(asin, json).ConfigureAwait(false);
+                if (msgCode.IsSuccess())
+                {// 有Item，确保激活
+                    msgCode = await ProductDAL.UpdateProductStatusAsync(new ProductDTO
+                    {
+                        ASIN = asin,
+                        Status = ProductStatusEnum.Active
+                    }).ConfigureAwait(false);
+                }
                 return msgCode;
             }
-
-            return MsgCodes.SUCCESS;
+            else
+            {//没有Item，不激活
+                var msgCode = await ProductDAL.UpdateProductStatusAsync(new ProductDTO
+                {
+                    ASIN = asin,
+                    Status = ProductStatusEnum.Inactive
+                }).ConfigureAwait(false);
+                return msgCode;
+            }
         }
 
         #endregion
