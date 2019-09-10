@@ -89,6 +89,10 @@ VALUES
             {
                 where.AppendFormat(" AND (ASIN LIKE '%{0}%' OR ProductName LIKE '%{0}%')", query.Keyword);
             }
+            if (query.Status.HasValue)
+            {
+                where.AppendFormat(" AND Status = {0}", (int)query.Status.Value);
+            }
 
             string orderBy = "CreatedOnUtc";
 

@@ -17,7 +17,7 @@ var productVM = new Vue({
             self.title = self.isNew ? "New" : "Edit";
 
             if (!self.isNew) {
-                $.get("/api/product/" + self.product.asin, function (rs) {
+                $.get("/api/admin/product/" + self.product.asin, function (rs) {
                     rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 100, 100) : $.pic(rs.imageUrl);
                     self.product = rs;
                 });
@@ -28,7 +28,7 @@ var productVM = new Vue({
             var actionType = self.isNew ? 'POST' : 'PUT';
 
             $.ajax({
-                url: '/api/product',
+                url: '/api/admin/product',
                 type: actionType,
                 data: {
                     Product: self.product
@@ -162,60 +162,6 @@ function DeleteItem(skuIn) {
     });
 }
 
-// Image Upload
-$("#mydropzone").dropzone({
-    parallelUploads: 1,
-    maxFilesize: 1,
-    autoProcessQueue: false,
-    addRemoveLinks: true,
-    dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg">Drop files to upload</span> <span>&nbsp&nbsp<h4 class="display-inline"> (Or Click)</h4></span>',
-    dictResponseError: 'Error uploading file!',
-    acceptedFiles: "image/*",
-    init: function () {
-        var myDropzone = this;
-
-        $("#uploadBtn").on("click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (myDropzone.getQueuedFiles().length > 0) {
-                myDropzone.processQueue();
-            }
-            else {
-                bootbox.alert("Please add files to upload.");
-            }
-        });
-        myDropzone.on("removedfile", function (file) {
-            if (myDropzone.files.length <= 0) {
-                $('#uploadBtn').attr('disabled', true);
-            }
-        });
-        myDropzone.on("addedfile", function (file) {
-            if (myDropzone.files.length > 0) {
-                $('#uploadBtn').attr('disabled', false);
-            }
-            if (!$.isNW(myDropzone.files[1])) {
-                myDropzone.removeFile(myDropzone.files[0]);
-            }
-        });
-        myDropzone.on("sending", function (file, xhr, formData) {
-            // post extra data
-            formData.append('PostData[ASIN]', productVM.product.asin);
-        });
-        myDropzone.on("success", function (files, response) {
-            if (response.isSuccess) {
-                productVM.product.imageUrl = response.result.imageUrl;
-            }
-            else {
-                bootbox.alert(respones.msgCode);
-            }
-
-            $("#uploadModal").modal('toggle');
-            myDropzone.removeAllFiles();
-        });
-    }
-});
-
 $(function () {
     $('#items-tab').on('shown.bs.tab', function () {
         if ($.isNW(itemsTable)) {
@@ -233,5 +179,59 @@ $(function () {
     $('#itemModal').on('click', '#itemSaveBtn', function () {
         var btn = $(this);
         itemVM.save();
+    });
+
+    // Image Upload
+    $("#mydropzone").dropzone({
+        parallelUploads: 1,
+        maxFilesize: 1,
+        autoProcessQueue: false,
+        addRemoveLinks: true,
+        dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg">Drop files to upload</span> <span>&nbsp&nbsp<h4 class="display-inline"> (Or Click)</h4></span>',
+        dictResponseError: 'Error uploading file!',
+        acceptedFiles: "image/*",
+        init: function () {
+            var myDropzone = this;
+
+            $("#uploadBtn").on("click", function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (myDropzone.getQueuedFiles().length > 0) {
+                    myDropzone.processQueue();
+                }
+                else {
+                    bootbox.alert("Please add files to upload.");
+                }
+            });
+            myDropzone.on("removedfile", function (file) {
+                if (myDropzone.files.length <= 0) {
+                    $('#uploadBtn').attr('disabled', true);
+                }
+            });
+            myDropzone.on("addedfile", function (file) {
+                if (myDropzone.files.length > 0) {
+                    $('#uploadBtn').attr('disabled', false);
+                }
+                if (!$.isNW(myDropzone.files[1])) {
+                    myDropzone.removeFile(myDropzone.files[0]);
+                }
+            });
+            myDropzone.on("sending", function (file, xhr, formData) {
+                // post extra data
+                formData.append('PostData[ASIN]', productVM.product.asin);
+            });
+            myDropzone.on("success", function (files, response) {
+                if (response.isSuccess) {
+                    productVM.product.imageUrl = response.result.imageUrl;
+                }
+                else {
+                    bootbox.alert(respones.msgCode);
+                }
+
+                $("#uploadModal").modal('toggle');
+                myDropzone.removeAllFiles();
+            });
+        }
     });
 });

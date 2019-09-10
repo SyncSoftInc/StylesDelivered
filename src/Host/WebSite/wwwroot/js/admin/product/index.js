@@ -4,7 +4,7 @@ function DeleteProduct(asin) {
     bootbox.confirm("Delete product?", function (confirm) {
         if (confirm) {
             $.ajax({
-                url: '/api/product/' + asin,
+                url: '/api/admin/product/' + asin,
                 type: 'DELETE',
                 success: function (rs) {
                     if ($.isSuccess(rs)) {
@@ -21,7 +21,7 @@ function DeleteProduct(asin) {
 
 function UpdateProductStatus(asinIn, statusIn) {
     $.ajax({
-        url: '/api/product',
+        url: '/api/admin/product',
         data: { asin: asinIn, status: statusIn },
         type: 'PATCH',
         success: function (rs) {
@@ -41,7 +41,7 @@ $(function () {
         searchDelay: 500,
         lengthMenu: [5, 10, 25],
         ajax: {
-            url: '/api/products'
+            url: '/api/admin/products'
         },
         columns: [
             {
@@ -92,26 +92,4 @@ $(function () {
         ],
         order: [[2, "DESC"]]
     });
-
-    //$('#mainTable').on('click', '.delBtn', function () {
-    //    var btn = $(this);
-    //    bootbox.confirm("Delete product?", function (confirm) {
-    //        if (confirm) {
-    //            var asin = btn.data('id');
-
-    //            $.ajax({
-    //                url: '/api/product/' + asin,
-    //                type: 'DELETE',
-    //                success: function (rs) {
-    //                    if ($.isSuccess(rs)) {
-    //                        mainTable.ajax.reload();
-    //                    }
-    //                    else {
-    //                        bootbox.alert(rs);
-    //                    }
-    //                }
-    //            });
-    //        }
-    //    });
-    //});
 });

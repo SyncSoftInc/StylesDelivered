@@ -77,7 +77,7 @@
             </div>
             <div class="modal-body">
                 <fieldset>
-                    <form novalidate="novalidate" class="dropzone" id="mydropzone" action="/api/product/upload"></form>
+                    <form novalidate="novalidate" class="dropzone" id="mydropzone" action="/api/admin/product/upload"></form>
                 </fieldset>
             </div>
             <div class="modal-footer">
@@ -104,15 +104,6 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="form-row">
-                        @*<div class="col-xs-12 col-md-4 d-flex flex-wrap align-content-center img_center">
-                                <div v-if="isNew">
-                                    <h6 class="text-center align-middle">Save to Upload Image</h6>
-                                </div>
-                                <div v-else>
-                                    <img class="rounded img-fluid pointer" data-toggle="modal" data-target="#uploadModal"
-                                         v-bind:src="product.imageUrl" v-bind:alt="product.productName" />
-                                </div>
-                            </div>*@
                         <div class="col-md-6">
                             <label for="sku">SKU</label>
                             <input type="text" class="form-control" v-model="item.sku" placeholder="SKU" required>

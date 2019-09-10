@@ -29,31 +29,31 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// <summary>
         /// 创建Product
         /// </summary>
-        [HttpPost("api/product")]
+        [HttpPost("api/admin/product")]
         public Task<string> CreateItemAsync(CreateProductCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
         /// Upadte Product
         /// </summary>
-        [HttpPut("api/product")]
+        [HttpPut("api/admin/product")]
         public Task<string> UpdateItemAsync(UpdateProductCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
         /// 删除Product
         /// </summary>
-        [HttpDelete("api/product/{asin}")]
+        [HttpDelete("api/admin/product/{asin}")]
         public Task<string> DeleteItemAsync(DeleteProductCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
         /// 获取Product
         /// </summary>
-        [HttpGet("api/product/{asin}")]
+        [HttpGet("api/admin/product/{asin}")]
         public Task<ProductDTO> GetItemAsync(string asin) => ProductDF.GetProductAsync(asin);
 
         /// <summary>
         /// Upadte Product Image
         /// </summary>
-        [HttpPost("api/product/upload")]
+        [HttpPost("api/admin/product/upload")]
         public Task<MsgResult<ProductDTO>> UploadImageAsync(UploadProductImageCommand cmd)
         {
             using (var stream = Request.Form.Files[0].OpenReadStream())
@@ -72,7 +72,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// <summary>
         /// Upadte Product Status
         /// </summary>
-        [HttpPatch("api/product")]
+        [HttpPatch("api/admin/product")]
         public Task<string> UpdateStatusAsync(UpdateProductStatusCommand cmd) => base.RequestAsync(cmd);
 
         #endregion
@@ -82,8 +82,8 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// <summary>
         /// 获取分页Product数据
         /// </summary>
-        [HttpGet("api/products")]
-        public async Task<DataTables<ProductDTO>> GetProductsAsync(DataTableModel model)
+        [HttpGet("api/admin/products")]
+        public async Task<DataTables<ProductDTO>> GetProductsAsync(ProductQueryModel model)
         {
             var query = new GetProductsQuery
             {
@@ -93,6 +93,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
                 Draw = model.Draw,
                 Keyword = model.Keyword,
                 SortDirection = model.SortDirection,
+                Status = model.Status
             };
             query.SetContext(User.Identity);
 
@@ -101,6 +102,5 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         }
 
         #endregion
-
     }
 }
