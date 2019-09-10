@@ -1,13 +1,13 @@
 var itemsTable;
 Dropzone.autoDiscover = false;
 
-var saveVM = new Vue({
+var productVM = new Vue({
     el: "#app",
     data: {
         isNew: true,
         title: "New",
         product: {
-            asin: null
+            asin: asinPara
         }
     },
     methods: {
@@ -50,10 +50,6 @@ var saveVM = new Vue({
     },
     beforeMount: function () {
         var self = this;
-        var url = window.location.href;
-        var last = url.substring(url.lastIndexOf('/') + 1);
-        if (last !== "Save") self.product.asin = last;
-
         self.loadData();
     }
 });
@@ -73,12 +69,12 @@ var itemVM = new Vue({
             self.isNew = $.isNW(self.item.sku);
 
             if (!self.isNew) {
-                $.get("/api/product/item", { asin: saveVM.product.asin, sku: self.item.sku }, function (rs) {
+                $.get("/api/product/item", { asin: productVM.product.asin, sku: self.item.sku }, function (rs) {
                     self.item = rs;
                 });
             }
             else {
-                self.item = { asin: saveVM.product.asin, invQty: 0 };
+                self.item = { asin: productVM.product.asin, invQty: 0 };
             }
         },
         save: function () {
@@ -112,11 +108,11 @@ function createTable() {
     itemsTable = $('#itemsTable').DataTable({
         serverSide: true,
         searchDelay: 500,
-        lengthMenu: [5, 10, 25],
+        lengthMenu: [10, 15, 20],
         ajax: {
             url: '/api/product/items',
             data: {
-                "asin": saveVM.product.asin
+                "asin": productVM.product.asin
             }
         },
         columns: [
@@ -151,7 +147,7 @@ function DeleteItem(sku) {
         if (confirmed) {
             $.ajax({
                 url: '/api/product/item',
-                data: { asin: saveVM.product.asin, sku: sku },
+                data: { asin: productVM.product.asin, sku: sku },
                 type: 'DELETE',
                 success: function (rs) {
                     if ($.isSuccess(rs)) {
@@ -165,6 +161,60 @@ function DeleteItem(sku) {
         }
     });
 }
+
+// Image Upload
+$("#mydropzone").dropzone({
+    parallelUploads: 1,
+    maxFilesize: 1,
+    autoProcessQueue: false,
+    addRemoveLinks: true,
+    dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg">Drop files to upload</span> <span>&nbsp&nbsp<h4 class="display-inline"> (Or Click)</h4></span>',
+    dictResponseError: 'Error uploading file!',
+    acceptedFiles: "image/*",
+    init: function () {
+        var myDropzone = this;
+
+        $("#uploadBtn").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (myDropzone.getQueuedFiles().length > 0) {
+                myDropzone.processQueue();
+            }
+            else {
+                bootbox.alert("Please add files to upload.");
+            }
+        });
+        myDropzone.on("removedfile", function (file) {
+            if (myDropzone.files.length <= 0) {
+                $('#uploadBtn').attr('disabled', true);
+            }
+        });
+        myDropzone.on("addedfile", function (file) {
+            if (myDropzone.files.length > 0) {
+                $('#uploadBtn').attr('disabled', false);
+            }
+            if (!$.isNW(myDropzone.files[1])) {
+                myDropzone.removeFile(myDropzone.files[0]);
+            }
+        });
+        myDropzone.on("sending", function (file, xhr, formData) {
+            // post extra data
+            formData.append('PostData[ASIN]', productVM.product.asin);
+        });
+        myDropzone.on("success", function (files, response) {
+            if (response.isSuccess) {
+                productVM.product.imageUrl = response.result.imageUrl;
+            }
+            else {
+                bootbox.alert(respones.msgCode);
+            }
+
+            $("#uploadModal").modal('toggle');
+            myDropzone.removeAllFiles();
+        });
+    }
+});
 
 $(function () {
     $('#items-tab').on('shown.bs.tab', function () {
@@ -183,59 +233,5 @@ $(function () {
     $('#itemModal').on('click', '#itemSaveBtn', function () {
         var btn = $(this);
         itemVM.save();
-    });
-
-    // Image Upload
-    $("#mydropzone").dropzone({
-        parallelUploads: 1,
-        maxFilesize: 1,
-        autoProcessQueue: false,
-        addRemoveLinks: true,
-        dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg">Drop files to upload</span> <span>&nbsp&nbsp<h4 class="display-inline"> (Or Click)</h4></span>',
-        dictResponseError: 'Error uploading file!',
-        acceptedFiles: "image/*",
-        init: function () {
-            var myDropzone = this;
-
-            $("#uploadBtn").on("click", function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (myDropzone.getQueuedFiles().length > 0) {
-                    myDropzone.processQueue();
-                }
-                else {
-                    bootbox.alert("Please add files to upload.");
-                }
-            });
-            myDropzone.on("removedfile", function (file) {
-                if (myDropzone.files.length <= 0) {
-                    $('#uploadBtn').attr('disabled', true);
-                }
-            });
-            myDropzone.on("addedfile", function (file) {
-                if (myDropzone.files.length > 0) {
-                    $('#uploadBtn').attr('disabled', false);
-                }
-                if (myDropzone.files[1] !== null) {
-                    myDropzone.removeFile(myDropzone.files[0]);
-                }
-            });
-            myDropzone.on("sending", function (file, xhr, formData) {
-                // post extra data
-                formData.append('PostData[ASIN]', saveVM.product.asin);
-            });
-            myDropzone.on("success", function (files, response) {
-                if (response.isSuccess) {
-                    saveVM.product.imageUrl = response.result.imageUrl;
-                }
-                else {
-                    bootbox.alert(respones.msgCode);
-                }
-
-                $("#uploadModal").modal('toggle');
-                myDropzone.removeAllFiles();
-            });
-        }
     });
 });

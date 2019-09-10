@@ -56,7 +56,7 @@ $(function () {
                     type: 'DELETE',
                     success: function (rs) {
                         if ($.isSuccess(rs)) {
-                            window.location = "/admin/product";
+                            mainTable.ajax.reload();
                         }
                         else {
                             bootbox.alert(rs);

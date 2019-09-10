@@ -69,7 +69,18 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> DeleteProductAsync(string asin)
         {
-            return await ProductDAL.DeleteProductAsync(asin).ConfigureAwait(false);
+            var product = await ProductDAL.GetProductAsync(asin).ConfigureAwait(false);
+            if (product.IsNull()) return MsgCodes.ProductNotExists;
+            // ^^^^^^^^^^
+
+            var msgCode = await ProductDAL.DeleteProductAsync(asin).ConfigureAwait(false);
+            if (msgCode.IsSuccess())
+            {
+                var imageKey = product.ImageUrl.Remove(0, _imageRoot.Length);
+                msgCode = await Storage.DeleteAsync(imageKey).ConfigureAwait(false);
+            }
+
+            return msgCode;
         }
 
         #endregion

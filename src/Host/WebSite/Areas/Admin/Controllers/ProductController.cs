@@ -18,9 +18,9 @@ namespace SyncSoft.StylesDelivered.WebSite.Areas.Product.Controllers
         // *******************************************************************************************************************************
         #region -  Save  -
 
-        public IActionResult Save()
+        public IActionResult Save(string id)
         {
-            return View();
+            return View(model: id);
         }
 
         #endregion
