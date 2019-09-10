@@ -7,7 +7,7 @@ namespace SyncSoft.StylesDelivered.Redis.Inventory
 {
     public class InventoryQueryDAL : IInventoryDAL
     {
-        private const string _Key = "INV:STYD";
+        private const string _Key = "inv:STYD";
         private readonly IInventoryDB _db;
 
         public InventoryQueryDAL(IInventoryDB db)
