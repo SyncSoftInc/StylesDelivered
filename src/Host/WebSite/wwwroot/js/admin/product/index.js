@@ -66,28 +66,25 @@ $(function () {
                 }
             },
             {
-                width: 50,
+                width: 200,
                 orderable: false,
                 render: function (id, display, item) {
+                    var btn;
                     if (item['status'] === 1) {
-                        return '<button type="button" class="btn btn-sm btn-primary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 0)">Deactivate</button>';
+                        btn = '<button type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 0)">Deactivate</button>';
                     }
                     else {
-                        return '<button type="button" class="btn btn-sm btn-primary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 1)">Activate</button>';
+                        btn = '<button type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 1)">Activate</button>';
                     }
-                }
-            },
-            {
-                width: 120,
-                orderable: false,
-                render: function (id, display, item) {
-                    return '<a class="btn btn-sm btn-primary mr-2" href="/admin/product/Save/' + item['asin'] + '">Edit</a>' +
+                    btn += '<a class="btn btn-sm btn-primary ml-2 mr-2" href="/admin/product/Save/' + item['asin'] + '">Edit</a>' +
                         '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteProduct(\'' + item['asin'] + '\')">Delete</button>';
+
+                    return btn;
                 }
             }
         ],
         columnDefs: [
-            { "className": "text-center align-middle", "targets": [-1, 0, 3, 5] },
+            { "className": "text-center align-middle", "targets": [-1, 0, 3] },
             { "className": "align-middle", "targets": '_all' }
         ],
         order: [[2, "DESC"]]
