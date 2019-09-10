@@ -25,9 +25,10 @@
                         <div v-if="isNew">
                             <h6 class="text-center align-middle">Save to Upload Image</h6>
                         </div>
-                        <div v-else>
+                        <div v-else class="img-container">
                             <img class="rounded img-fluid pointer" data-toggle="modal" data-target="#uploadModal"
                                  v-bind:src="product.imageUrl" v-bind:alt="product.productName" />
+                            <div class="caption"><p><small>Click to Upload</small></p></div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-8 d-flex flex-wrap align-content-bottom">

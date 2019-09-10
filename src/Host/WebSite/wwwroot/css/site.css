@@ -33,8 +33,13 @@ code {
     cursor: pointer;
 }
 
-@media only screen and (max-width: 770px) {
-    .img_center {
-        justify-content: center !important
-    }
+.img-container {
+    position: relative;
+}
+
+.caption {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

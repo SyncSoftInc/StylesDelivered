@@ -18,7 +18,7 @@ var productVM = new Vue({
 
             if (!self.isNew) {
                 $.get("/api/admin/product/" + self.product.asin, function (rs) {
-                    rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 100, 100) : $.pic(rs.imageUrl);
+                    rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 150, 150) : $.pic(rs.imageUrl);
                     self.product = rs;
                 });
             }
