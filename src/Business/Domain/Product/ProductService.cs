@@ -124,7 +124,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         // *******************************************************************************************************************************
         #region -  RefreshItemsJson  -
 
-        public async Task<string> RefreshItemsJsonAsync(string asin)
+        public async Task<string> RefreshProductAsync(string asin)
         {
             var items = await ProductItemDAL.GetItemsAsync(asin).ConfigureAwait(false);
             if (items.IsPresent())
@@ -137,10 +137,25 @@ namespace SyncSoft.StylesDelivered.Domain.Product
                 });
                 var json = JsonSerializer.Serialize(baseItems);
                 var msgCode = await ProductDAL.UpdateItemsJsonAsync(asin, json).ConfigureAwait(false);
+                if (msgCode.IsSuccess())
+                {// 有Item，确保激活
+                    msgCode = await ProductDAL.UpdateProductStatusAsync(new ProductDTO
+                    {
+                        ASIN = asin,
+                        Status = ProductStatusEnum.Active
+                    }).ConfigureAwait(false);
+                }
                 return msgCode;
             }
-
-            return MsgCodes.SUCCESS;
+            else
+            {//没有Item，不激活
+                var msgCode = await ProductDAL.UpdateProductStatusAsync(new ProductDTO
+                {
+                    ASIN = asin,
+                    Status = ProductStatusEnum.Inactive
+                }).ConfigureAwait(false);
+                return msgCode;
+            }
         }
 
         #endregion
