@@ -77,6 +77,9 @@ var itemVM = new Vue({
                     self.item = rs;
                 });
             }
+            else {
+                self.item = { asin: saveVM.product.asin, invQty: 0 };
+            }
         },
         save: function () {
             var self = this;
@@ -90,9 +93,8 @@ var itemVM = new Vue({
                 },
                 success: function (rs) {
                     if ($.isSuccess(rs)) {
-                        bootbox.alert("Save successfully.", function () {
-                            window.location = "/admin/product/Save/" + saveVM.product.asin;
-                        });
+                        $("#itemModal").modal("toggle");
+                        itemsTable.ajax.reload();
                     }
                     else {
                         bootbox.alert(rs);
@@ -105,15 +107,48 @@ var itemVM = new Vue({
         show: function () {
             bootbox.alert("aaa");
         }
-    },
-    beforeMount: function () {
-        var self = this;
-        self.item.asin = saveVM.product.asin;
-        //self.loadData();
     }
 });
 
+// Item Delete
+function DeleteItem(sku) {
+    bootbox.confirm("Delete product?", function (confirmed) {
+        if (confirmed) {
+            $.ajax({
+                url: '/api/product/item',
+                data: { asin: saveVM.product.asin, sku: sku },
+                type: 'DELETE',
+                success: function (rs) {
+                    if ($.isSuccess(rs)) {
+                        itemsTable.ajax.reload();
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                }
+            });
+        }
+    });
+}
+
+
 $(function () {
+    $('#items-tab').on('click', function () {
+        itemsTable.ajax.reload();
+    });
+
+    // ItemModal events
+    $('#itemModal').on('show.bs.modal', function (e) {
+        var btn = $(e.relatedTarget);
+        itemVM.item.sku = btn.data('id');
+        itemVM.loadData();
+    });
+
+    $('#itemModal').on('click', '#itemSaveBtn', function () {
+        var btn = $(this);
+        itemVM.save();
+    });
+
     // Items Table
     itemsTable = $('#itemsTable').DataTable({
         serverSide: true,
@@ -136,11 +171,11 @@ $(function () {
                 orderable: false
             },
             {
-                width: 120,
+                width: 150,
                 orderable: false,
                 render: function (id, display, item) {
-                    return '<button class="editBtn btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemModal" data-id="' + item['sku'] + '">Edit</a>' +
-                        '<button class="delBtn btn btn-sm btn-danger" type="button" data-id="' + item['asin'] + '">Delete</button>';
+                    return '<button class="editBtn btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemModal"  data-id="' + item['sku'] + '">Edit</a>' +
+                        '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteItem(\'' + item['sku'] + '\')">Delete</button>';
                 }
             }
         ],
@@ -148,43 +183,6 @@ $(function () {
             { "className": "text-center", "targets": [-1] }
         ],
         order: [[1, "DESC"]]
-    });
-
-    // Item Modal save
-    $('#itemModal').on('click', '#itemSaveBtn', function () {
-        var btn = $(this);
-        itemVM.save();
-    });
-
-    // Item edit event
-    $('#itemsTable').on('click', '.editBtn', function () {
-        var btn = $(this);
-        var sku = btn.data('id');
-        itemVM.item.sku = sku;
-        itemVM.loadData();
-    });
-
-    // Item delete event
-    $('#itemsTable').on('click', '.delBtn', function () {
-        var btn = $(this);
-        bootbox.confirm("Delete product?", function (confirm) {
-            if (confirm) {
-                var asin = btn.data('id');
-
-                $.ajax({
-                    url: '/api/product/item' + asin,
-                    type: 'DELETE',
-                    success: function (rs) {
-                        if ($.isSuccess(rs)) {
-                            window.location = "/admin/product/item";
-                        }
-                        else {
-                            bootbox.alert(rs);
-                        }
-                    }
-                });
-            }
-        });
     });
 
     // Image Upload
