@@ -110,27 +110,6 @@ var itemVM = new Vue({
     }
 });
 
-// Item Delete
-function DeleteItem(sku) {
-    bootbox.confirm("Delete product?", function (confirmed) {
-        if (confirmed) {
-            $.ajax({
-                url: '/api/product/item',
-                data: { asin: saveVM.product.asin, sku: sku },
-                type: 'DELETE',
-                success: function (rs) {
-                    if ($.isSuccess(rs)) {
-                        itemsTable.ajax.reload();
-                    }
-                    else {
-                        bootbox.alert(rs);
-                    }
-                }
-            });
-        }
-    });
-}
-
 // Items Table
 function createTable() {
     itemsTable = $('#itemsTable').DataTable({
@@ -166,6 +145,27 @@ function createTable() {
             { "className": "text-center", "targets": [-1] }
         ],
         order: [[1, "DESC"]]
+    });
+}
+
+// Item Delete
+function DeleteItem(sku) {
+    bootbox.confirm("Delete product?", function (confirmed) {
+        if (confirmed) {
+            $.ajax({
+                url: '/api/product/item',
+                data: { asin: saveVM.product.asin, sku: sku },
+                type: 'DELETE',
+                success: function (rs) {
+                    if ($.isSuccess(rs)) {
+                        itemsTable.ajax.reload();
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                }
+            });
+        }
     });
 }
 
