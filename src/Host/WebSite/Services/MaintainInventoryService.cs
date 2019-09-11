@@ -2,7 +2,6 @@
 using SyncSoft.App.Components;
 using SyncSoft.App.Logging;
 using SyncSoft.ECP.Quartz;
-using SyncSoft.StylesDelivered.Domain.Inventory;
 using SyncSoft.StylesDelivered.Domain.Product;
 using System;
 using System.Threading.Tasks;
@@ -21,18 +20,11 @@ namespace SyncSoft.StylesDelivered.WebSite.Services
         private static readonly Lazy<IProductItemService> _lazyProductItemService = ObjectContainer.LazyResolve<IProductItemService>();
         private IProductItemService ProductItemService => _lazyProductItemService.Value;
 
-        private static readonly Lazy<IInventoryService> _lazyInventoryService = ObjectContainer.LazyResolve<IInventoryService>();
-        private IInventoryService InventoryService => _lazyInventoryService.Value;
-
         #endregion
 
         protected override async Task<string> InnerExecuteAsync(IJobExecutionContext context)
         {
-            var msgCode = await InventoryService.CleanInventoriesAsync().ConfigureAwait(false);
-            if (msgCode.IsSuccess())
-            {
-                msgCode = await ProductItemService.SyncInventoriesAsync().ConfigureAwait(false);
-            }
+            var msgCode = await ProductItemService.SyncInventoriesAsync().ConfigureAwait(false);
             return msgCode;
         }
     }

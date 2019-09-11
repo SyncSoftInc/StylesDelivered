@@ -20,7 +20,6 @@ namespace SyncSoft.App
                     ObjectContainer.Register<IProductItemService, ProductItemService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserService, UserService>(LifeCycleEnum.Singleton);
                     //ObjectContainer.Register<IShoppingCartService, ShoppingCartService>(LifeCycleEnum.Singleton);
-                    ObjectContainer.Register<IInventoryService, InventoryService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IItemInventoryFactory, ItemInventoryFactory>(LifeCycleEnum.Singleton);
                 };
             }

@@ -34,7 +34,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<long> GetOnHandAsync()
         {
-            var r = await InventoryService.GetOnHandQtyAsync(new InventoryDTO { Warehouse = "STYD", ItemNo = _sku });
+            var r = await InventoryService.GetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku });
             return r.Qty;
         }
 
@@ -44,7 +44,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> SetOnHandAsync(long qty)
         {
-            var r = await InventoryService.SetOnHandQtyAsync(new InventoryDTO { Warehouse = "STYD", ItemNo = _sku, Qty = qty });
+            var r = await InventoryService.SetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
         }
 
@@ -54,7 +54,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> HoldAsync(long qty)
         {
-            var r = await InventoryService.HoldAsync(new InventoryDTO { Warehouse = "STYD", ItemNo = _sku, Qty = qty });
+            var r = await InventoryService.HoldAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
         }
 
@@ -64,7 +64,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> UnholdAsync(long qty)
         {
-            var r = await InventoryService.UnholdAsync(new InventoryDTO { Warehouse = "STYD", ItemNo = _sku, Qty = qty });
+            var r = await InventoryService.UnholdAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
         }
 
