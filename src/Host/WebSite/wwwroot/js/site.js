@@ -72,10 +72,13 @@ Vue.component("itembox", {
     template: '#item-box',
     data: function () {
         return {
-            selectedSize: "-All-",
-            selectedColor: "-All-",
-            sizeList: ["-All-"],
-            colorList: ["-All-"]
+            json: null,
+            selectedSize: "-Select Size-",
+            selectedColor: "-Select Color-",
+            sizeList: ["-Select Size-"],
+            colorList: ["-Select Color-"],
+            allSize: ["-Select Size-"],
+            allColor: ["-Select Color-"]
         }
     },
     methods: {
@@ -92,39 +95,52 @@ Vue.component("itembox", {
         createdTime: function (item) {
             return $.timeFormat(item.createdOnUtc);
         },
-        loadData: function () {
+        decorateData: function () {
             var self = this;
 
             if (!$.isNW(self.item.itemsJson)) {
-                var items = JSON.parse(self.item.itemsJson);
+                self.json = JSON.parse(self.item.itemsJson);
 
-                $.each(items, function (idx, item) {
-                    if (!$.isNW(item.Size)) {
+                $.each(self.json, function (idx, item) {
+                    if (!$.isNW(item.Size) && !self.sizeList.includes(item.Size)) {
                         self.sizeList.push(item.Size);
+                        self.allSize.push(item.Size);
                     }
-                    if (!$.isNW(item.Color)) {
+                    if (!$.isNW(item.Color) && !self.colorList.includes(item.Color)) {
                         self.colorList.push(item.Color);
+                        self.allColor.push(item.Color);
                     }
                 });
             }
         },
-        onChangeSize: function (selectedSize) {
+        onChangeList: function (type, selectedVal) {
             var self = this;
 
-            if (!$.isNW(self.item.itemsJson)) {
-                self.colorList = [];
+            if ((type === 'size' || type === 'color') && !$.isNW(self.json)) {
+                if (selectedVal === '-Select Size-' || selectedVal === '-Select Color-') {
+                    // return all
+                    self.colorList = self.allColor;
+                    self.sizeList = self.allSize;
+                }
+                else {
+                    // clear list
+                    if (type === 'size') self.colorList = ["-Select Color-"];
+                    if (type === 'color') self.sizeList = ["-Select Size-"];
 
-                var items = JSON.parse(self.item.itemsJson);
-                $.each(items, function (idx, item) {
-                    if (item.Size === selectedSize) {
-                        self.colorList.push(item.Color);
-                    }
-                });
+                    $.each(self.json, function (idx, item) {
+                        if (type === 'size' && item.Size === selectedVal) {
+                            self.colorList.push(item.Color);
+                        }
+                        if (type === 'color' && item.Color === selectedVal) {
+                            self.sizeList.push(item.Size);
+                        }
+                    });
+                }
             }
         }
     },
     beforeMount: function () {
         var self = this;
-        self.loadData();
+        self.decorateData();
     }
 });

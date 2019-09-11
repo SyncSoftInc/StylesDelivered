@@ -24,11 +24,11 @@
                     <div class="row">
                         <div class="col-xs-12 col-md-4 d-flex flex-wrap align-content-center justify-content-center">
                             <div v-if="isNew">
-                                <h6 class="text-center align-middle">Save to Upload Image</h6>
+                                <h6 class="text-center img-container">Save to Upload Image</h6>
                             </div>
-                            <div v-else class="img-container">
+                            <div v-else class="img-container align-middle">
                                 <img class="rounded img-fluid pointer" data-toggle="modal" data-target="#uploadModal"
-                                     v-bind:src="product.imageUrl" v-bind:alt="product.productName" />
+                                     v-bind:src="product.imageUrl" v-bind:alt="product.productName" style="position:relative;" />
                                 <div class="caption"><p><small>Click to Upload</small></p></div>
                             </div>
                         </div>
@@ -145,6 +145,6 @@
 </div>
 <!-- Items Modal END-->
 @section Scripts{
-    <script>var asinPara='@Model';</script>
-    <partial name="Script" model='"admin/product/save"' />
+<script>var asinPara='@Model';</script>
+<partial name="Script" model='"admin/product/save"' />
 }
