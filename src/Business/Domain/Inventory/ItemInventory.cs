@@ -9,8 +9,8 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
-        private static readonly Lazy<IInventoryDAL> _lazyInventoryQueryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
-        private IInventoryDAL InventoryQueryDAL => _lazyInventoryQueryDAL.Value;
+        private static readonly Lazy<IInventoryDAL> _lazyInventoryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
+        private IInventoryDAL InventoryDAL => _lazyInventoryDAL.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -33,7 +33,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public bool IsAvailable(int qty)
         {
-            var invQty = InventoryQueryDAL.GetAvailableInventory(_sku);
+            var invQty = InventoryDAL.GetAvailableInventory(_sku);
             return invQty >= qty;
         }
 
@@ -43,7 +43,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public int Get()
         {
-            var invQty = InventoryQueryDAL.GetAvailableInventory(_sku);
+            var invQty = InventoryDAL.GetAvailableInventory(_sku);
             return invQty;
         }
 
@@ -55,7 +55,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         {
             try
             {
-                InventoryQueryDAL.SetItemInventories((_sku, invQty));
+                InventoryDAL.SetItemInventories((_sku, invQty));
                 return MsgCodes.SUCCESS;
             }
             catch (Exception ex)

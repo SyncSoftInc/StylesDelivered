@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SyncSoft.ECP.MySql" Version="2.9.11" />
+      <PackageReference Include="SyncSoft.ECP.MySql" Version="2.9.13" />
     </ItemGroup>
 
     <ItemGroup>
