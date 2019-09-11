@@ -70,6 +70,14 @@ $.pic = function (url, width = 350, height = 350) {
 Vue.component("itembox", {
     props: ["item"],
     template: '#item-box',
+    data: function () {
+        return {
+            selectedSize: "-All-",
+            selectedColor: "-All-",
+            sizeList: ["-All-"],
+            colorList: ["-All-"]
+        }
+    },
     methods: {
         //addToCart: function (item) {
         //    $.post("/api/shoppingcart/item", {
@@ -83,6 +91,40 @@ Vue.component("itembox", {
         //},
         createdTime: function (item) {
             return $.timeFormat(item.createdOnUtc);
+        },
+        loadData: function () {
+            var self = this;
+
+            if (!$.isNW(self.item.itemsJson)) {
+                var items = JSON.parse(self.item.itemsJson);
+
+                $.each(items, function (idx, item) {
+                    if (!$.isNW(item.Size)) {
+                        self.sizeList.push(item.Size);
+                    }
+                    if (!$.isNW(item.Color)) {
+                        self.colorList.push(item.Color);
+                    }
+                });
+            }
+        },
+        onChangeSize: function (selectedSize) {
+            var self = this;
+
+            if (!$.isNW(self.item.itemsJson)) {
+                self.colorList = [];
+
+                var items = JSON.parse(self.item.itemsJson);
+                $.each(items, function (idx, item) {
+                    if (item.Size === selectedSize) {
+                        self.colorList.push(item.Color);
+                    }
+                });
+            }
         }
+    },
+    beforeMount: function () {
+        var self = this;
+        self.loadData();
     }
 });
