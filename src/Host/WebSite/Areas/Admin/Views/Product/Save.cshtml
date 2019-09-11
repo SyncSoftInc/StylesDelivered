@@ -32,12 +32,12 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-8 d-flex flex-wrap align-content-bottom">
-                        <label for="asin">ASIN</label>
-                        <input type="text" class="form-control" v-model="product.asin" placeholder="ASIN" v-bind:readonly="!isNew" required>
-                        <label for="productName">ProductName</label>
-                        <input type="text" class="form-control" v-model="product.productName" placeholder="ProductName" required>
-                        <label for="description">Description</label>
-                        <textarea class="form-control" v-model="product.description" rows="4" placeholder="Description"></textarea>
+                        <label for="ASIN">ASIN</label>
+                        <input id="ASIN" type="text" class="form-control" v-model="product.asin" placeholder="ASIN" v-bind:readonly="!isNew" maxlength="20" required>
+                        <label for="ProductName">ProductName</label>
+                        <input id="ProductName" type="text" class="form-control" v-model="product.productName" placeholder="ProductName" maxlength="200" required>
+                        <label for="Description">Description</label>
+                        <textarea id="Description" class="form-control" v-model="product.description" rows="4" placeholder="Description" maxlength="2000"></textarea>
                     </div>
                 </div>
                 <div class="form-row mt-2">
@@ -106,32 +106,32 @@
                 <div class="container">
                     <div class="form-row">
                         <div class="col-md-6">
-                            <label for="sku">SKU</label>
-                            <input type="text" class="form-control" v-model="item.sku" placeholder="SKU" required>
+                            <label for="SKU">SKU</label>
+                            <input id="SKU" type="text" class="form-control" v-model="item.sku" placeholder="SKU" maxlength="20" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="alias">Alias</label>
-                            <input type="text" class="form-control" v-model="item.alias" placeholder="Alias">
+                            <label for="Alias">Alias</label>
+                            <input id="Alias" type="text" class="form-control" v-model="item.alias" placeholder="Alias" maxlength="200">
                         </div>
                     </div>
                     <div class="form-row mt-2">
                         <div class="col-md-4">
-                            <label for="color">Color</label>
-                            <input type="text" class="form-control" v-model="item.color" placeholder="Color">
+                            <label for="Color">Color</label>
+                            <input id="Color" type="text" class="form-control" v-model="item.color" placeholder="Color" maxlength="30">
                         </div>
                         <div class="col-md-4">
-                            <label for="size">Size</label>
-                            <input type="text" class="form-control" v-model="item.size" placeholder="Size">
+                            <label for="Size">Size</label>
+                            <input id="Size" type="text" class="form-control" v-model="item.size" placeholder="Size" maxlength="30">
                         </div>
                         <div class="col-md-4">
                             <label for="invQty">InvQty</label>
-                            <input type="number" class="form-control" v-model="item.invQty" min="0">
+                            <input id="invQty" type="number" class="form-control" v-model="item.invQty" min="0">
                         </div>
                     </div>
                     <div class="form-row mt-2">
                         <div class="col-md-12">
-                            <label for="invQty">Url</label>
-                            <input type="text" class="form-control" v-model="item.url" placeholder="Url">
+                            <label for="Url">Url</label>
+                            <input id="Url" type="text" class="form-control" v-model="item.url" placeholder="Url" maxlength="200">
                         </div>
                     </div>
                 </div>
