@@ -1,4 +1,5 @@
 ﻿using SyncSoft.App.Components;
+using SyncSoft.App.Configurations;
 using SyncSoft.App.EngineConfigs;
 using SyncSoft.App.GRPC;
 
@@ -16,7 +17,9 @@ namespace SyncSoft.App
                 {
                     ObjectContainer.Register(() =>
                     {
-                        var channel = ObjectContainer.Resolve<IChannelFactory>().Create("localhost:9999");
+                        var endpoint = ObjectContainer.Resolve<IConfigProvider>().GetValue<string>("Services:Logistics");
+
+                        var channel = ObjectContainer.Resolve<IChannelFactory>().Create(endpoint);
                         return new Warehouse.Inventory.InventoryClient(channel);
                     }, LifeCycleEnum.Singleton);
                 };
