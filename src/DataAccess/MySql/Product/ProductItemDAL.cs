@@ -56,14 +56,14 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
         // *******************************************************************************************************************************
         #region -  SetItemInventories  -
 
-        public Task<string> SetItemInventoriesAsync(IDictionary<string, int> inventories)
+        public Task<string> SetItemInventoriesAsync(IDictionary<string, long> inventories)
         {
             var parameters = inventories.Select(x =>
             {
                 var para = new DynamicParameters();
 
                 para.Add("SKU", x.Key, DbType.String);
-                para.Add("InvQty", x.Value, DbType.Int32);
+                para.Add("InvQty", x.Value, DbType.Int64);
 
                 return para;
             }).ToArray();

@@ -16,9 +16,9 @@ namespace SyncSoft.App
 {
     public static class EngineExtensions
     {
-        public static CommonConfigurator UseStylesDeliveredMySql(this CommonConfigurator configurator, Action<DBOptions> configOptions = null, DBOptions options = null)
+        public static CommonConfigurator UseStydMySql(this CommonConfigurator configurator, Action<DBOptions> configOptions = null, DBOptions options = null)
         {
-            Engine.PreventDuplicateRegistration(nameof(UseStylesDeliveredMySql));
+            Engine.PreventDuplicateRegistration(nameof(UseStydMySql));
 
             options = options ?? new DBOptions();
             configOptions?.Invoke(options);

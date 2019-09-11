@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Proto\inventory.proto" />
       <None Remove="ss.pfx" />
     </ItemGroup>
 
@@ -14,7 +15,16 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Grpc.Tools" Version="2.23.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="SyncSoft.App.GRPC" Version="2.9.13.2" />
         <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.13" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Protobuf Include="Proto\inventory.proto" GrpcServices="Client" />
     </ItemGroup>
 
 </Project>

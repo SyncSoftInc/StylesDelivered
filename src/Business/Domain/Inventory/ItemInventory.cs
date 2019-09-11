@@ -1,6 +1,7 @@
 ﻿using SyncSoft.App.Components;
-using SyncSoft.StylesDelivered.DataAccess.Inventory;
 using System;
+using System.Threading.Tasks;
+using Warehouse;
 
 namespace SyncSoft.StylesDelivered.Domain.Inventory
 {
@@ -9,8 +10,8 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
-        private static readonly Lazy<IInventoryDAL> _lazyInventoryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
-        private IInventoryDAL InventoryDAL => _lazyInventoryDAL.Value;
+        private static readonly Lazy<Warehouse.Inventory.InventoryClient> _lazyInventoryService = ObjectContainer.LazyResolve<Warehouse.Inventory.InventoryClient>();
+        private Warehouse.Inventory.InventoryClient InventoryService => _lazyInventoryService.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -24,44 +25,47 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         internal ItemInventory(string sku)
         {
-            _sku = sku;
+            _sku = sku.Trim().ToUpper();
         }
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  IsAvailable  -
+        #region -  GetOnHand  -
 
-        public bool IsAvailable(int qty)
+        public async Task<long> GetOnHandAsync()
         {
-            var invQty = InventoryDAL.GetAvailableInventory(_sku);
-            return invQty >= qty;
+            var r = await InventoryService.GetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku });
+            return r.Qty;
         }
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  Get  -
+        #region -  SetOnHold  -
 
-        public int Get()
+        public async Task<string> SetOnHandAsync(long qty)
         {
-            var invQty = InventoryDAL.GetAvailableInventory(_sku);
-            return invQty;
+            var r = await InventoryService.SetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            return r.MsgCode;
         }
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  Set  -
+        #region -  Hold  -
 
-        public string Set(int invQty)
+        public async Task<string> HoldAsync(long qty)
         {
-            try
-            {
-                InventoryDAL.SetItemInventories((_sku, invQty));
-                return MsgCodes.SUCCESS;
-            }
-            catch (Exception ex)
-            {
-                return ex.GetRootExceptionMessage();
-            }
+            var r = await InventoryService.HoldAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            return r.MsgCode;
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  Hold  -
+
+        public async Task<string> UnholdAsync(long qty)
+        {
+            var r = await InventoryService.UnholdAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            return r.MsgCode;
         }
 
         #endregion

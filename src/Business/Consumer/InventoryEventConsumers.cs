@@ -23,7 +23,7 @@ namespace SyncSoft.StylesDelivered.Consumer
         {
             var msg = context.Message;
             var inventory = ItemInventoryFactory.Create(msg.SKU);
-            var msgCode = inventory.Set(msg.InvQty);
+            var msgCode = inventory.SetOnHandAsync(msg.InvQty);
 
             return Task.FromResult<object>(msgCode);
         }

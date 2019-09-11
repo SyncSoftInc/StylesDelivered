@@ -21,15 +21,19 @@ namespace SyncSoft.StylesDelivered.WebSite
                 .UseMessageQueue()
                 .UseDefaultMessageComponents()
                 .UseWebSiteApiClient()
-                .UseStylesDeliveredDomain()
-                .UseStylesDeliveredRedis()
-                .UseStylesDeliveredMySql()
-                .UseStylesDeliveredDF()
+                .UseStydDomain()
+                .UseStydRedis()
+                .UseStydMySql()
+                .UseStydDF()
+                .UseStydShared()
+                .UseGRPC()
                 .UseAliyun()
                 .UseJsonConfiguration()
                 .Start();
 
             QuartzHost.Run<Startup>(args);
+
+            Engine.Stop();
         }
     }
 }

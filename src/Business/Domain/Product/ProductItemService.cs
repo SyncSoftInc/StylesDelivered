@@ -1,6 +1,5 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.App.Messaging;
-using SyncSoft.StylesDelivered.DataAccess.Inventory;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
 using SyncSoft.StylesDelivered.Event.Inventory;
@@ -22,11 +21,11 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
+        private static readonly Lazy<Warehouse.Inventory.InventoryClient> _lazyInventoryService = ObjectContainer.LazyResolve<Warehouse.Inventory.InventoryClient>();
+        private Warehouse.Inventory.InventoryClient InventoryService => _lazyInventoryService.Value;
+
         private static readonly Lazy<IProductItemDAL> _lazyProductItemDAL = ObjectContainer.LazyResolve<IProductItemDAL>();
         private IProductItemDAL ProductItemDAL => _lazyProductItemDAL.Value;
-
-        private static readonly Lazy<IInventoryDAL> _lazyInventoryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
-        private IInventoryDAL InventoryDAL => _lazyInventoryDAL.Value;
 
         private static readonly Lazy<IMessageDispatcher> _lazyMessageDispatcher = ObjectContainer.LazyResolve<IMessageDispatcher>();
         private IMessageDispatcher MessageDispatcher => _lazyMessageDispatcher.Value;
@@ -93,10 +92,11 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> SyncInventoriesAsync()
         {
-            var inventories = await InventoryDAL.GetItemInventoriesAsync().ConfigureAwait(false);
-            if (inventories.IsPresent())
+            var warehouseDTO = await InventoryService.GetWarehouseOnHandQtyAsync(new Warehouse.WarehouseDTO { Warehouse = Constants.WarehouseID });
+            if (warehouseDTO.Inventories.IsPresent())
             {
-                return await ProductItemDAL.SetItemInventoriesAsync(inventories).ConfigureAwait(false);
+                var dic = warehouseDTO.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);
+                return await ProductItemDAL.SetItemInventoriesAsync(dic).ConfigureAwait(false);
             }
             return MsgCodes.SUCCESS;
         }
