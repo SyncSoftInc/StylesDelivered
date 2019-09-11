@@ -76,7 +76,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             // ^^^^^^^^^^
 
             var msgCode = await ProductDAL.DeleteProductAsync(asin).ConfigureAwait(false);
-            if (msgCode.IsSuccess())
+            if (msgCode.IsSuccess() && product.ImageUrl.IsPresent())
             {
                 var imageKey = product.ImageUrl.Remove(0, _imageRoot.Length);
                 msgCode = await Storage.DeleteAsync(imageKey).ConfigureAwait(false);

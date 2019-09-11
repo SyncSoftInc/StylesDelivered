@@ -26,14 +26,14 @@ namespace Product
         [Test]
         public async Task InsertItems()
         {
-            var asin = "new_2";
+            var asin = "new_item_1";
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var msgCode = await ProductItemDAL.InsertItemAsync(new SyncSoft.StylesDelivered.DTO.Product.ProductItemDTO
                 {
                     ASIN = asin,
-                    SKU = $"new_item2_{i}",
+                    SKU = $"item1_{i}",
                     Color = $"color_{i}",
                     Size = $"size_{i}"
                 }).ConfigureAwait(false);

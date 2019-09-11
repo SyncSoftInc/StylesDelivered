@@ -22,23 +22,22 @@
             <form onsubmit="return productVM.save();">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-xs-12 col-md-4 d-flex flex-wrap align-content-center justify-content-center">
+                        <div class="col-xs-12 col-md-4 img-container">
                             <div v-if="isNew">
-                                <h6 class="text-center img-container">Save to Upload Image</h6>
+                                <h6>Save to Upload Image</h6>
                             </div>
-                            <div v-else class="img-container align-middle">
-                                <img class="rounded img-fluid pointer" data-toggle="modal" data-target="#uploadModal"
-                                     v-bind:src="product.imageUrl" v-bind:alt="product.productName" style="position:relative;" />
-                                <div class="caption"><p><small>Click to Upload</small></p></div>
+                            <div v-else class="pointer" data-toggle="modal" data-target="#uploadModal">
+                                <img class="rounded img-fluid" v-bind:src="product.imageUrl" />
+                                <p class="caption"><small>Click to Upload</small></p>
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-8 d-flex flex-wrap align-content-bottom">
-                            <label for="asin">ASIN</label>
-                            <input type="text" class="form-control" v-model="product.asin" placeholder="ASIN" v-bind:readonly="!isNew" required>
-                            <label for="productName">ProductName</label>
-                            <input type="text" class="form-control" v-model="product.productName" placeholder="ProductName" required>
-                            <label for="description">Description</label>
-                            <textarea class="form-control" v-model="product.description" rows="4" placeholder="Description"></textarea>
+                            <label for="ASIN">ASIN</label>
+                            <input id="ASIN" type="text" class="form-control" v-model="product.asin" placeholder="ASIN" v-bind:readonly="!isNew" maxlength="20" required>
+                            <label for="ProductName">ProductName</label>
+                            <input id="ProductName" type="text" class="form-control" v-model="product.productName" placeholder="ProductName" maxlength="200" required>
+                            <label for="Description">Description</label>
+                            <textarea id="Description" class="form-control" v-model="product.description" rows="4" placeholder="Description" maxlength="2000"></textarea>
                         </div>
                     </div>
                 </div>
@@ -106,32 +105,32 @@
                 <div class="container">
                     <div class="form-row">
                         <div class="col-md-6">
-                            <label for="sku">SKU</label>
-                            <input type="text" class="form-control" v-model="item.sku" placeholder="SKU" required>
+                            <label for="SKU">SKU</label>
+                            <input id="SKU" type="text" class="form-control" v-model="item.sku" placeholder="SKU" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="alias">Alias</label>
-                            <input type="text" class="form-control" v-model="item.alias" placeholder="Alias">
+                            <label for="Alias">Alias</label>
+                            <input id="Alias" type="text" class="form-control" v-model="item.alias" placeholder="Alias">
                         </div>
                     </div>
                     <div class="form-row mt-2">
                         <div class="col-md-4">
                             <label for="color">Color</label>
-                            <input type="text" class="form-control" v-model="item.color" placeholder="Color">
+                            <input id="color" type="text" class="form-control" v-model="item.color" placeholder="Color">
                         </div>
                         <div class="col-md-4">
                             <label for="size">Size</label>
-                            <input type="text" class="form-control" v-model="item.size" placeholder="Size">
+                            <input id="size" type="text" class="form-control" v-model="item.size" placeholder="Size">
                         </div>
                         <div class="col-md-4">
                             <label for="invQty">InvQty</label>
-                            <input type="number" class="form-control" v-model="item.invQty" min="0">
+                            <input id="invQty" type="number" class="form-control" v-model="item.invQty" min="0">
                         </div>
                     </div>
                     <div class="form-row mt-2">
                         <div class="col-md-12">
-                            <label for="invQty">Url</label>
-                            <input type="text" class="form-control" v-model="item.url" placeholder="Url">
+                            <label for="url">Url</label>
+                            <input id="url" type="text" class="form-control" v-model="item.url" placeholder="Url">
                         </div>
                     </div>
                 </div>
@@ -145,6 +144,6 @@
 </div>
 <!-- Items Modal END-->
 @section Scripts{
-<script>var asinPara='@Model';</script>
-<partial name="Script" model='"admin/product/save"' />
+    <script>var asinPara='@Model';</script>
+    <partial name="Script" model='"admin/product/save"' />
 }

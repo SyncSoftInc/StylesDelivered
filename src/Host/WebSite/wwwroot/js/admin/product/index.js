@@ -35,8 +35,10 @@ function UpdateProductStatus(asinIn, statusIn) {
     });
 }
 
+
 $(function () {
     mainTable = $('#mainTable').DataTable({
+        responsive: true,
         serverSide: true,
         searchDelay: 500,
         lengthMenu: [5, 10, 25],
@@ -66,15 +68,15 @@ $(function () {
                 }
             },
             {
-                width: 200,
+                width: 210,
                 orderable: false,
                 render: function (id, display, item) {
                     var btn;
                     if (item['status'] === 1) {
-                        btn = '<button type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 0)">Deactivate</button>';
+                        btn = '<button style="width:80px;" type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 0)">Deactivate</button>';
                     }
                     else {
-                        btn = '<button type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 1)">Activate</button>';
+                        btn = '<button style="width:80px;" type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', 1)">Activate</button>';
                     }
                     btn += '<a class="btn btn-sm btn-primary ml-2 mr-2" href="/admin/product/Save/' + item['asin'] + '">Edit</a>' +
                         '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteProduct(\'' + item['asin'] + '\')">Delete</button>';
