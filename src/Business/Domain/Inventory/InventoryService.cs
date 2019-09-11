@@ -1,6 +1,4 @@
-﻿using SyncSoft.App.Components;
-using SyncSoft.StylesDelivered.DataAccess.Inventory;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Inventory
@@ -10,8 +8,8 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
-        private static readonly Lazy<IInventoryDAL> _lazyInventoryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
-        private IInventoryDAL InventoryDAL => _lazyInventoryDAL.Value;
+        //private static readonly Lazy<IInventoryDAL> _lazyInventoryDAL = ObjectContainer.LazyResolve<IInventoryDAL>();
+        //private IInventoryDAL InventoryDAL => _lazyInventoryDAL.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -21,7 +19,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         {
             try
             {
-                await InventoryDAL.CleanInventoriesAsync().ConfigureAwait(false);
+                //await InventoryDAL.CleanInventoriesAsync().ConfigureAwait(false);
                 return MsgCodes.SUCCESS;
             }
             catch (Exception ex)

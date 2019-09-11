@@ -8,6 +8,6 @@
         //public string Color { get; set; }
         //public string Size { get; set; }
         public string Url { get; set; }
-        public int InvQty { get; set; }
+        public long InvQty { get; set; }
     }
 }

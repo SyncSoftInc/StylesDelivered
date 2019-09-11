@@ -2,16 +2,15 @@
 using SyncSoft.App.EngineConfigs;
 using SyncSoft.StylesDelivered.Domain.Inventory;
 using SyncSoft.StylesDelivered.Domain.Product;
-using SyncSoft.StylesDelivered.Domain.ShoppingCart;
 using SyncSoft.StylesDelivered.Domain.User;
 
 namespace SyncSoft.App
 {
     public static class EngineExtensions
     {
-        public static CommonConfigurator UseStylesDeliveredDomain(this CommonConfigurator configurator)
+        public static CommonConfigurator UseStydDomain(this CommonConfigurator configurator)
         {
-            Engine.PreventDuplicateRegistration(nameof(UseStylesDeliveredDomain));
+            Engine.PreventDuplicateRegistration(nameof(UseStydDomain));
 
             if (!Engine.IsStarted)
             {
@@ -20,7 +19,7 @@ namespace SyncSoft.App
                     ObjectContainer.Register<IProductService, ProductService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IProductItemService, ProductItemService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IUserService, UserService>(LifeCycleEnum.Singleton);
-                    ObjectContainer.Register<IShoppingCartService, ShoppingCartService>(LifeCycleEnum.Singleton);
+                    //ObjectContainer.Register<IShoppingCartService, ShoppingCartService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IInventoryService, InventoryService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IItemInventoryFactory, ItemInventoryFactory>(LifeCycleEnum.Singleton);
                 };

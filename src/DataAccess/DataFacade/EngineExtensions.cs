@@ -13,9 +13,9 @@ namespace SyncSoft.App
 {
     public static class EngineExtensions
     {
-        public static CommonConfigurator UseStylesDeliveredDF(this CommonConfigurator configurator)
+        public static CommonConfigurator UseStydDF(this CommonConfigurator configurator)
         {
-            Engine.PreventDuplicateRegistration(nameof(UseStylesDeliveredDF));
+            Engine.PreventDuplicateRegistration(nameof(UseStydDF));
 
             if (!Engine.IsStarted)
             {

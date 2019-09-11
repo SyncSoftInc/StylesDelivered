@@ -14,10 +14,12 @@ namespace DomainTest
                 {
                     o.ProjectName = "styd";
                 })
-                .UseStylesDeliveredDomain()
-                .UseStylesDeliveredRedis()
-                .UseStylesDeliveredMySql()
-                .UseStylesDeliveredDF()
+                .UseStydDomain()
+                .UseStydRedis()
+                .UseStydMySql()
+                .UseStydDF()
+                .UseStydShared()
+                .UseGRPC()
                 .UseAliyun()
                 .UseJsonConfiguration()
                 .Start();

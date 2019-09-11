@@ -3,9 +3,9 @@
     public class ItemInventoryChangedEvent : App.Messaging.Event
     {
         public string SKU { get; private set; }
-        public int InvQty { get; private set; }
+        public long InvQty { get; private set; }
 
-        public ItemInventoryChangedEvent(string sku, int invQty)
+        public ItemInventoryChangedEvent(string sku, long invQty)
         {
             SKU = sku;
             InvQty = invQty;
