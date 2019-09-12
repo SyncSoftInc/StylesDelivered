@@ -54,7 +54,12 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             foreach (var orderItem in cmd.Order.Items)
             {
                 var item = await ProductItemDAL.GetItemAsync(orderItem.ASIN, orderItem.SKU).ConfigureAwait(false);
-
+                if (item.IsNull())
+                {
+                    var err = $"Item '{orderItem.SKU}' doesn't exists.";
+                    Context.Set(CreateOrderTransaction.Error, err);
+                    throw new Exception(err);
+                }
                 orderItem.OrderNo = cmd.Order.OrderNo;
                 orderItem.Alias = item.Alias;
                 orderItem.Color = item.Color;

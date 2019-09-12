@@ -24,5 +24,11 @@ namespace DomainTest
                 .UseJsonConfiguration()
                 .Start();
         }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            Engine.Stop();
+        }
     }
 }

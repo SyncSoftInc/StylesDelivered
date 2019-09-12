@@ -30,6 +30,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             {
                 var dto = new InventoryDTO
                 {
+                    Warehouse = Constants.WarehouseID,
                     ItemNo = item.SKU,
                     Qty = item.Qty
                 };
@@ -53,7 +54,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             var items = Context.Get<List<InventoryDTO>>("HoldItems");
             foreach (var item in items)
             {
-                await InventoryServiceClient.HoldAsync(item);
+                await InventoryServiceClient.UnholdAsync(item);
             }
         }
     }

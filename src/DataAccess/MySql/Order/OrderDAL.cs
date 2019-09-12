@@ -30,7 +30,7 @@ namespace SyncSoft.StylesDelivered.MySql.Order
             {
                 try
                 {
-                    await base.ExecuteAsync("SP_InsertOrder", new
+                    await conn.ExecuteAsync("SP_InsertOrder", new
                     {
                         dto.OrderNo,
                         dto.User_ID,
@@ -46,7 +46,7 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                     if (dto.Items.IsPresent())
                     {
                         var parameters = dto.Items.Select(x => new DynamicParameters(x)).ToArray();
-                        await base.ExecuteAsync("SP_InsertOrderItem", parameters, tran).ConfigureAwait(false);
+                        await conn.ExecuteAsync("SP_InsertOrderItem", parameters, tran, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
                     }
 
                     tran.Commit();

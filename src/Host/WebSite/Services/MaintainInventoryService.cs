@@ -21,15 +21,15 @@ namespace SyncSoft.StylesDelivered.WebSite.Services
         private static readonly Lazy<IProductItemService> _lazyProductItemService = ObjectContainer.LazyResolve<IProductItemService>();
         private IProductItemService ProductItemService => _lazyProductItemService.Value;
 
-        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryService
+        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryServiceClient
             = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
-        private InventoryService.InventoryServiceClient InventoryService => _lazyInventoryService.Value;
+        private InventoryService.InventoryServiceClient InventoryServiceClient => _lazyInventoryServiceClient.Value;
 
         #endregion
 
         protected override async Task<string> InnerExecuteAsync(IJobExecutionContext context)
         {
-            var mr = await InventoryService.CleanWarehouseAsync(new InventoriesDTO { Warehouse = Constants.WarehouseID });
+            var mr = await InventoryServiceClient.CleanWarehouseAsync(new InventoriesDTO { Warehouse = Constants.WarehouseID });
             var msgCode = mr.MsgCode;
             if (msgCode.IsSuccess())
             {
