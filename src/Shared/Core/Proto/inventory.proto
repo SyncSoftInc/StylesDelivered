@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package warehouse;
+package logistics;
 
 message InventoryDTO{
   string Warehouse = 1;
@@ -8,7 +8,7 @@ message InventoryDTO{
   int64 Qty = 3;
 }
 
-message WarehouseDTO{
+message InventoriesDTO{
   string Warehouse = 1;
   repeated InventoryDTO Inventories = 2;
 }
@@ -17,11 +17,13 @@ message MsgResult{
   string MsgCode = 1;
 }
 
-service Inventory {
+service InventoryService {
   rpc GetOnHandQty (InventoryDTO) returns (InventoryDTO) {}
   rpc SetOnHandQty (InventoryDTO) returns (MsgResult) {}
   rpc Hold (InventoryDTO) returns (MsgResult) {}
   rpc Unhold (InventoryDTO) returns (MsgResult) {}
   rpc GetAvbQty(InventoryDTO) returns (InventoryDTO) {}
-  rpc GetWarehouseOnHandQty(WarehouseDTO) returns (WarehouseDTO) {}
+  rpc GetAvbQtys(InventoriesDTO) returns (InventoriesDTO) {}
+  rpc GetWarehouseOnHandQty(InventoriesDTO) returns (InventoriesDTO) {}
+  rpc CleanWarehouse(InventoriesDTO) returns (MsgResult) {}
 }

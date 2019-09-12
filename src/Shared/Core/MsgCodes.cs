@@ -36,7 +36,7 @@ namespace SyncSoft.StylesDelivered
         public const string InvalidPhoneLength = nameof(InvalidPhoneLength);
         public const string InvalidEmailLength = nameof(InvalidEmailLength);
 
-        // Inventory
-        public const string ShortageOfInventory = nameof(ShortageOfInventory);
+        // Order
+        public const string CreateOrderFailed = nameof(CreateOrderFailed);
     }
 }
