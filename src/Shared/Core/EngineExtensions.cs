@@ -20,7 +20,7 @@ namespace SyncSoft.App
                         var endpoint = ObjectContainer.Resolve<IConfigProvider>().GetValue<string>("Services:Logistics");
 
                         var channel = ObjectContainer.Resolve<IChannelFactory>().Create(endpoint);
-                        return new Warehouse.Inventory.InventoryClient(channel);
+                        return new global::Logistics.InventoryService.InventoryServiceClient(channel);
                     }, LifeCycleEnum.Singleton);
                 };
             }

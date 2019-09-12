@@ -1,4 +1,5 @@
-﻿using SyncSoft.App.Components;
+﻿using Logistics;
+using SyncSoft.App.Components;
 using SyncSoft.App.Messaging;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.DTO.Product;
@@ -21,8 +22,9 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
-        private static readonly Lazy<Warehouse.Inventory.InventoryClient> _lazyInventoryService = ObjectContainer.LazyResolve<Warehouse.Inventory.InventoryClient>();
-        private Warehouse.Inventory.InventoryClient InventoryService => _lazyInventoryService.Value;
+        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryService
+            = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
+        private InventoryService.InventoryServiceClient InventoryService => _lazyInventoryService.Value;
 
         private static readonly Lazy<IProductItemDAL> _lazyProductItemDAL = ObjectContainer.LazyResolve<IProductItemDAL>();
         private IProductItemDAL ProductItemDAL => _lazyProductItemDAL.Value;
@@ -92,10 +94,10 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> SyncInventoriesAsync()
         {
-            var warehouseDTO = await InventoryService.GetWarehouseOnHandQtyAsync(new Warehouse.WarehouseDTO { Warehouse = Constants.WarehouseID });
-            if (warehouseDTO.Inventories.IsPresent())
+            var query = await InventoryService.GetWarehouseOnHandQtyAsync(new InventoriesDTO { Warehouse = Constants.WarehouseID });
+            if (query.Inventories.IsPresent())
             {
-                var dic = warehouseDTO.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);
+                var dic = query.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);
                 return await ProductItemDAL.SetItemInventoriesAsync(dic).ConfigureAwait(false);
             }
             return MsgCodes.SUCCESS;

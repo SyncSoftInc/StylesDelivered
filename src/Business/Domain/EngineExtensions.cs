@@ -1,6 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.App.EngineConfigs;
 using SyncSoft.StylesDelivered.Domain.Inventory;
+using SyncSoft.StylesDelivered.Domain.Order;
 using SyncSoft.StylesDelivered.Domain.Product;
 using SyncSoft.StylesDelivered.Domain.User;
 
@@ -21,6 +22,7 @@ namespace SyncSoft.App
                     ObjectContainer.Register<IUserService, UserService>(LifeCycleEnum.Singleton);
                     //ObjectContainer.Register<IShoppingCartService, ShoppingCartService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IItemInventoryFactory, ItemInventoryFactory>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IOrderService, OrderService>(LifeCycleEnum.Singleton);
                 };
             }
 

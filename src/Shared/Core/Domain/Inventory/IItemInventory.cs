@@ -8,5 +8,6 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         Task<string> SetOnHandAsync(long qty);
         Task<string> HoldAsync(long qty);
         Task<string> UnholdAsync(long qty);
+        Task<long> GetAvbQtyAsync();
     }
 }

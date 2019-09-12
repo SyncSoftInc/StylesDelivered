@@ -1,7 +1,7 @@
-﻿using SyncSoft.App.Components;
+﻿using Logistics;
+using SyncSoft.App.Components;
 using System;
 using System.Threading.Tasks;
-using Warehouse;
 
 namespace SyncSoft.StylesDelivered.Domain.Inventory
 {
@@ -10,8 +10,9 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
-        private static readonly Lazy<Warehouse.Inventory.InventoryClient> _lazyInventoryService = ObjectContainer.LazyResolve<Warehouse.Inventory.InventoryClient>();
-        private Warehouse.Inventory.InventoryClient InventoryService => _lazyInventoryService.Value;
+        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryServiceClient
+            = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
+        private InventoryService.InventoryServiceClient InventoryServiceClient => _lazyInventoryServiceClient.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -34,7 +35,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<long> GetOnHandAsync()
         {
-            var r = await InventoryService.GetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku });
+            var r = await InventoryServiceClient.GetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku });
             return r.Qty;
         }
 
@@ -44,7 +45,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> SetOnHandAsync(long qty)
         {
-            var r = await InventoryService.SetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            var r = await InventoryServiceClient.SetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
         }
 
@@ -54,18 +55,29 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> HoldAsync(long qty)
         {
-            var r = await InventoryService.HoldAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            var r = await InventoryServiceClient.HoldAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
         }
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  Hold  -
+        #region -  Unhold  -
 
         public async Task<string> UnholdAsync(long qty)
         {
-            var r = await InventoryService.UnholdAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            var r = await InventoryServiceClient.UnholdAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  GetAvbQty  -
+
+        public async Task<long> GetAvbQtyAsync()
+        {
+            var query = new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku };
+            query = await InventoryServiceClient.GetAvbQtyAsync(query);
+            return query.Qty;
         }
 
         #endregion

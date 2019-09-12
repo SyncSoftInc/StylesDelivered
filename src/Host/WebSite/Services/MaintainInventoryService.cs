@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using Logistics;
+using Quartz;
 using SyncSoft.App.Components;
 using SyncSoft.App.Logging;
 using SyncSoft.ECP.Quartz;
@@ -20,11 +21,20 @@ namespace SyncSoft.StylesDelivered.WebSite.Services
         private static readonly Lazy<IProductItemService> _lazyProductItemService = ObjectContainer.LazyResolve<IProductItemService>();
         private IProductItemService ProductItemService => _lazyProductItemService.Value;
 
+        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryService
+            = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
+        private InventoryService.InventoryServiceClient InventoryService => _lazyInventoryService.Value;
+
         #endregion
 
         protected override async Task<string> InnerExecuteAsync(IJobExecutionContext context)
         {
-            var msgCode = await ProductItemService.SyncInventoriesAsync().ConfigureAwait(false);
+            var mr = await InventoryService.CleanWarehouseAsync(new InventoriesDTO { Warehouse = Constants.WarehouseID });
+            var msgCode = mr.MsgCode;
+            if (msgCode.IsSuccess())
+            {
+                msgCode = await ProductItemService.SyncInventoriesAsync().ConfigureAwait(false);
+            }
             return msgCode;
         }
     }
