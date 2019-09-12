@@ -106,6 +106,7 @@ var itemVM = new Vue({
 // Items Table
 function createTable() {
     itemsTable = $('#itemsTable').DataTable({
+        responsive: true,
         serverSide: true,
         searchDelay: 500,
         lengthMenu: [10, 15, 20],

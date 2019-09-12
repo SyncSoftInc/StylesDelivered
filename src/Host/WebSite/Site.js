@@ -103,12 +103,15 @@ Vue.component("itembox", {
                     if (!$.isNW(item.Size) && !self.sizeList.includes(item.Size)) {
                         self.sizeList.push(item.Size);
                     }
-                    if (!$.isNW(item.Color) && !$.isNW(self.sizeList) && item.Size === self.sizeList[0] && !self.colorList.includes(item.Color)) {
+                    if (!$.isNW(item.Color) && !self.colorList.includes(item.Color)) {
                         self.colorList.push(item.Color);
                     }
                 });
 
-                if (!$.isNW(self.sizeList)) self.selectedSize = self.sizeList[0];
+                if (!$.isNW(self.sizeList)) {
+                    self.selectedSize = self.sizeList[0];
+                    this.onSizeChange(self.selectedSize);
+                }
                 if (!$.isNW(self.colorList)) self.selectedColor = self.colorList[0];
             }
         },
