@@ -56,7 +56,7 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
         // *******************************************************************************************************************************
         #region -  SetItemInventories  -
 
-        public Task<string> SetItemInventoriesAsync(IDictionary<string, long> inventories)
+        public async Task<string> SetItemInventoriesAsync(IDictionary<string, long> inventories)
         {
             var parameters = inventories.Select(x =>
             {
@@ -68,7 +68,23 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
                 return para;
             }).ToArray();
 
-            return base.TryExecuteAsync("SP_SetProductItemInventory", parameters, commandType: CommandType.StoredProcedure);
+            using (var conn = await base.CreateConnectionAsync().ConfigureAwait(false))
+            using (var tran = conn.BeginTransaction())
+            {
+                try
+                {
+                    await conn.ExecuteAsync("UPDATE ProductItem SET InvQty = 0", transaction: tran).ConfigureAwait(false);
+                    await conn.ExecuteAsync("SP_SetProductItemInventory", parameters, tran, commandType: CommandType.StoredProcedure);
+
+                    tran.Commit();
+                    return MsgCodes.SUCCESS;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return ex.GetRootExceptionMessage();
+                }
+            }
         }
 
         #endregion
