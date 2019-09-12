@@ -34,13 +34,12 @@ code {
 }
 
 .img-container {
-    position: relative;
     min-width: 200px;
     min-height: 200px;
-    display:flex !important;
+    display: flex !important;
     flex-wrap: wrap;
     align-content: center;
-    justify-content:center;
+    justify-content: center;
 }
 
 .caption {
