@@ -145,7 +145,7 @@ Vue.component("itembox", {
                     },
                     success: function (rs) {
                         if ($.isSuccess(rs)) {
-                            bootbox.alert("Apply Success");
+                            bootbox.alert("Success");
                         }
                         else {
                             bootbox.alert(rs);

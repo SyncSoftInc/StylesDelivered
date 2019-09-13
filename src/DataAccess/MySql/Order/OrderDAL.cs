@@ -71,7 +71,7 @@ namespace SyncSoft.StylesDelivered.MySql.Order
 
         public Task<OrderDTO> GetPendingOrderAsync(Guid userId)
         {
-            return base.QueryFirstOrDefaultAsync<OrderDTO>("SELECT * FROM StylesDelivered.Order WHERE User_ID = @UserID AND Status = @Status", new
+            return base.QueryFirstOrDefaultAsync<OrderDTO>("SELECT * FROM `Order` WHERE User_ID = @UserID AND Status = @Status", new
             {
                 UserID = userId,
                 Status = (int)OrderStatusEnum.Pending
