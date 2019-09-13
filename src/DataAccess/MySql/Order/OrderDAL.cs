@@ -3,6 +3,7 @@ using SyncSoft.ECP.MySql;
 using SyncSoft.StylesDelivered.DataAccess;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DTO.Order;
+using SyncSoft.StylesDelivered.Enum.Order;
 using System;
 using System.Data;
 using System.Linq;
@@ -59,13 +60,22 @@ namespace SyncSoft.StylesDelivered.MySql.Order
             }
         }
 
-        #endregion
-        // *******************************************************************************************************************************
-        #region -  DeleteOrder  -
-
         public Task DeleteOrderAsync(string orderNo)
         {
             return base.ExecuteAsync("DELETE FROM Order WHERE OrderNo = @OrderNo", new { OrderNo = orderNo });
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  GetOrder  -
+
+        public Task<OrderDTO> GetPendingOrderAsync(Guid userId)
+        {
+            return base.QueryFirstOrDefaultAsync<OrderDTO>("SELECT * FROM StylesDelivered.Order WHERE User_ID = @UserID AND Status = @Status", new
+            {
+                UserID = userId,
+                Status = (int)OrderStatusEnum.Pending
+            });
         }
 
         #endregion

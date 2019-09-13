@@ -1,4 +1,5 @@
 ﻿using SyncSoft.StylesDelivered.DTO.Order;
+using System;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.DataAccess.Order
@@ -7,5 +8,6 @@ namespace SyncSoft.StylesDelivered.DataAccess.Order
     {
         Task InsertAsync(OrderDTO dto);
         Task DeleteOrderAsync(string orderNo);
+        Task<OrderDTO> GetPendingOrderAsync(Guid userId);
     }
 }

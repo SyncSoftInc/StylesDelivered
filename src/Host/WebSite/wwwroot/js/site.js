@@ -130,6 +130,29 @@ Vue.component("itembox", {
 
                 if (!$.isNW(self.colorList)) self.selectedColor = self.colorList[0];
             }
+        },
+        applyItem: function () {
+            var self = this;
+            var selectedItem = self.items.find(x => x.Size == self.selectedSize && x.Color == self.selectedColor);
+            if (!$.isNW(selectedItem)) {
+                var order = { items: [{ asin: self.item.asin, sku: selectedItem.SKU }] };
+
+                $.ajax({
+                    url: '/api/order',
+                    type: "PUT",
+                    data: {
+                        Order: order
+                    },
+                    success: function (rs) {
+                        if ($.isSuccess(rs)) {
+                            bootbox.alert("Apply Success");
+                        }
+                        else {
+                            bootbox.alert(rs);
+                        }
+                    }
+                });
+            }
         }
     },
     beforeMount: function () {
