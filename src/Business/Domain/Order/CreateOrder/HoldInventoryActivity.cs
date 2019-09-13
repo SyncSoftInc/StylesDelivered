@@ -1,10 +1,11 @@
-﻿using Logistics;
-using SyncSoft.App;
+﻿using SyncSoft.App;
 using SyncSoft.App.Components;
 using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Order;
+using SyncSoft.StylesDelivered.Domain.Inventory;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,46 +16,54 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
-        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryServiceClient
-            = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
-        private InventoryService.InventoryServiceClient InventoryServiceClient => _lazyInventoryServiceClient.Value;
+        private static readonly Lazy<IItemInventoryFactory> _lazyItemInventoryFactory = ObjectContainer.LazyResolve<IItemInventoryFactory>();
+        private IItemInventoryFactory ItemInventoryFactory => _lazyItemInventoryFactory.Value;
 
         #endregion
 
         protected override async Task RunAsync(CancellationToken? cancellationToken)
         {
             var cmd = base.Context.Get<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand);
-            var list = new List<InventoryDTO>(cmd.Order.Items.Count);
+            var dic = new Dictionary<string, long>();
+            string msgCode = MsgCodes.SUCCESS;
 
-            foreach (var item in cmd.Order.Items)
+            foreach (var orderItem in cmd.Order.Items)
             {
-                var dto = new InventoryDTO
+                var itemInv = ItemInventoryFactory.Create(orderItem.SKU);
+                msgCode = await itemInv.HoldAsync(orderItem.Qty).ConfigureAwait(false);
+                if (msgCode.IsSuccess())
                 {
-                    Warehouse = Constants.WarehouseID,
-                    ItemNo = item.SKU,
-                    Qty = item.Qty
-                };
-                var mr = await InventoryServiceClient.HoldAsync(dto);
-
-                if (mr.MsgCode.IsSuccess())
-                {
-                    list.Add(dto);
-                    Context.Set("HoldItems", list);
+                    dic.Add(orderItem.SKU, orderItem.Qty);
                 }
                 else
                 {
-                    throw new Exception("Hold inventory failed: " + mr.MsgCode);
+                    break;
                 }
+            }
+
+            // 备份
+            Context.Set("HoldItems", dic);
+
+            if (!msgCode.IsSuccess())
+            {
+                throw new Exception("Hold inventory failed: " + msgCode);
             }
         }
 
         protected override async Task RollbackAsync()
         {
-            var cmd = base.Context.Get<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand);
-            var items = Context.Get<List<InventoryDTO>>("HoldItems");
-            foreach (var item in items)
+            var dic = Context.Get<Dictionary<string, long>>("HoldItems");
+            if (dic.IsPresent())
             {
-                await InventoryServiceClient.UnholdAsync(item);
+                foreach (var kvp in dic)
+                {
+                    var itemInv = ItemInventoryFactory.Create(kvp.Key);
+                    var msgCode = await itemInv.UnholdAsync(kvp.Value).ConfigureAwait(false);
+                    if (!msgCode.IsSuccess())
+                    {
+                        throw new Exception($"Unhold inventory {kvp.Key}:{kvp.Value} failed");
+                    }
+                }
             }
         }
     }
