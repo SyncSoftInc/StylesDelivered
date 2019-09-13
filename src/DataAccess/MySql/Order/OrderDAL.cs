@@ -1,12 +1,15 @@
 ﻿using Dapper;
+using SyncSoft.ECP.DTOs;
 using SyncSoft.ECP.MySql;
 using SyncSoft.StylesDelivered.DataAccess;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DTO.Order;
 using SyncSoft.StylesDelivered.Enum.Order;
+using SyncSoft.StylesDelivered.Query.Order;
 using System;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.MySql.Order
@@ -60,9 +63,24 @@ namespace SyncSoft.StylesDelivered.MySql.Order
             }
         }
 
-        public Task DeleteOrderAsync(string orderNo)
+        public async Task DeleteOrderAsync(string orderNo)
         {
-            return base.ExecuteAsync("DELETE FROM Order WHERE OrderNo = @OrderNo", new { OrderNo = orderNo });
+            using (var conn = await base.CreateConnectionAsync().ConfigureAwait(false))
+            using (var tran = conn.BeginTransaction())
+            {
+                try
+                {
+                    await base.ExecuteAsync("DELETE FROM OrderItem WHERE OrderNo = @OrderNo", new { OrderNo = orderNo }).ConfigureAwait(false);
+                    await base.ExecuteAsync("DELETE FROM `Order` WHERE OrderNo = @OrderNo", new { OrderNo = orderNo }).ConfigureAwait(false);
+
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran?.Rollback();
+                    throw ex;
+                }
+            }
         }
 
         #endregion
@@ -77,6 +95,35 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                 Status = (int)OrderStatusEnum.Pending
             });
         }
+
+        public Task<OrderDTO> GetOrderAsync(string orderNo)
+        {
+            return base.QueryFirstOrDefaultAsync<OrderDTO>("SELECT * FROM `Order` WHERE OrderNo = @OrderNo", new { OrderNo = orderNo });
+        }
+
+        public Task<PagedList<OrderDTO>> GetOrdersAsync(GetOrdersQuery query)
+        {
+            var where = new StringBuilder();
+
+            if (query.Keyword.IsPresent())
+            {
+                where.AppendFormat(" AND (OrderNo LIKE '%{0}%' OR User_ID LIKE '%{0}%')", query.Keyword);
+            }
+
+            string orderBy = "OrderNo";
+
+            switch (query.OrderBy.GetValueOrDefault())
+            {
+                case 1:
+                    orderBy = "User_ID";
+                    break;
+            }
+
+            orderBy += " " + query.SortDirection;
+
+            return base.GetPagedListAsync<OrderDTO>(query.PageSize, query.PageIndex, "`Order`", "*", where.ToString(), orderBy);
+        }
+
 
         #endregion
     }

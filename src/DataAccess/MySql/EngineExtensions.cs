@@ -36,6 +36,7 @@ namespace SyncSoft.App
                     ObjectContainer.Register<IShoppingCartDAL, ShoppingCartDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<ICommonDAL, CommonDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IOrderDAL, OrderDAL>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IOrderItemDAL, OrderItemDAL>(LifeCycleEnum.Singleton);
                 };
             }
 
