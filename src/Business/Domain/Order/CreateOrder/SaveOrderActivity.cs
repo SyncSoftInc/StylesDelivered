@@ -75,7 +75,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
                 orderItem.Color = item.Color;
                 orderItem.Size = item.Size;
                 orderItem.Url = item.Url;
-                orderItem.Qty = 1;
+                orderItem.Qty = orderItem.Qty;
             }
 
             await OrderDAL.InsertAsync(cmd.Order).ConfigureAwait(false);

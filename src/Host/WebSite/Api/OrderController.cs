@@ -16,6 +16,12 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         public Task<string> CreateOrderAsync(CreateOrderCommand cmd)
         {
             cmd.Order.User_ID = User.Identity.UserID();
+
+            foreach (var item in cmd.Order.Items)
+            {
+                item.Qty = 1;
+            }
+
             return base.RequestAsync(cmd);
         }
     }
