@@ -22,7 +22,6 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
         private InventoryService.InventoryServiceClient InventoryServiceClient => _lazyInventoryServiceClient.Value;
 
-
         private static readonly Lazy<IProductItemDAL> _lazyProductItemDAL = ObjectContainer.LazyResolve<IProductItemDAL>();
         private IProductItemDAL ProductItemDAL => _lazyProductItemDAL.Value;
 
@@ -30,14 +29,20 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
         private IOrderDAL OrderDAL => _lazyOrderDAL.Value;
 
         #endregion
+
         protected override async Task RunAsync(CancellationToken? cancellationToken)
         {
             var cmd = base.Context.Get<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand);
+            var userId = cmd.Identity.UserID();
 
-            cmd.Order.OrderNo = Guid.NewGuid().ToLowerNString();
-            Context.Set("OrderNo", cmd.Order.OrderNo);
-            cmd.Order.User_ID = cmd.Identity.UserID();
-            cmd.Order.Status = OrderStatusEnum.Pending;
+            // Check Pending Order
+            var order = await OrderDAL.GetPendingOrderAsync(userId).ConfigureAwait(false);
+            if (order.IsNotNull())
+            {// User has pending order
+                var err = $"Pending order exists.";
+                Context.Set(CreateOrderTransaction.Error, err);
+                throw new Exception(err);
+            }
 
             // 检查库存
             var invQ = new InventoriesDTO { Warehouse = Constants.WarehouseID };
@@ -50,6 +55,11 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
                 Context.Set(CreateOrderTransaction.Error, err);
                 throw new Exception(err);
             }
+
+            cmd.Order.OrderNo = Guid.NewGuid().ToLowerNString();
+            Context.Set("OrderNo", cmd.Order.OrderNo);
+            cmd.Order.User_ID = userId;
+            cmd.Order.Status = OrderStatusEnum.Pending;
 
             foreach (var orderItem in cmd.Order.Items)
             {
@@ -65,6 +75,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
                 orderItem.Color = item.Color;
                 orderItem.Size = item.Size;
                 orderItem.Url = item.Url;
+                orderItem.Qty = 1;
             }
 
             await OrderDAL.InsertAsync(cmd.Order).ConfigureAwait(false);

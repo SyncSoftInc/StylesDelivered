@@ -1,17 +1,12 @@
 ﻿using SyncSoft.ECP.DTOs;
 using SyncSoft.StylesDelivered.DTO.Order;
 using SyncSoft.StylesDelivered.Query.Order;
-using System;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.DataAccess.Order
 {
-    public interface IOrderDAL
+    public interface IOrderDF
     {
-        Task InsertAsync(OrderDTO dto);
-        Task DeleteOrderAsync(string orderNo);
-
-        Task<OrderDTO> GetPendingOrderAsync(Guid userId);
         Task<OrderDTO> GetOrderAsync(string orderNo);
         Task<PagedList<OrderDTO>> GetOrdersAsync(GetOrdersQuery query);
     }
