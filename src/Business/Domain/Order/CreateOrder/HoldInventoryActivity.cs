@@ -30,7 +30,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             foreach (var orderItem in cmd.Order.Items)
             {
                 var itemInv = ItemInventoryFactory.Create(orderItem.SKU);
-                msgCode = await itemInv.HoldAsync(orderItem.Qty).ConfigureAwait(false);
+                msgCode = await itemInv.HoldAsync(Context.TransactionID, orderItem.Qty).ConfigureAwait(false);
                 if (msgCode.IsSuccess())
                 {
                     dic.Add(orderItem.SKU, orderItem.Qty);

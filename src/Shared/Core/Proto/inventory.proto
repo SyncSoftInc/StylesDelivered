@@ -3,9 +3,10 @@ syntax = "proto3";
 package logistics;
 
 message InventoryDTO{
-  string Warehouse = 1;
-  string ItemNo = 2;
-  int64 Qty = 3;
+  string RequestID = 1;
+  string Warehouse = 2;
+  string ItemNo = 3;
+  int64 Qty = 4;
 }
 
 message InventoriesDTO{
@@ -20,10 +21,20 @@ message MsgResult{
 service InventoryService {
   rpc GetOnHandQty (InventoryDTO) returns (InventoryDTO) {}
   rpc SetOnHandQty (InventoryDTO) returns (MsgResult) {}
+
   rpc Hold (InventoryDTO) returns (MsgResult) {}
   rpc Unhold (InventoryDTO) returns (MsgResult) {}
+
+  rpc GetOnHoldQty (InventoryDTO) returns (InventoryDTO) {}
+  rpc SetOnHoldQty (InventoryDTO) returns (MsgResult) {}
+
   rpc GetAvbQty(InventoryDTO) returns (InventoryDTO) {}
   rpc GetAvbQtys(InventoriesDTO) returns (InventoriesDTO) {}
-  rpc GetWarehouseOnHandQty(InventoriesDTO) returns (InventoriesDTO) {}
+
+  rpc GetWarehouseOnHandQtys(InventoriesDTO) returns (InventoriesDTO) {}
+  rpc GetWarehouseOnHoldQtys(InventoriesDTO) returns (InventoriesDTO) {}
+  
+  rpc ShipConfirm(InventoriesDTO) returns (MsgResult) {}
+
   rpc CleanWarehouse(InventoriesDTO) returns (MsgResult) {}
 }
