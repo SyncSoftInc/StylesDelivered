@@ -33,7 +33,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// <summary>
         /// 获取Order
         /// </summary>
-        [HttpGet("api/admin/order")]
+        [HttpGet("api/admin/order/{orderNo}")]
         public Task<OrderDTO> GetOrderAsync(string orderNo) => OrderDF.GetOrderAsync(orderNo);
 
         #endregion
