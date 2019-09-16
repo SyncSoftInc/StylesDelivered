@@ -53,9 +53,15 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         // *******************************************************************************************************************************
         #region -  Hold  -
 
-        public async Task<string> HoldAsync(long qty)
+        public async Task<string> HoldAsync(Guid correlationId, long qty)
         {
-            var r = await InventoryServiceClient.HoldAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            var r = await InventoryServiceClient.HoldAsync(new InventoryDTO
+            {
+                RequestID = correlationId.ToLowerNString() + "-" + _sku,
+                Warehouse = Constants.WarehouseID,
+                ItemNo = _sku,
+                Qty = qty
+            });
             return r.MsgCode;
         }
 

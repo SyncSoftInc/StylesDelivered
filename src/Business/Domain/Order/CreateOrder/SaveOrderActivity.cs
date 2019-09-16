@@ -39,7 +39,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             var order = await OrderDAL.GetPendingOrderAsync(userId).ConfigureAwait(false);
             if (order.IsNotNull())
             {// User has pending order
-                var err = $"Pending order exists.";
+                var err = $"One user can only claim one item before it get approved.";
                 Context.Set(CreateOrderTransaction.Error, err);
                 throw new Exception(err);
             }

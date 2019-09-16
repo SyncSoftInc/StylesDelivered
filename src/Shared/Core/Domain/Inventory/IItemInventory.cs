@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Inventory
 {
@@ -6,7 +7,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
     {
         Task<long> GetOnHandAsync();
         Task<string> SetOnHandAsync(long qty);
-        Task<string> HoldAsync(long qty);
+        Task<string> HoldAsync(Guid correlationid, long qty);
         Task<string> UnholdAsync(long qty);
         Task<long> GetAvbQtyAsync();
     }
