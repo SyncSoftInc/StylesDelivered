@@ -60,7 +60,6 @@ $(function () {
             {
                 data: "status",
                 width: 30,
-                orderable: false,
                 render: function (data, type, item) {
                     if (!$.isNW(data)) {
                         return $.enumToName(OrderStatusEnum, data);
@@ -72,12 +71,13 @@ $(function () {
                 width: 210,
                 orderable: false,
                 render: function (id, display, item) {
-                    var btn =
-                        '<button class="btn btn-sm btn-primary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')">Approve</button>' +
+                    var disabled = item.status === OrderStatusEnum.Approved ? " disabled" : "";
+                    var btns =
+                        '<button class="btn btn-sm btn-primary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')"' + disabled+'>Approve</button>' +
                         '<a class="btn btn-sm btn-info mr-2 ml-2" href="/admin/order/Detail/' + item.orderNo + '">Detail</a>' +
-                        '<button class="btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item.orderNo + '\')">Delete</button>';
+                        '<button class="btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item.orderNo + '\')"' + disabled +'>Delete</button>';
 
-                    return btn;
+                    return btns;
                 }
             }
         ],
@@ -85,6 +85,6 @@ $(function () {
             { "className": "text-center align-middle", "targets": [-1, 0] },
             { "className": "align-middle", "targets": '_all' }
         ],
-        order: [[3, "DESC"]]
+        order: [[6, "DESC"]]
     });
 });

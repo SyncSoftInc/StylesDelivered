@@ -145,6 +145,9 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                 case 4:
                     orderBy = "Alias";
                     break;
+                case 5:
+                    orderBy = "Status";
+                    break;
             }
 
             orderBy += " " + query.SortDirection;

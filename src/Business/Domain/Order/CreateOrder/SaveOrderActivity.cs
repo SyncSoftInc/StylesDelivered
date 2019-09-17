@@ -61,7 +61,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             await SetStateAsync("OrderNo", cmd.Order.OrderNo).ConfigureAwait(false);
 
             cmd.Order.User_ID = userId;
-            cmd.Order.User = cmd.Identity.UserFirstName() + " " + cmd.Identity.UserLastName();
+            cmd.Order.User = cmd.Identity.UserNickName();
             cmd.Order.Status = OrderStatusEnum.Pending;
             cmd.Order.CreatedOnUtc = DateTime.UtcNow;
 
