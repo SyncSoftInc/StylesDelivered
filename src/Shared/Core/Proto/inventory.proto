@@ -35,6 +35,7 @@ service InventoryService {
   rpc GetWarehouseOnHoldQtys(InventoriesDTO) returns (InventoriesDTO) {}
   
   rpc ShipConfirm(InventoriesDTO) returns (MsgResult) {}
+  rpc CancelShipConfirm(InventoriesDTO) returns (MsgResult) {}
 
   rpc CleanWarehouse(InventoriesDTO) returns (MsgResult) {}
 }

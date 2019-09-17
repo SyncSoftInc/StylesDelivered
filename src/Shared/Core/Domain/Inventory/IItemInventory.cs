@@ -10,6 +10,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         Task<string> HoldAsync(Guid correlationid, long qty);
         Task<string> UnholdAsync(long qty);
         Task<string> ShipConfirmAsync(long qty);
+        Task<string> CancelShipConfirmAsync(long qty);
         Task<long> GetAvbQtyAsync();
     }
 }

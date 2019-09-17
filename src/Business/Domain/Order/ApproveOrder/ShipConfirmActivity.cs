@@ -53,15 +53,19 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
 
         protected override async Task<string> RollbackAsync()
         {
+            var msgCode = MsgCodes.SUCCESS;
             var dic = await GetStateAsync<Dictionary<string, long>>("ShipConfirmItems").ConfigureAwait(false);
             if (dic.IsPresent())
             {
                 foreach (var kvp in dic)
                 {
                     var itemInv = ItemInventoryFactory.Create(kvp.Key);
+                    msgCode = await itemInv.CancelShipConfirmAsync(kvp.Value).ConfigureAwait(false);
+                    if (!msgCode.IsSuccess()) break;
+                    // ^^^^^^^^^^
                 }
             }
-            return MsgCodes.SUCCESS;
+            return msgCode;
         }
     }
 }
