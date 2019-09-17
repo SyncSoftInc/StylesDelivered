@@ -31,7 +31,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order
 
             foreach (var item in cmd.Order.Items)
             {
-                var count = await OrderDAL.CountPendingOrderAsync(userId, item.SKU).ConfigureAwait(false);
+                var count = await OrderDAL.CountOrderedItemsAsync(userId, item.SKU).ConfigureAwait(false);
                 if (count > 0)
                 {
                     var err = $"You have already applied this item.";

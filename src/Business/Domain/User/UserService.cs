@@ -41,7 +41,7 @@ namespace SyncSoft.StylesDelivered.Domain.User
                 return await UserDAL.InsertUserAddressAsync(cmd.Address).ConfigureAwait(false);
             }
             else
-            {// 更新
+            {// 已经存在
                 return MsgCodes.AddressExists;
             }
         }
