@@ -106,15 +106,14 @@ namespace SyncSoft.StylesDelivered.MySql.Order
         //    });
         //}
 
-        public Task<int> CountPendingOrderAsync(Guid userId, string sku)
+        public Task<int> CountOrderedItemsAsync(Guid userId, string sku)
         {
             return base.ExecuteScalarAsync<int>(@"SELECT COUNT(*) FROM `Order` t1
 INNER JOIN OrderItem t2 ON t2.OrderNo = t1.OrderNo
-WHERE t1.User_ID = @UserID AND t2.SKU = @SKU AND t1.Status = @Status", new
+WHERE t1.User_ID = @UserID AND t2.SKU = @SKU", new
             {
                 UserID = userId,
                 SKU = sku,
-                Status = (int)OrderStatusEnum.Pending
             });
         }
 
