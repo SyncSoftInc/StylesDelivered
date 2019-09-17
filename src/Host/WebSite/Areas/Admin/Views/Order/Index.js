@@ -73,8 +73,8 @@ $(function () {
                 orderable: false,
                 render: function (id, display, item) {
                     var btn =
-                        '<button class="approveBtn btn btn-sm btn-secondary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')">Approve</button>' +
-                        '<a class="btn btn-sm btn-primary mr-2 ml-2" href="/admin/order/Detail/' + item.orderNo + '">Detail</a>' +
+                        '<button class="approveBtn btn btn-sm btn-primary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')">Approve</button>' +
+                        '<a class="btn btn-sm btn-info mr-2 ml-2" href="/admin/order/Detail/' + item.orderNo + '">Detail</a>' +
                         '<button class="btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item.orderNo + '\')">Delete</button>';
 
                     return btn;
