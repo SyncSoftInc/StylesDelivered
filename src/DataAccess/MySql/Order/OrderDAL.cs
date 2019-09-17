@@ -97,9 +97,18 @@ namespace SyncSoft.StylesDelivered.MySql.Order
         // *******************************************************************************************************************************
         #region -  GetOrder  -
 
-        public Task<OrderDTO> GetPendingOrderAsync(Guid userId)
+        //public Task<OrderDTO> CountPendingOrderAsync(Guid userId)
+        //{
+        //    return base.QueryFirstOrDefaultAsync<OrderDTO>("SELECT * FROM `Order` WHERE User_ID = @UserID AND Status = @Status", new
+        //    {
+        //        UserID = userId,
+        //        Status = (int)OrderStatusEnum.Pending
+        //    });
+        //}
+
+        public Task<int> CountPendingOrderAsync(Guid userId)
         {
-            return base.QueryFirstOrDefaultAsync<OrderDTO>("SELECT * FROM `Order` WHERE User_ID = @UserID AND Status = @Status", new
+            return base.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM `Order` WHERE User_ID = @UserID AND Status = @Status", new
             {
                 UserID = userId,
                 Status = (int)OrderStatusEnum.Pending

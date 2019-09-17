@@ -23,6 +23,12 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
         private IOrderItemDAL OrderItemDAL => _lazyOrderItemDAL.Value;
 
         #endregion
+        // *******************************************************************************************************************************
+        #region -  Property(ies)  -
+
+        public override int RunOrdinal => 1;
+
+        #endregion
 
         protected override async Task<string> RunAsync()
         {

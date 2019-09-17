@@ -27,7 +27,12 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
         private IOrderDAL OrderDAL => _lazyOrderDAL.Value;
 
         #endregion
+        // *******************************************************************************************************************************
+        #region -  Property(ies)  -
 
+        public override int RunOrdinal => 1;
+
+        #endregion
         protected override async Task<string> RunAsync()
         {
             var cmd = await GetStateAsync<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
