@@ -63,10 +63,11 @@
                 </div>
                 <hr />
                 <div class="addrBtnBox">
-                    <div class="card addrBtn" v-for="item in addresses" style="width: 10rem;">
+                    <div class="card addrBtn" v-for="item in addresses">
                         <a href="javascript:;" v-on:click="select(item)">
                             <div class="card-body">
-                                <p class="card-text">{{item.address1}}<br />{{item.address2}}<br />{{item.city}}<br />{{item.state}} {{item.zipCode}}</p>
+                                <p class="card-text addr">{{item.address1}}<br />{{item.address2}}<br /></p>
+                                <p class="card-text">{{item.city}}<br />{{item.state}} {{item.zipCode}}</p>
                             </div>
                         </a>
                     </div>
