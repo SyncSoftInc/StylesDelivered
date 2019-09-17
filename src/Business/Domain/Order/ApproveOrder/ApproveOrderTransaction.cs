@@ -15,7 +15,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
         public override ILogger Logger => _lazyLogger.Value;
 
         public ApproveOrderTransaction(ApproveOrderCommand cmd) : base(cmd.CorrelationId
-            , new CheckInventoryActivity()
+            , new HoldInventoryActivity()
             , new ApproveOrderActivity()
             , new ShipConfirmActivity()
         )
