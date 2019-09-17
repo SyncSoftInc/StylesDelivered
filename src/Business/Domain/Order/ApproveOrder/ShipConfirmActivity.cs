@@ -1,9 +1,8 @@
-﻿using SyncSoft.App;
-using SyncSoft.App.Components;
+﻿using SyncSoft.App.Components;
 using SyncSoft.App.Transactions;
-using SyncSoft.StylesDelivered.Command.Order;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.Domain.Inventory;
+using SyncSoft.StylesDelivered.DTO.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +31,9 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
 
         protected override async Task<string> RunAsync()
         {
-            var cmd = await GetStateAsync<ApproveOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
-            var msgCode = MsgCodes.SUCCESS;
+            var orderItems = await GetStateAsync<IList<OrderItemDTO>>("OrderItems").ConfigureAwait(false);
 
-            var orderItems = await OrderItemDAL.GetOrderItemsAsync(cmd.OrderNo).ConfigureAwait(false);
+            var msgCode = MsgCodes.SUCCESS;
 
             var dic = new Dictionary<string, long>();
             foreach (var item in orderItems)
@@ -51,6 +49,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
                     break;
                 }
             }
+
             // 备份
             await SetStateAsync("ShipConfirmItems", dic).ConfigureAwait(false);
 

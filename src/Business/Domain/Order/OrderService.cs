@@ -1,6 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Order;
+using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.Domain.Order.ApproveOrder;
 using SyncSoft.StylesDelivered.Domain.Order.CreateOrder;
 using SyncSoft.StylesDelivered.Domain.Order.DeleteOrder;
@@ -17,12 +18,27 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         private static readonly Lazy<IControllerFactory> _lazyControllerFactory = ObjectContainer.LazyResolve<IControllerFactory>();
         private IControllerFactory ControllerFactory => _lazyControllerFactory.Value;
 
+        private static readonly Lazy<IOrderDAL> _lazyOrderDAL = ObjectContainer.LazyResolve<IOrderDAL>();
+        private IOrderDAL OrderDAL => _lazyOrderDAL.Value;
+
         #endregion
         // *******************************************************************************************************************************
         #region -  CreateOrder  -
 
         public async Task<string> CreateOrderAsync(CreateOrderCommand cmd)
         {
+            var userId = cmd.Identity.UserID();
+
+            foreach (var item in cmd.Order.Items)
+            {
+                var count = await OrderDAL.CountPendingOrderAsync(userId, item.SKU).ConfigureAwait(false);
+                if (count > 0)
+                {
+                    var err = $"You have already applied this item.";
+                    return err;
+                }
+            }
+
             var tran = new CreateOrderTransaction(cmd);
             var ctl = ControllerFactory.CreateForTcc(tran);
             var msgCode = await ctl.RunAsync().ConfigureAwait(false);

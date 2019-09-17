@@ -28,34 +28,12 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  Property(ies)  -
+        #region -  Run  -
 
-        public override int RunOrdinal => 1;
-
-        #endregion
         protected override async Task<string> RunAsync()
         {
             var cmd = await GetStateAsync<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
             var userId = cmd.Identity.UserID();
-
-            //// Check Pending Order
-            //var order = await OrderDAL.GetPendingOrderAsync(userId).ConfigureAwait(false);
-            //if (order.IsNotNull())
-            //{// User has pending order
-            //    var err = $"One user can only claim one item before it get approved.";
-            //    return err;
-            //}
-
-            //// 检查库存
-            //var invQ = new InventoriesDTO { Warehouse = Constants.WarehouseID };
-            //invQ.Inventories.AddRange(cmd.Order.Items.Select(x => new InventoryDTO { ItemNo = x.SKU }));
-            //invQ = await InventoryServiceClient.GetAvbQtysAsync(invQ);
-            //var invs = invQ.Inventories.Where(x => x.Qty <= 0);
-            //if (invs.IsPresent())
-            //{// 有Item库存不足
-            //    var err = $"Item(s):[{invs.Select(x => x.ItemNo).JointStrings()}] do(es)n't have enough inventories.";
-            //    return err;
-            //}
 
             cmd.Order.OrderNo = Guid.NewGuid().ToLowerNString();
             await SetStateAsync("OrderNo", cmd.Order.OrderNo).ConfigureAwait(false);
@@ -85,10 +63,16 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             return await OrderDAL.InsertAsync(cmd.Order).ConfigureAwait(false);
         }
 
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  Rollback  -
+
         protected override async Task<string> RollbackAsync()
         {
             var orderNo = await GetStateAsync<string>("OrderNo").ConfigureAwait(false);
             return await OrderDAL.DeleteOrderAsync(orderNo).ConfigureAwait(false);
         }
+
+        #endregion
     }
 }

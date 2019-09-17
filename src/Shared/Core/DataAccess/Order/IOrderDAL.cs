@@ -13,7 +13,7 @@ namespace SyncSoft.StylesDelivered.DataAccess.Order
         Task<string> UpdateOrderStatusAsync(string orderNo, OrderStatusEnum status);
         Task<string> DeleteOrderAsync(string orderNo);
 
-        Task<int> CountPendingOrderAsync(Guid userId);
+        Task<int> CountPendingOrderAsync(Guid userId, string sku);
         Task<OrderDTO> GetOrderAsync(string orderNo);
         Task<PagedList<OrderDTO>> GetOrdersAsync(GetOrdersQuery query);
     }

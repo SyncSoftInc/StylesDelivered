@@ -2,6 +2,7 @@
 using SyncSoft.App.Components;
 using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Order;
+using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.Domain.Inventory;
 using System;
 using System.Collections.Generic;
@@ -18,15 +19,24 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
         private static readonly Lazy<IItemInventoryFactory> _lazyItemInventoryFactory = ObjectContainer.LazyResolve<IItemInventoryFactory>();
         private IItemInventoryFactory ItemInventoryFactory => _lazyItemInventoryFactory.Value;
 
+        private static readonly Lazy<IOrderItemDAL> _lazyOrderItemDAL = ObjectContainer.LazyResolve<IOrderItemDAL>();
+        private IOrderItemDAL OrderItemDAL => _lazyOrderItemDAL.Value;
+
         #endregion
 
         protected override async Task<string> RunAsync()
         {
-            var cmd = await GetStateAsync<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
+            var cmd = await GetStateAsync<ApproveOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
             var dic = new Dictionary<string, long>();
             string msgCode = MsgCodes.SUCCESS;
 
-            foreach (var orderItem in cmd.Order.Items)
+            var orderItems = await OrderItemDAL.GetOrderItemsAsync(cmd.OrderNo).ConfigureAwait(false);
+            if (orderItems.IsMissing()) return MsgCodes.OrderItemsMissing;
+            // ^^^^^^^^^^
+
+            await SetStateAsync("OrderItems", orderItems).ConfigureAwait(false);
+
+            foreach (var orderItem in orderItems)
             {
                 var itemInv = ItemInventoryFactory.Create(orderItem.SKU);
                 msgCode = await itemInv.HoldAsync(Transaction.ID, orderItem.Qty).ConfigureAwait(false);
