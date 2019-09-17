@@ -76,12 +76,12 @@ $(function () {
                 render: function (id, display, item) {
                     var btn;
                     if (item['status'] === 1) {
-                        btn = '<button style="width:80px;" type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', ProductStatusEnum.Inactive)">Deactivate</button>';
+                        btn = '<button style="width:80px;" type="button" class="btn btn-sm btn-primary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', ProductStatusEnum.Inactive)">Deactivate</button>';
                     }
                     else {
-                        btn = '<button style="width:80px;" type="button" class="btn btn-sm btn-secondary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', ProductStatusEnum.Active)">Activate</button>';
+                        btn = '<button style="width:80px;" type="button" class="btn btn-sm btn-primary" onclick="UpdateProductStatus(\'' + item['asin'] + '\', ProductStatusEnum.Active)">Activate</button>';
                     }
-                    btn += '<a class="btn btn-sm btn-primary ml-2 mr-2" href="/admin/product/Save/' + item['asin'] + '">Edit</a>' +
+                    btn += '<a class="btn btn-sm btn-info ml-2 mr-2" href="/admin/product/Save/' + item['asin'] + '">Edit</a>' +
                         '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteProduct(\'' + item['asin'] + '\')">Delete</button>';
 
                     return btn;
