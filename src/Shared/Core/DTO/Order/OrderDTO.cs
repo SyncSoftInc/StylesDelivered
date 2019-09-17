@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SyncSoft.StylesDelivered.DTO.Order
 {
-    public class OrderDTO
+    public partial class OrderDTO
     {
         public string OrderNo { get; set; }
         public Guid User_ID { get; set; }

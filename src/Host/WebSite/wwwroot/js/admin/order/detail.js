@@ -45,13 +45,6 @@ itemsTable = $('#itemsTable').DataTable({
         }
     },
     columns: [
-        {
-            width: 50,
-            orderable: false,
-            render: function (id, display, item) {
-                return '<img src="' + $.pic(item.imageUrl) + '" class="pic_s" />';
-            }
-        },
         { data: "sku" },
         { data: "asin" },
         { data: "alias", orderable: false },
@@ -64,8 +57,7 @@ itemsTable = $('#itemsTable').DataTable({
         }
     ],
     columnDefs: [
-        { "className": "text-center align-middle", "targets": [-1, 0] },
-        { "className": "align-middle", "targets": '_all' }
+        { "className": "text-center", "targets": [-1] },
     ],
     order: [[0, "DESC"]]
 });

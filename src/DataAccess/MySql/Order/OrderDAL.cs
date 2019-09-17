@@ -133,16 +133,16 @@ namespace SyncSoft.StylesDelivered.MySql.Order
 
             switch (query.OrderBy.GetValueOrDefault())
             {
-                case 0:
+                case 1:
                     orderBy = "User";
                     break;
-                case 1:
+                case 2:
                     orderBy = "ASIN";
                     break;
-                case 2:
+                case 3:
                     orderBy = "SKU";
                     break;
-                case 3:
+                case 4:
                     orderBy = "Alias";
                     break;
             }
