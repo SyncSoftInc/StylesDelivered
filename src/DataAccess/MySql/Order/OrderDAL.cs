@@ -27,7 +27,7 @@ namespace SyncSoft.StylesDelivered.MySql.Order
         // *******************************************************************************************************************************
         #region -  CURD  -
 
-        public async Task InsertAsync(OrderDTO dto)
+        public async Task<string> InsertAsync(OrderDTO dto)
         {
             using (var conn = await base.CreateConnectionAsync().ConfigureAwait(false))
             using (var tran = conn.BeginTransaction())
@@ -56,21 +56,22 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                     }
 
                     tran.Commit();
+                    return MsgCodes.SUCCESS;
                 }
                 catch (Exception ex)
                 {
                     tran.Rollback();
-                    throw ex;
+                    return ex.GetRootExceptionMessage();
                 }
             }
         }
 
-        public async Task UpdateOrderStatusAsync(string orderNo, OrderStatusEnum status)
+        public async Task<string> UpdateOrderStatusAsync(string orderNo, OrderStatusEnum status)
         {
-            await base.ExecuteAsync("UPDATE `Order` SET Status = @Status WHERE OrderNo = @OrderNo", new { OrderNo = orderNo, Status = (int)status }).ConfigureAwait(false);
+            return await base.TryExecuteAsync("UPDATE `Order` SET Status = @Status WHERE OrderNo = @OrderNo", new { OrderNo = orderNo, Status = (int)status }).ConfigureAwait(false);
         }
 
-        public async Task DeleteOrderAsync(string orderNo)
+        public async Task<string> DeleteOrderAsync(string orderNo)
         {
             using (var conn = await base.CreateConnectionAsync().ConfigureAwait(false))
             using (var tran = conn.BeginTransaction())
@@ -81,11 +82,13 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                     await base.ExecuteAsync("DELETE FROM `Order` WHERE OrderNo = @OrderNo", new { OrderNo = orderNo }).ConfigureAwait(false);
 
                     tran.Commit();
+
+                    return MsgCodes.SUCCESS;
                 }
                 catch (Exception ex)
                 {
-                    tran?.Rollback();
-                    throw ex;
+                    tran.Rollback();
+                    return ex.GetRootExceptionMessage();
                 }
             }
         }

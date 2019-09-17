@@ -9,9 +9,9 @@ namespace SyncSoft.StylesDelivered.DataAccess.Order
 {
     public interface IOrderDAL
     {
-        Task InsertAsync(OrderDTO dto);
-        Task UpdateOrderStatusAsync(string orderNo, OrderStatusEnum status);
-        Task DeleteOrderAsync(string orderNo);
+        Task<string> InsertAsync(OrderDTO dto);
+        Task<string> UpdateOrderStatusAsync(string orderNo, OrderStatusEnum status);
+        Task<string> DeleteOrderAsync(string orderNo);
 
         Task<OrderDTO> GetPendingOrderAsync(Guid userId);
         Task<OrderDTO> GetOrderAsync(string orderNo);

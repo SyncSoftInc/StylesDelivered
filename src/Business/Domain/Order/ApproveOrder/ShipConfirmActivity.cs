@@ -6,12 +6,12 @@ using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.Domain.Inventory;
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
 {
-    public class ShipConfirmActivity : TccActivity
+    public class ShipConfirmActivity : Activity
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
@@ -24,13 +24,14 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
 
         #endregion
 
-        protected override async Task RunAsync(CancellationToken? cancellationToken)
+        protected override async Task<string> RunAsync()
         {
-            var cmd = base.Context.Get<ApproveOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand);
-            var dic = new Dictionary<string, long>();
+            var cmd = await GetStateAsync<ApproveOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
             var msgCode = MsgCodes.SUCCESS;
 
             var orderItems = await OrderItemDAL.GetOrderItemsAsync(cmd.OrderNo).ConfigureAwait(false);
+
+            var dic = new Dictionary<string, long>();
             foreach (var item in orderItems)
             {
                 var itemInv = ItemInventoryFactory.Create(item.SKU);
@@ -44,19 +45,23 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
                     break;
                 }
             }
-
             // 备份
-            Context.Set("ShipConfirmItems", dic);
+            await SetStateAsync("ShipConfirmItems", dic).ConfigureAwait(false);
 
-            if (!msgCode.IsSuccess())
-            {
-                throw new Exception("Ship confirm failed: " + msgCode);
-            }
+            return msgCode;
         }
 
-        protected override async Task RollbackAsync()
+        protected override async Task<string> RollbackAsync()
         {
-            var dic = Context.Get<Dictionary<string, long>>("ShipConfirmItems");
+            var dic = await GetStateAsync<Dictionary<string, long>>("ShipConfirmItems").ConfigureAwait(false);
+            if (dic.IsPresent())
+            {
+                foreach (var kvp in dic)
+                {
+                    var itemInv = ItemInventoryFactory.Create(kvp.Key);
+                }
+            }
+            return MsgCodes.SUCCESS;
         }
     }
 }

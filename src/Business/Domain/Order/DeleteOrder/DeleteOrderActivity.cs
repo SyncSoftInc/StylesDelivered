@@ -7,12 +7,11 @@ using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DTO.Order;
 using SyncSoft.StylesDelivered.Enum.Order;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Order.DeleteOrder
 {
-    public class DeleteOrderActivity : TccActivity
+    public class DeleteOrderActivity : Activity
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
@@ -29,9 +28,9 @@ namespace SyncSoft.StylesDelivered.Domain.Order.DeleteOrder
 
         #endregion
 
-        protected override async Task RunAsync(CancellationToken? cancellationToken)
+        protected override async Task<string> RunAsync()
         {
-            var cmd = base.Context.Get<DeleteOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand);
+            var cmd = await GetStateAsync<DeleteOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
 
             // Get Order
             var order = await OrderDAL.GetOrderAsync(cmd.OrderNo).ConfigureAwait(false);
@@ -39,27 +38,29 @@ namespace SyncSoft.StylesDelivered.Domain.Order.DeleteOrder
 
             if (order.IsNull())
             {
-                var err = MsgCodes.OrderNotExists;
-                Context.Set(DeleteOrderTransaction.Error, err);
-                throw new Exception(err);
+                return MsgCodes.OrderNotExists;
             }
             else if (order.IsNotNull() && order.Status == OrderStatusEnum.Approved)
             {// order is approved
                 var err = $"Cannot delete approved order.";
-                Context.Set(DeleteOrderTransaction.Error, err);
-                throw new Exception(err);
+                return err;
             }
 
             // 备份
-            Context.Set("Order", order);
+            await SetStateAsync("Order", order).ConfigureAwait(false);
 
-            await OrderDAL.DeleteOrderAsync(cmd.OrderNo).ConfigureAwait(false);
+            return await OrderDAL.DeleteOrderAsync(cmd.OrderNo).ConfigureAwait(false);
         }
 
-        protected override async Task RollbackAsync()
+        protected override async Task<string> RollbackAsync()
         {
-            var order = Context.Get<OrderDTO>("Order");
-            if (order.IsNotNull()) await OrderDAL.InsertAsync(order).ConfigureAwait(false);
+            var order = await GetStateAsync<OrderDTO>("Order").ConfigureAwait(false);
+            if (order.IsNotNull())
+            {
+                return await OrderDAL.InsertAsync(order).ConfigureAwait(false);
+            }
+
+            return MsgCodes.SUCCESS;
         }
     }
 }

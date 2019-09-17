@@ -7,13 +7,11 @@ using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.Enum.Order;
 using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
 {
-    public class SaveOrderActivity : TccActivity
+    public class SaveOrderActivity : Activity
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
@@ -30,34 +28,33 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
 
         #endregion
 
-        protected override async Task RunAsync(CancellationToken? cancellationToken)
+        protected override async Task<string> RunAsync()
         {
-            var cmd = base.Context.Get<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand);
+            var cmd = await GetStateAsync<CreateOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
             var userId = cmd.Identity.UserID();
 
-            // Check Pending Order
-            var order = await OrderDAL.GetPendingOrderAsync(userId).ConfigureAwait(false);
-            if (order.IsNotNull())
-            {// User has pending order
-                var err = $"One user can only claim one item before it get approved.";
-                Context.Set(CreateOrderTransaction.Error, err);
-                throw new Exception(err);
-            }
+            //// Check Pending Order
+            //var order = await OrderDAL.GetPendingOrderAsync(userId).ConfigureAwait(false);
+            //if (order.IsNotNull())
+            //{// User has pending order
+            //    var err = $"One user can only claim one item before it get approved.";
+            //    return err;
+            //}
 
-            // 检查库存
-            var invQ = new InventoriesDTO { Warehouse = Constants.WarehouseID };
-            invQ.Inventories.AddRange(cmd.Order.Items.Select(x => new InventoryDTO { ItemNo = x.SKU }));
-            invQ = await InventoryServiceClient.GetAvbQtysAsync(invQ);
-            var invs = invQ.Inventories.Where(x => x.Qty <= 0);
-            if (invs.IsPresent())
-            {// 有Item库存不足
-                var err = $"Item(s):[{invs.Select(x => x.ItemNo).JointStrings()}] do(es)n't have enough inventories.";
-                Context.Set(CreateOrderTransaction.Error, err);
-                throw new Exception(err);
-            }
+            //// 检查库存
+            //var invQ = new InventoriesDTO { Warehouse = Constants.WarehouseID };
+            //invQ.Inventories.AddRange(cmd.Order.Items.Select(x => new InventoryDTO { ItemNo = x.SKU }));
+            //invQ = await InventoryServiceClient.GetAvbQtysAsync(invQ);
+            //var invs = invQ.Inventories.Where(x => x.Qty <= 0);
+            //if (invs.IsPresent())
+            //{// 有Item库存不足
+            //    var err = $"Item(s):[{invs.Select(x => x.ItemNo).JointStrings()}] do(es)n't have enough inventories.";
+            //    return err;
+            //}
 
             cmd.Order.OrderNo = Guid.NewGuid().ToLowerNString();
-            Context.Set("OrderNo", cmd.Order.OrderNo);
+            await SetStateAsync("OrderNo", cmd.Order.OrderNo).ConfigureAwait(false);
+
             cmd.Order.User_ID = userId;
             cmd.Order.User = cmd.Identity.UserFirstName() + " " + cmd.Identity.UserLastName();
             cmd.Order.Status = OrderStatusEnum.Pending;
@@ -69,8 +66,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
                 if (item.IsNull())
                 {
                     var err = $"Item '{orderItem.SKU}' doesn't exists.";
-                    Context.Set(CreateOrderTransaction.Error, err);
-                    throw new Exception(err);
+                    return err;
                 }
                 orderItem.OrderNo = cmd.Order.OrderNo;
                 orderItem.Alias = item.Alias;
@@ -81,13 +77,13 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
                 orderItem.Qty = orderItem.Qty;
             }
 
-            await OrderDAL.InsertAsync(cmd.Order).ConfigureAwait(false);
+            return await OrderDAL.InsertAsync(cmd.Order).ConfigureAwait(false);
         }
 
-        protected override async Task RollbackAsync()
+        protected override async Task<string> RollbackAsync()
         {
-            var orderNo = await Context.GetAsync<string>("OrderNo").ConfigureAwait(false);
-            await OrderDAL.DeleteOrderAsync(orderNo).ConfigureAwait(false);
+            var orderNo = await GetStateAsync<string>("OrderNo").ConfigureAwait(false);
+            return await OrderDAL.DeleteOrderAsync(orderNo).ConfigureAwait(false);
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using Logistics;
-using SyncSoft.App.Components;
+﻿using SyncSoft.App.Components;
+using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Order;
-using SyncSoft.StylesDelivered.DataAccess.Order;
-using SyncSoft.StylesDelivered.DataAccess.Product;
-using SyncSoft.StylesDelivered.Domain.Inventory;
 using SyncSoft.StylesDelivered.Domain.Order.ApproveOrder;
 using SyncSoft.StylesDelivered.Domain.Order.CreateOrder;
 using SyncSoft.StylesDelivered.Domain.Order.DeleteOrder;
@@ -17,18 +14,8 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
 
-        private static readonly Lazy<IOrderDAL> _lazyOrderDAL = ObjectContainer.LazyResolve<IOrderDAL>();
-        private IOrderDAL OrderDAL => _lazyOrderDAL.Value;
-
-        private static readonly Lazy<IProductItemDAL> _lazyProductItemDAL = ObjectContainer.LazyResolve<IProductItemDAL>();
-        private IProductItemDAL ProductItemDAL => _lazyProductItemDAL.Value;
-
-        private static readonly Lazy<IItemInventoryFactory> _lazyItemInventoryFactory = ObjectContainer.LazyResolve<IItemInventoryFactory>();
-        private IItemInventoryFactory ItemInventoryFactory => _lazyItemInventoryFactory.Value;
-
-        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryServiceClient
-            = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
-        private InventoryService.InventoryServiceClient InventoryServiceClient => _lazyInventoryServiceClient.Value;
+        private static readonly Lazy<IControllerFactory> _lazyControllerFactory = ObjectContainer.LazyResolve<IControllerFactory>();
+        private IControllerFactory ControllerFactory => _lazyControllerFactory.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -37,16 +24,9 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         public async Task<string> CreateOrderAsync(CreateOrderCommand cmd)
         {
             var tran = new CreateOrderTransaction(cmd);
-            await tran.RunAsync().ConfigureAwait(false);
-            if (tran.IsSuccess)
-            {
-                return MsgCodes.SUCCESS;
-            }
-            else
-            {
-                var err = tran.Context.Get<string>(CreateOrderTransaction.Error);
-                return err.IsPresent() ? err : MsgCodes.CreateOrderFailed;
-            }
+            var ctl = ControllerFactory.CreateForTcc(tran);
+            var msgCode = await ctl.RunAsync().ConfigureAwait(false);
+            return msgCode;
         }
 
         #endregion
@@ -56,16 +36,9 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         public async Task<string> ApproveOrderAsync(ApproveOrderCommand cmd)
         {
             var tran = new ApproveOrderTransaction(cmd);
-            await tran.RunAsync().ConfigureAwait(false);
-            if (tran.IsSuccess)
-            {
-                return MsgCodes.SUCCESS;
-            }
-            else
-            {
-                var err = tran.Context.Get<string>(ApproveOrderTransaction.Error);
-                return err.IsPresent() ? err : MsgCodes.ApproveOrderFailed;
-            }
+            var ctl = ControllerFactory.CreateForTcc(tran);
+            var msgCode = await ctl.RunAsync().ConfigureAwait(false);
+            return msgCode;
         }
 
         #endregion
@@ -75,16 +48,9 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         public async Task<string> DeleteOrderAsync(DeleteOrderCommand cmd)
         {
             var tran = new DeleteOrderTransaction(cmd);
-            await tran.RunAsync().ConfigureAwait(false);
-            if (tran.IsSuccess)
-            {
-                return MsgCodes.SUCCESS;
-            }
-            else
-            {
-                var err = tran.Context.Get<string>(DeleteOrderTransaction.Error);
-                return err.IsPresent() ? err : MsgCodes.DeleteOrderFailed;
-            }
+            var ctl = ControllerFactory.CreateForTcc(tran);
+            var msgCode = await ctl.RunAsync().ConfigureAwait(false);
+            return msgCode;
         }
 
         #endregion
