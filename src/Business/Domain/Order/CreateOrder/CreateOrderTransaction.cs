@@ -15,6 +15,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
         public override ILogger Logger => _lazyLogger.Value;
 
         public CreateOrderTransaction(CreateOrderCommand cmd) : base(cmd.CorrelationId
+            , new CheckEligibilityActivity()
             , new SaveOrderActivity()
         //, new HoldInventoryActivity() // 暂时不锁定库存
         )

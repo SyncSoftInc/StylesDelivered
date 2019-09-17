@@ -51,7 +51,7 @@ namespace Order
             };
             cmd.SetContext(identity);
 
-            var msgCode = await OrderService.CreateOrderAsync(cmd);
+            var msgCode = await OrderService.CreateOrderAsync(cmd).ConfigureAwait(false);
 
             Assert.IsTrue(msgCode.IsSuccess(), msgCode);
         }
@@ -66,7 +66,7 @@ namespace Order
             var orderNo = "6a12c235f01c4cafb5ac102ad2873609";
 
             var cmd = new ApproveOrderCommand { OrderNo = orderNo };
-            var msgCode = await OrderService.ApproveOrderAsync(cmd);
+            var msgCode = await OrderService.ApproveOrderAsync(cmd).ConfigureAwait(false);
             Assert.IsTrue(msgCode.IsSuccess(), msgCode);
         }
 
@@ -80,7 +80,7 @@ namespace Order
             var orderNo = "6a12c235f01c4cafb5ac102ad2873609";
 
             var cmd = new DeleteOrderCommand { OrderNo = orderNo };
-            var msgCode = await OrderService.DeleteOrderAsync(cmd);
+            var msgCode = await OrderService.DeleteOrderAsync(cmd).ConfigureAwait(false);
             Assert.IsTrue(msgCode.IsSuccess(), msgCode);
         }
 
