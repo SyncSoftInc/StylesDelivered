@@ -59,7 +59,9 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             cmd.Order.OrderNo = Guid.NewGuid().ToLowerNString();
             Context.Set("OrderNo", cmd.Order.OrderNo);
             cmd.Order.User_ID = userId;
+            cmd.Order.User = cmd.Identity.UserFirstName() + " " + cmd.Identity.UserLastName();
             cmd.Order.Status = OrderStatusEnum.Pending;
+            cmd.Order.CreatedOnUtc = DateTime.UtcNow;
 
             foreach (var orderItem in cmd.Order.Items)
             {
@@ -74,6 +76,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
                 orderItem.Alias = item.Alias;
                 orderItem.Color = item.Color;
                 orderItem.Size = item.Size;
+                orderItem.ImageUrl = item.ImageUrl;
                 orderItem.Url = item.Url;
                 orderItem.Qty = orderItem.Qty;
             }

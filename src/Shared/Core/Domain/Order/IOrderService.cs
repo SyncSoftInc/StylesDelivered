@@ -6,5 +6,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order
     public interface IOrderService
     {
         Task<string> CreateOrderAsync(CreateOrderCommand cmd);
+        Task<string> ApproveOrderAsync(ApproveOrderCommand cmd);
+        Task<string> DeleteOrderAsync(DeleteOrderCommand cmd);
     }
 }

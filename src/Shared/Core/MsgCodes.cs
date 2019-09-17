@@ -37,6 +37,9 @@ namespace SyncSoft.StylesDelivered
         public const string InvalidEmailLength = nameof(InvalidEmailLength);
 
         // Order
+        public const string OrderNotExists = nameof(OrderNotExists);
         public const string CreateOrderFailed = nameof(CreateOrderFailed);
+        public const string ApproveOrderFailed = nameof(ApproveOrderFailed);
+        public const string DeleteOrderFailed = nameof(DeleteOrderFailed);
     }
 }

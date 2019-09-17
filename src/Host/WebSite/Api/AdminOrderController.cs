@@ -25,9 +25,15 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         #region -  CRUD  -
 
         /// <summary>
+        /// Approve Order
+        /// </summary>
+        [HttpPatch("api/admin/order/{orderNo}")]
+        public Task<string> ApproveOrderAsync(ApproveOrderCommand cmd) => base.RequestAsync(cmd);
+
+        /// <summary>
         /// 删除Order
         /// </summary>
-        [HttpDelete("api/admin/order")]
+        [HttpDelete("api/admin/order/{orderNo}")]
         public Task<string> DeleteOrderAsync(DeleteOrderCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>

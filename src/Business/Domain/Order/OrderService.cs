@@ -4,7 +4,9 @@ using SyncSoft.StylesDelivered.Command.Order;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DataAccess.Product;
 using SyncSoft.StylesDelivered.Domain.Inventory;
+using SyncSoft.StylesDelivered.Domain.Order.ApproveOrder;
 using SyncSoft.StylesDelivered.Domain.Order.CreateOrder;
+using SyncSoft.StylesDelivered.Domain.Order.DeleteOrder;
 using System;
 using System.Threading.Tasks;
 
@@ -44,6 +46,44 @@ namespace SyncSoft.StylesDelivered.Domain.Order
             {
                 var err = tran.Context.Get<string>(CreateOrderTransaction.Error);
                 return err.IsPresent() ? err : MsgCodes.CreateOrderFailed;
+            }
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  ApproveOrder  -
+
+        public async Task<string> ApproveOrderAsync(ApproveOrderCommand cmd)
+        {
+            var tran = new ApproveOrderTransaction(cmd);
+            await tran.RunAsync().ConfigureAwait(false);
+            if (tran.IsSuccess)
+            {
+                return MsgCodes.SUCCESS;
+            }
+            else
+            {
+                var err = tran.Context.Get<string>(ApproveOrderTransaction.Error);
+                return err.IsPresent() ? err : MsgCodes.ApproveOrderFailed;
+            }
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  DeleteOrder  -
+
+        public async Task<string> DeleteOrderAsync(DeleteOrderCommand cmd)
+        {
+            var tran = new DeleteOrderTransaction(cmd);
+            await tran.RunAsync().ConfigureAwait(false);
+            if (tran.IsSuccess)
+            {
+                return MsgCodes.SUCCESS;
+            }
+            else
+            {
+                var err = tran.Context.Get<string>(DeleteOrderTransaction.Error);
+                return err.IsPresent() ? err : MsgCodes.DeleteOrderFailed;
             }
         }
 

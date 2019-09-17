@@ -4,7 +4,9 @@ var orderVM = new Vue({
     el: "#app",
     data: {
         order: {
-            orderNo: orderNoParam
+            orderNo: orderNoParam,
+            isAddress: false,
+            fullAddress: ''
         }
     },
     methods: {
@@ -13,6 +15,14 @@ var orderVM = new Vue({
 
             $.get("/api/admin/order/" + self.order.orderNo, function (rs) {
                 self.order = rs;
+                self.order.status = $.enumToName(OrderStatusEnum, self.order.status);
+
+                if (!$.isNW(rs.shipping_Address1)) {
+                    self.order.isAddress = true;
+                    self.order.fullAddress = $.isNW(rs.shipping_Address2) ?
+                        `${rs.shipping_Address1}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}, ${rs.shipping_Country}`
+                        : `${rs.shipping_Address1}, ${rs.shipping_Address2}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}, ${rs.shipping_Country}`
+                }
             });
         }
     },
@@ -22,90 +32,48 @@ var orderVM = new Vue({
     }
 });
 
-//var itemVM = new Vue({
-//    el: "#itemModal",
-//    data: {
-//        isNew: true,
-//        item: {
-//            sku: null,
-//            invQty: 0
-//        }
-//    },
-//    methods: {
-//        loadData: function () {
-//            var self = this;
-//            self.isNew = $.isNW(self.item.sku);
+// Items Table
+itemsTable = $('#itemsTable').DataTable({
+    responsive: true,
+    serverSide: true,
+    searchDelay: 500,
+    lengthMenu: [10, 15, 20],
+    ajax: {
+        url: '/api/admin/order/items',
+        data: {
+            "orderNo": orderVM.order.orderNo
+        }
+    },
+    columns: [
+        {
+            width: 50,
+            orderable: false,
+            render: function (id, display, item) {
+                return '<img src="' + $.pic(item.imageUrl) + '" class="pic_s" />';
+            }
+        },
+        { data: "sku" },
+        { data: "asin" },
+        { data: "alias", orderable: false },
+        { data: "color", orderable: false },
+        { data: "size", orderable: false },
+        {
+            data: "qty",
+            width: 50,
+            orderable: false
+        }
+    ],
+    columnDefs: [
+        { "className": "text-center align-middle", "targets": [-1, 0] },
+        { "className": "align-middle", "targets": '_all' }
+    ],
+    order: [[0, "DESC"]]
+});
 
-//            if (!self.isNew) {
-//                $.get("/api/product/item", { asin: productVM.product.asin, sku: self.item.sku }, function (rs) {
-//                    self.item = rs;
-//                });
-//            }
-//            else {
-//                self.item = { asin: productVM.product.asin, invQty: 0 };
-//            }
-//        },
-//        save: function () {
-//            var self = this;
-//            var actionType = self.isNew ? 'POST' : 'PUT';
-
-//            $.ajax({
-//                url: '/api/product/item',
-//                type: actionType,
-//                data: {
-//                    ProductItem: self.item
-//                },
-//                success: function (rs) {
-//                    if ($.isSuccess(rs)) {
-//                        $("#itemModal").modal("toggle");
-//                        itemsTable.ajax.reload();
-//                    }
-//                    else {
-//                        bootbox.alert(rs);
-//                    }
-//                }
-//            });
-
-//            return false;
-//        }
-//    }
-//});
-
-//// Items Table
-//function createTable() {
-//    itemsTable = $('#itemsTable').DataTable({
-//        responsive: true,
-//        serverSide: true,
-//        searchDelay: 500,
-//        lengthMenu: [10, 15, 20],
-//        ajax: {
-//            url: '/api/product/items',
-//            data: {
-//                "asin": productVM.product.asin
-//            }
-//        },
-//        columns: [
-//            { data: "sku" },
-//            { data: "alias" },
-//            { data: "color", orderable: false },
-//            { data: "size", orderable: false },
-//            {
-//                data: "invQty",
-//                width: 50,
-//                orderable: false
-//            },
-//            {
-//                width: 120,
-//                orderable: false,
-//                render: function (id, display, item) {
-//                    return '<button class="editBtn btn btn-sm btn-primary mr-2" type="button" data-toggle="modal" data-target="#itemModal"  data-id="' + item['sku'] + '">Edit</a>' +
-//                        '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteItem(\'' + item['sku'] + '\')">Delete</button>';
-//                }
-//            }
-//        ],
-//        columnDefs: [
-//            { "className": "text-center", "targets": [-1] }
-//        ],
-//        order: [[0, "DESC"]]
-//    });
-//}
+$(function () {
+    $('#items-tab').on('shown.bs.tab', function () {
+        if ($.isNW(itemsTable)) {
+            createTable();
+        }
+    });
+});

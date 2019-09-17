@@ -58,6 +58,18 @@ $.getWindowHeight = function () {
     return windowHeight;
 };
 
+/**
+ * 根据给定flags取得一系列枚举名
+ */
+$.enumToName = function (EnumType, value) {
+    for (var key in EnumType) {
+        if (value == EnumType[key]) {
+            return key;
+        }
+    }
+    return '';
+};
+
 $.pic = function (url, width = 350, height = 350) {
     if (!$.isNW(url)) {
         return url + "?x-oss-process=image/resize,m_lfit,h_" + height + ",w_" + width;

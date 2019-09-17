@@ -2,6 +2,6 @@
 {
     public class OrderItemQueryModel : DataTableModel
     {
-        public string OrderNo { get; internal set; }
+        public string OrderNo { get; set; }
     }
 }

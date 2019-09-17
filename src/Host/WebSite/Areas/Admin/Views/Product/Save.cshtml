@@ -114,21 +114,21 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="SKU">SKU</label>
-                            <input id="SKU" type="text" class="form-control" v-model="item.sku" placeholder="SKU" required>
+                            <input id="SKU" type="text" class="form-control" v-model="item.sku" placeholder="SKU" maxlength="20" required>
                         </div>
                         <div class="col-md-6">
                             <label for="Alias">Alias</label>
-                            <input id="Alias" type="text" class="form-control" v-model="item.alias" placeholder="Alias">
+                            <input id="Alias" type="text" class="form-control" v-model="item.alias" placeholder="Alias" maxlength="200">
                         </div>
                     </div>
                     <div class="form-row mt-2">
                         <div class="col-md-4">
                             <label for="color">Color</label>
-                            <input id="color" type="text" class="form-control" v-model="item.color" placeholder="Color">
+                            <input id="color" type="text" class="form-control" v-model="item.color" placeholder="Color" maxlength="30">
                         </div>
                         <div class="col-md-4">
                             <label for="size">Size</label>
-                            <input id="size" type="text" class="form-control" v-model="item.size" placeholder="Size">
+                            <input id="size" type="text" class="form-control" v-model="item.size" placeholder="Size" maxlength="30">
                         </div>
                         <div class="col-md-4">
                             <label for="invQty">InvQty</label>
@@ -138,7 +138,7 @@
                     <div class="form-row mt-2">
                         <div class="col-md-12">
                             <label for="url">Url</label>
-                            <input id="url" type="text" class="form-control" v-model="item.url" placeholder="Url">
+                            <input id="url" type="text" class="form-control" v-model="item.url" placeholder="Url" maxlength="200">
                         </div>
                     </div>
                 </div>

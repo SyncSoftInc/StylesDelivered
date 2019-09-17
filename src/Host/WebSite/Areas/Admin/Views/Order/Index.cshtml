@@ -10,13 +10,15 @@
     <thead>
         <tr>
             <th class="all">Order No</th>
-            <th class="min-desktop">User ID</th>
+            <th class="all">User</th>
             <th class="all">Status</th>
+            <th class="min-desktop">CreatedOnUtc</th>
             <th class="min-desktop"></th>
         </tr>
     </thead>
 </table>
 
 @section Scripts{
-<partial name="Script" model='"admin/order/index"' />
+    <script>@(Html.RenderEnumJson<SyncSoft.StylesDelivered.Enum.Order.OrderStatusEnum, int>())</script>
+    <partial name="Script" model='"admin/order/index"' />
 }

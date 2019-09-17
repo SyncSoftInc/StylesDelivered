@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace SyncSoft.StylesDelivered.Consumer
 {
     public class OrderCommandConsumers : IConsumer<CreateOrderCommand>
+        , IConsumer<ApproveOrderCommand>
+        , IConsumer<DeleteOrderCommand>
     {
         private static readonly Lazy<IOrderService> _lazyOrderService = ObjectContainer.LazyResolve<IOrderService>();
         private IOrderService OrderService => _lazyOrderService.Value;
@@ -15,6 +17,16 @@ namespace SyncSoft.StylesDelivered.Consumer
         public async Task<object> HandleAsync(IContext<CreateOrderCommand> context)
         {
             return await OrderService.CreateOrderAsync(context.Message).ConfigureAwait(false);
+        }
+
+        public async Task<object> HandleAsync(IContext<ApproveOrderCommand> context)
+        {
+            return await OrderService.ApproveOrderAsync(context.Message).ConfigureAwait(false);
+        }
+
+        public async Task<object> HandleAsync(IContext<DeleteOrderCommand> context)
+        {
+            return await OrderService.DeleteOrderAsync(context.Message).ConfigureAwait(false);
         }
     }
 }

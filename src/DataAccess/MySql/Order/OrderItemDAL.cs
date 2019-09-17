@@ -5,6 +5,7 @@ using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DTO.Order;
 using SyncSoft.StylesDelivered.Query.Order;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,11 @@ namespace SyncSoft.StylesDelivered.MySql.Order
         #endregion
         // *******************************************************************************************************************************
         #region -  GetOrderItems  -
+
+        public Task<IList<OrderItemDTO>> GetOrderItemsAsync(string orderNo)
+        {
+            return base.QueryListAsync<OrderItemDTO>("SELECT * FROM OrderItem WHERE OrderNo = @OrderNo", new { OrderNo = orderNo });
+        }
 
         public Task<PagedList<OrderItemDTO>> GetOrderItemsAsync(GetOrderItemsQuery query)
         {

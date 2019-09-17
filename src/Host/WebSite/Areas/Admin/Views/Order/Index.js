@@ -1,6 +1,6 @@
 ﻿var mainTable;
 
-function DeleteProduct(orderNo) {
+function DeleteOrder(orderNo) {
     bootbox.confirm("Delete product?", function (confirm) {
         if (confirm) {
             $.ajax({
@@ -19,22 +19,22 @@ function DeleteProduct(orderNo) {
     });
 }
 
-//function UpdateProductStatus(asinIn, statusIn) {
-//    $.ajax({
-//        url: '/api/admin/product',
-//        data: { asin: asinIn, status: statusIn },
-//        type: 'PATCH',
-//        success: function (rs) {
-//            if ($.isSuccess(rs)) {
-//                mainTable.ajax.reload();
-//            }
-//            else {
-//                bootbox.alert(rs);
-//            }
-//        }
-//    });
-//}
-
+function ApproveOrder(orderNo) {
+    $.ajax({
+        url: '/api/admin/order/' + orderNo,
+        type: 'PATCH',
+        success: function (rs) {
+            if ($.isSuccess(rs)) {
+                bootbox.alert("Order Approved.", function () {
+                    mainTable.ajax.reload();
+                });
+            }
+            else {
+                bootbox.alert(rs);
+            }
+        }
+    });
+}
 
 $(function () {
     mainTable = $('#mainTable').DataTable({
@@ -47,26 +47,34 @@ $(function () {
         },
         columns: [
             { data: "orderNo" },
-            { data: "user_ID" },
+            { data: "user" },
             {
                 data: "status",
                 width: 30,
-                orderable: false
+                orderable: false,
+                render: function (data, type, item) {
+                    if (!$.isNW(data)) {
+                        return $.enumToName(OrderStatusEnum, data);
+                    }
+                }
             },
+            { data: "createdOnUtc" },
             {
-                width: 120,
+                width: 210,
                 orderable: false,
                 render: function (id, display, item) {
-                    var btn = '<a class="btn btn-sm btn-primary mr-2" href="/admin/order/Detail/' + item['orderNo'] + '">Detail</a>' +
-                        '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item['orderNo'] + '\')" disabled>Delete</button>';
+                    var btn =
+                        '<button class="btn btn-sm btn-secondary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')">Approve</button>' +
+                        '<a class="btn btn-sm btn-primary mr-2 ml-2" href="/admin/order/Detail/' + item.orderNo + '">Detail</a>' +
+                        '<button class="delBtn btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item.orderNo + '\')">Delete</button>';
 
                     return btn;
                 }
             }
         ],
         columnDefs: [
-            { "className": "text-center align-middle", "targets": [-1, 2] },
+            { "className": "text-center", "targets": [-1] },
         ],
-        order: [[0, "DESC"]]
+        order: [[3, "DESC"]]
     });
 });

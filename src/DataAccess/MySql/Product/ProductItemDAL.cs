@@ -48,8 +48,8 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
 
         public Task<ProductItemDTO> GetItemAsync(string asin, string sku)
         {
-            return base.QueryFirstOrDefaultAsync<ProductItemDTO>("SELECT * FROM ProductItem WHERE SKU = @SKU AND ASIN = @ASIN"
-                , new { SKU = sku, ASIN = asin });
+            return base.QueryFirstOrDefaultAsync<ProductItemDTO>("SP_GetProductItem", new { SKU = sku, ASIN = asin }
+            , commandType: CommandType.StoredProcedure);
         }
 
         #endregion

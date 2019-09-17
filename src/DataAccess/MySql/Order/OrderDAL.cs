@@ -38,6 +38,7 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                     {
                         dto.OrderNo,
                         dto.User_ID,
+                        dto.User,
                         dto.Shipping_Address1,
                         dto.Shipping_Address2,
                         dto.Shipping_City,
@@ -45,6 +46,7 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                         dto.Shipping_ZipCode,
                         dto.Shipping_Country,
                         dto.Status,
+                        dto.CreatedOnUtc
                     }, tran, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
 
                     if (dto.Items.IsPresent())
@@ -61,6 +63,11 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                     throw ex;
                 }
             }
+        }
+
+        public async Task UpdateOrderStatusAsync(string orderNo, OrderStatusEnum status)
+        {
+            await base.ExecuteAsync("UPDATE `Order` SET Status = @Status WHERE OrderNo = @OrderNo", new { OrderNo = orderNo, Status = (int)status }).ConfigureAwait(false);
         }
 
         public async Task DeleteOrderAsync(string orderNo)
@@ -107,15 +114,18 @@ namespace SyncSoft.StylesDelivered.MySql.Order
 
             if (query.Keyword.IsPresent())
             {
-                where.AppendFormat(" AND (OrderNo LIKE '%{0}%' OR User_ID LIKE '%{0}%')", query.Keyword);
+                where.AppendFormat(" AND (OrderNo LIKE '%{0}%' OR User LIKE '%{0}%')", query.Keyword);
             }
 
-            string orderBy = "OrderNo";
+            string orderBy = "CreatedOnUtc";
 
             switch (query.OrderBy.GetValueOrDefault())
             {
+                case 0:
+                    orderBy = "OrderNo";
+                    break;
                 case 1:
-                    orderBy = "User_ID";
+                    orderBy = "User";
                     break;
             }
 

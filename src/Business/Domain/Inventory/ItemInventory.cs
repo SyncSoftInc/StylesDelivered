@@ -87,5 +87,17 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
         }
 
         #endregion
+        // *******************************************************************************************************************************
+        #region -  ShipConfirm  -
+
+        public async Task<string> ShipConfirmAsync(long qty)
+        {
+            var invs = new InventoriesDTO { Warehouse = Constants.WarehouseID };
+            invs.Inventories.Add(new InventoryDTO { ItemNo = _sku, Qty = qty });
+            var r = await InventoryServiceClient.ShipConfirmAsync(invs);
+            return r.MsgCode;
+        }
+
+        #endregion
     }
 }
