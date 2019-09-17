@@ -45,3 +45,82 @@
         self.scroll();
     }
 });
+
+var applyVM = new Vue({
+    el: "#addressModal",
+    data: {
+        asin: "",
+        sku: "",
+        addresses: [],
+        states: [],
+        address: {}
+    },
+    methods: {
+        loadAddresses: function () {
+            var self = this;
+            $.get("/api/user/addresses", function (rs) {
+                self.addresses = rs;
+            });
+        },
+        loadStates: function () {
+            var self = this;
+            $.get("/api/states/us", function (rs) {
+                self.states = rs;
+            });
+        },
+        select: function (item) {
+            var self = this;
+            self.address = item;
+        },
+        apply: function () {
+            var self = this;
+            var order = {
+                items: [{
+                    asin: self.asin,
+                    sku: self.sku
+                }],
+                shipping_Address1: self.address.address1,
+                shipping_Address2: self.address.address2,
+                shipping_City: self.address.city,
+                shipping_State: self.address.state,
+                shipping_ZipCode: self.address.zipCode,
+            };
+
+            $.ajax({
+                url: '/api/order',
+                type: "PUT",
+                data: {
+                    Order: order
+                },
+                success: function (rs) {
+                    if ($.isSuccess(rs)) {
+                        bootbox.alert("Success");
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                }
+            });
+        }
+    },
+    beforeMount: function () {
+        var self = this;
+        self.loadStates();
+        self.loadAddresses();
+    }
+});
+
+var ClearAddress = function () {
+    applyVM.address = { "state": "" };
+};
+
+$(function () {
+    $('#addressModal').on('show.bs.modal', function (e) {
+        // 编辑器打开时清空数据
+        ClearAddress();
+    });
+
+    $("#clearBtn").on('click', function () {
+        ClearAddress();
+    });
+});

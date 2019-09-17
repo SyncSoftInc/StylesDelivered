@@ -79,7 +79,7 @@ $.pic = function (url, width = 350, height = 350) {
     }
 };
 
-Vue.component("itembox", {
+var itemVM = Vue.component("itembox", {
     props: ["item"],
     template: '#item-box',
     data: function () {
@@ -146,24 +146,11 @@ Vue.component("itembox", {
         applyItem: function () {
             var self = this;
             var selectedItem = self.items.find(x => x.Size == self.selectedSize && x.Color == self.selectedColor);
-            if (!$.isNW(selectedItem)) {
-                var order = { items: [{ asin: self.item.asin, sku: selectedItem.SKU }] };
 
-                $.ajax({
-                    url: '/api/order',
-                    type: "PUT",
-                    data: {
-                        Order: order
-                    },
-                    success: function (rs) {
-                        if ($.isSuccess(rs)) {
-                            bootbox.alert("Success");
-                        }
-                        else {
-                            bootbox.alert(rs);
-                        }
-                    }
-                });
+            if (!$.isNW(selectedItem)) {
+                applyVM.asin = self.item.asin;
+                applyVM.sku = selectedItem.SKU;
+                $("#addressModal").modal("show");
             }
         }
     },

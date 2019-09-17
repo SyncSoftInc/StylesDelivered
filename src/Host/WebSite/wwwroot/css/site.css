@@ -48,3 +48,17 @@ code {
     left: 50%;
     transform: translate(-50%, -100%);
 }
+.addrBtnBox {
+    overflow: auto;
+    text-align:center;
+    max-height: 160px;
+}
+
+.addrBtn{
+    margin:2px 12px;
+    display:inline-block;
+}
+.addrBtn a:hover {
+    text-decoration: none;
+    background: #f5f5f5;
+}

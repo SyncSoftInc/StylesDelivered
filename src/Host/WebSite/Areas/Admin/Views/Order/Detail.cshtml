@@ -30,10 +30,10 @@
                 <p>{{order.createdOnUtc}}</p>
             </div>
         </div>
-        <div class="row" v-bind:hidden="!order.isAddress">
+        <div class="row">
             <div class="col-md-4">
                 <label class="font-weight-bold">Shipping Address</label>
-                <p>{{order.fullAddress}}</p>
+                <p>{{order.shipping_Address1}}<br />{{order.shipping_Address2}}<br />{{order.shipping_City}}<br />{{order.shipping_State}} {{order.shipping_ZipCode}}</p>
             </div>
         </div>
 
@@ -58,7 +58,7 @@
 
 
 @section Scripts{
-<script>@(Html.RenderEnumJson<SyncSoft.StylesDelivered.Enum.Order.OrderStatusEnum, int>())</script>
-<script>var orderNoParam='@Model';</script>
-<partial name="Script" model='"admin/order/detail"' />
+    <script>@(Html.RenderEnumJson<SyncSoft.StylesDelivered.Enum.Order.OrderStatusEnum, int>())</script>
+    <script>var orderNoParam='@Model';</script>
+    <partial name="Script" model='"admin/order/detail"' />
 }

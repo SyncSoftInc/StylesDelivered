@@ -4,9 +4,7 @@ var orderVM = new Vue({
     el: "#app",
     data: {
         order: {
-            orderNo: orderNoParam,
-            isAddress: false,
-            fullAddress: ''
+            orderNo: orderNoParam
         }
     },
     methods: {
@@ -17,13 +15,6 @@ var orderVM = new Vue({
                 self.order = rs;
                 self.order.status = $.enumToName(OrderStatusEnum, self.order.status);
                 self.order.createdOnUtc = $.timeFormat(self.order.createdOnUtc);
-
-                if (!$.isNW(rs.shipping_Address1)) {
-                    self.order.isAddress = true;
-                    self.order.fullAddress = $.isNW(rs.shipping_Address2) ?
-                        `${rs.shipping_Address1}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}`
-                        : `${rs.shipping_Address1}, ${rs.shipping_Address2}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}`
-                }
             });
         }
     },

@@ -29,6 +29,13 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         {
             var userId = cmd.Identity.UserID();
 
+            if (cmd.Order.Shipping_Address1.IsNull() || cmd.Order.Shipping_City.IsNull()
+                || cmd.Order.Shipping_State.IsNull() || cmd.Order.Shipping_ZipCode.IsNull())
+            {
+                var err = $"Missing address information.";
+                return err;
+            }
+
             foreach (var item in cmd.Order.Items)
             {
                 var count = await OrderDAL.CountPendingOrderAsync(userId, item.SKU).ConfigureAwait(false);
