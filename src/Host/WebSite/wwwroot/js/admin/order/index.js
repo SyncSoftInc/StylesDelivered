@@ -46,8 +46,17 @@ $(function () {
             url: '/api/admin/orders'
         },
         columns: [
-            { data: "orderNo" },
+            {
+                width: 50,
+                orderable: false,
+                render: function (id, display, item) {
+                    return '<img src="' + $.pic(item.imageUrl) + '" class="pic_s" />';
+                }
+            },
             { data: "user" },
+            { data: "asin" },
+            { data: "sku" },
+            { data: "alias" },
             {
                 data: "status",
                 width: 30,
@@ -73,7 +82,8 @@ $(function () {
             }
         ],
         columnDefs: [
-            { "className": "text-center", "targets": [-1] },
+            { "className": "text-center align-middle", "targets": [-1, 0] },
+            { "className": "align-middle", "targets": '_all' }
         ],
         order: [[3, "DESC"]]
     });

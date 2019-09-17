@@ -19,6 +19,9 @@ namespace Order
         private IOrderService OrderService => _lazyOrderService.Value;
 
         #endregion
+        // *******************************************************************************************************************************
+        #region -  CreateOrder  -
+
         [Test]
         public async Task CreateOrder()
         {
@@ -52,5 +55,35 @@ namespace Order
 
             Assert.IsTrue(msgCode.IsSuccess(), msgCode);
         }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  ApproveOrder  -
+
+        [Test]
+        public async Task ApproveOrder()
+        {
+            var orderNo = "6a12c235f01c4cafb5ac102ad2873609";
+
+            var cmd = new ApproveOrderCommand { OrderNo = orderNo };
+            var msgCode = await OrderService.ApproveOrderAsync(cmd);
+            Assert.IsTrue(msgCode.IsSuccess(), msgCode);
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  DeleteOrder  -
+
+        [Test]
+        public async Task DeleteOrder()
+        {
+            var orderNo = "6a12c235f01c4cafb5ac102ad2873609";
+
+            var cmd = new DeleteOrderCommand { OrderNo = orderNo };
+            var msgCode = await OrderService.DeleteOrderAsync(cmd);
+            Assert.IsTrue(msgCode.IsSuccess(), msgCode);
+        }
+
+        #endregion
     }
 }

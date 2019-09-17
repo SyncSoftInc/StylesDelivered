@@ -126,7 +126,7 @@ namespace SyncSoft.StylesDelivered.MySql.Order
 
             if (query.Keyword.IsPresent())
             {
-                where.AppendFormat(" AND (OrderNo LIKE '%{0}%' OR User LIKE '%{0}%')", query.Keyword);
+                where.AppendFormat(" AND (User LIKE '%{0}%' OR ASIN LIKE '%{0}%' OR SKU LIKE '%{0}%' OR Alias LIKE '%{0}%')", query.Keyword);
             }
 
             string orderBy = "CreatedOnUtc";
@@ -134,16 +134,22 @@ namespace SyncSoft.StylesDelivered.MySql.Order
             switch (query.OrderBy.GetValueOrDefault())
             {
                 case 0:
-                    orderBy = "OrderNo";
+                    orderBy = "User";
                     break;
                 case 1:
-                    orderBy = "User";
+                    orderBy = "ASIN";
+                    break;
+                case 2:
+                    orderBy = "SKU";
+                    break;
+                case 3:
+                    orderBy = "Alias";
                     break;
             }
 
             orderBy += " " + query.SortDirection;
 
-            return base.GetPagedListAsync<OrderDTO>(query.PageSize, query.PageIndex, "`Order`", "*", where.ToString(), orderBy);
+            return base.GetPagedListAsync<OrderDTO>(query.PageSize, query.PageIndex, "V_OrderList", "*", where.ToString(), orderBy);
         }
 
 
