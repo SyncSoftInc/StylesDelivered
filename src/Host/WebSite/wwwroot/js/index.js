@@ -53,7 +53,14 @@ var applyVM = new Vue({
         sku: "",
         addresses: [],
         states: [],
-        address: {}
+        address: {
+            shipping_Address1: '',
+            shipping_Address2: '',
+            shipping_City: '',
+            shipping_State: '',
+            shipping_ZipCode: '',
+            shipping_Country: 'US',
+        }
     },
     methods: {
         loadAddresses: function () {
@@ -70,7 +77,12 @@ var applyVM = new Vue({
         },
         select: function (item) {
             var self = this;
-            self.address = item;
+            self.address.shipping_Address1 = item.address1;
+            self.address.shipping_Address2 = item.address2;
+            self.address.shipping_City = item.city;
+            self.address.shipping_State = item.state;
+            self.address.shipping_ZipCode = item.zipCode;
+            self.address.shipping_Country = item.country;
         },
         apply: function () {
             var self = this;
@@ -79,11 +91,12 @@ var applyVM = new Vue({
                     asin: self.asin,
                     sku: self.sku
                 }],
-                shipping_Address1: self.address.address1,
-                shipping_Address2: self.address.address2,
-                shipping_City: self.address.city,
-                shipping_State: self.address.state,
-                shipping_ZipCode: self.address.zipCode,
+                shipping_Address1: self.address.shipping_Address1,
+                shipping_Address2: self.address.shipping_Address2,
+                shipping_City: self.address.shipping_City,
+                shipping_State: self.address.shipping_State,
+                shipping_ZipCode: self.address.shipping_ZipCode,
+                shipping_Country: self.address.shipping_Country,
             };
 
             $.ajax({
@@ -101,6 +114,15 @@ var applyVM = new Vue({
                     }
                 }
             });
+        },
+        clear: function () {
+            var self = this;
+            self.address.shipping_Address1 = '';
+            self.address.shipping_Address2 = '';
+            self.address.shipping_City ='';
+            self.address.shipping_State = '';
+            self.address.shipping_ZipCode = '';
+            self.address.shipping_Country = 'US';
         }
     },
     beforeMount: function () {
@@ -108,19 +130,4 @@ var applyVM = new Vue({
         self.loadStates();
         self.loadAddresses();
     }
-});
-
-var ClearAddress = function () {
-    applyVM.address = { "state": "" };
-};
-
-$(function () {
-    $('#addressModal').on('show.bs.modal', function (e) {
-        // 编辑器打开时清空数据
-        ClearAddress();
-    });
-
-    $("#clearBtn").on('click', function () {
-        ClearAddress();
-    });
 });

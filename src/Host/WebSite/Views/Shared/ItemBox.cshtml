@@ -35,30 +35,30 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">Address</h5>
+                <h5 class="modal-title" id="addressModalLabel">Please enter a shipping address</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <input type="text" class="form-control" v-model="address.address1" placeholder="Address1" maxlength="100" required />
+                    <input type="text" class="form-control" v-model="address.shipping_Address1" placeholder="Address1" maxlength="100" required />
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" v-model="address.address2" placeholder="Address2" maxlength="200" />
+                    <input type="text" class="form-control" v-model="address.shipping_Address2" placeholder="Address2" maxlength="200" />
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <input type="text" class="form-control" v-model="address.city" placeholder="City" maxlength="50" required />
+                        <input type="text" class="form-control" v-model="address.shipping_City" placeholder="City" maxlength="50" required />
                     </div>
                     <div class="form-group col-md-4">
-                        <select class="form-control" v-model="address.state">
+                        <select class="form-control" v-model="address.shipping_State">
                             <option disabled value="">State</option>
                             <option v-for="state in states" v-bind:value="state.code">{{state.name}}</option>
                         </select>
                     </div>
                     <div class="form-group col-md-4">
-                        <input type="text" class="form-control" v-model="address.zipCode" placeholder="ZipCode" maxlength="15" required />
+                        <input type="text" class="form-control" v-model="address.shipping_ZipCode" placeholder="ZipCode" maxlength="15" required />
                     </div>
                 </div>
                 <hr />
@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="clearBtn">Clear</button>
+                <button type="button" class="btn btn-secondary" id="clearBtn" v-on:click="clear">Clear</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" v-on:click="apply()">Apply</button>
             </div>
