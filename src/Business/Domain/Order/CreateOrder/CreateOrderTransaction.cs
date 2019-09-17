@@ -16,6 +16,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
 
         public CreateOrderTransaction(CreateOrderCommand cmd) : base(cmd.CorrelationId
             , new SaveOrderActivity()
+            , new SaveUserAddressActivity()
         //, new HoldInventoryActivity() // 暂时不锁定库存
         )
         {

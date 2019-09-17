@@ -25,7 +25,7 @@ namespace SyncSoft.StylesDelivered
         {
             if (str.IsMissing()) return string.Empty;
 
-            str = str.Trim();
+            str = str.Trim().ToUpper();
             str = RemoveSpecialCharacters(str);
             str = RemoveExtraSpaces(str);
             return str;
