@@ -66,16 +66,22 @@ $(function () {
                     }
                 }
             },
-            { data: "createdOnUtc" },
+            {
+                data: "createdOnUtc",
+                width: 150,
+                render: function (data, type, full, meta) {
+                    return $.timeFormat(data);
+                }
+            },
             {
                 width: 210,
                 orderable: false,
                 render: function (id, display, item) {
                     var disabled = item.status === OrderStatusEnum.Approved ? " disabled" : "";
                     var btns =
-                        '<button class="btn btn-sm btn-primary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')"' + disabled+'>Approve</button>' +
+                        '<button class="btn btn-sm btn-primary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')"' + disabled + '>Approve</button>' +
                         '<a class="btn btn-sm btn-info mr-2 ml-2" href="/admin/order/Detail/' + item.orderNo + '">Detail</a>' +
-                        '<button class="btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item.orderNo + '\')"' + disabled +'>Delete</button>';
+                        '<button class="btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item.orderNo + '\')"' + disabled + '>Delete</button>';
 
                     return btns;
                 }

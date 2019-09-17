@@ -16,12 +16,13 @@ var orderVM = new Vue({
             $.get("/api/admin/order/" + self.order.orderNo, function (rs) {
                 self.order = rs;
                 self.order.status = $.enumToName(OrderStatusEnum, self.order.status);
+                self.order.createdOnUtc = $.timeFormat(self.order.createdOnUtc);
 
                 if (!$.isNW(rs.shipping_Address1)) {
                     self.order.isAddress = true;
                     self.order.fullAddress = $.isNW(rs.shipping_Address2) ?
-                        `${rs.shipping_Address1}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}, ${rs.shipping_Country}`
-                        : `${rs.shipping_Address1}, ${rs.shipping_Address2}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}, ${rs.shipping_Country}`
+                        `${rs.shipping_Address1}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}`
+                        : `${rs.shipping_Address1}, ${rs.shipping_Address2}, ${rs.shipping_City}, ${rs.shipping_State}, ${rs.shipping_ZipCode}`
                 }
             });
         }
