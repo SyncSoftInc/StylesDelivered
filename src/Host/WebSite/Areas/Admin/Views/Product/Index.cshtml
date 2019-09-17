@@ -26,5 +26,6 @@
 </table>
 
 @section Scripts{
-<partial name="Script" model='"admin/product/index"' />
+    <script>@(Html.RenderEnumJson<SyncSoft.StylesDelivered.Enum.Product.ProductStatusEnum, int>())</script>
+    <partial name="Script" model='"admin/product/index"' />
 }

@@ -58,7 +58,10 @@ $(function () {
             {
                 data: "status",
                 width: 30,
-                orderable: false
+                orderable: false,
+                render: function (data, type, full, meta) {
+                    return $.enumToName(ProductStatusEnum, data);
+                }
             },
             {
                 data: "createdOnUtc",
@@ -86,7 +89,7 @@ $(function () {
             }
         ],
         columnDefs: [
-            { "className": "text-center align-middle", "targets": [-1, 0, 3] },
+            { "className": "text-center align-middle", "targets": [-1, 0] },
             { "className": "align-middle", "targets": '_all' }
         ],
         order: [[2, "DESC"]]
