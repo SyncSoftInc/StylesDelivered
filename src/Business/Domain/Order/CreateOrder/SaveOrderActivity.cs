@@ -36,6 +36,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             var userId = cmd.Identity.UserID();
 
             cmd.Order.OrderNo = Guid.NewGuid().ToLowerNString();
+            SetResult(cmd.Order.OrderNo);   // 设置事务返回结果
             await SetStateAsync("OrderNo", cmd.Order.OrderNo).ConfigureAwait(false);
 
             cmd.Order.User_ID = userId;

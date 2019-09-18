@@ -20,7 +20,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
         //, new HoldInventoryActivity() // 暂时不锁定库存
         )
         {
-            Context.Set(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);
+            SetState(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);
         }
     }
 }

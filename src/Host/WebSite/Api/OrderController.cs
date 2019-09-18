@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SyncSoft.App;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
 using SyncSoft.StylesDelivered.Command.Order;
 using System;
@@ -13,7 +14,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// Create Order
         /// </summary>
         [HttpPut("api/order")]
-        public Task<string> CreateOrderAsync(CreateOrderCommand cmd)
+        public Task<MsgResult<string>> CreateOrderAsync(CreateOrderCommand cmd)
         {
             cmd.Order.User_ID = User.Identity.UserID();
 
@@ -22,7 +23,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
                 item.Qty = 1;
             }
 
-            return base.RequestAsync(cmd);
+            return base.RequestAsync<CreateOrderCommand, MsgResult<string>>(cmd);
         }
     }
 }

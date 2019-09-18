@@ -19,8 +19,8 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="SyncSoft.App.GRPC" Version="2.9.18" />
-        <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.18" />
+        <PackageReference Include="SyncSoft.App.GRPC" Version="2.9.19" />
+        <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.19" />
     </ItemGroup>
 
     <ItemGroup>
