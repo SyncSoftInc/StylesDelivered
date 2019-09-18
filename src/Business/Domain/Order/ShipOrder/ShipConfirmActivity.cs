@@ -24,12 +24,6 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ShipOrder
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  Property(ies)  -
-
-        public override int RunOrdinal => 1;
-
-        #endregion
-        // *******************************************************************************************************************************
         #region -  RunAsync  -
 
         protected override async Task<string> RunAsync()

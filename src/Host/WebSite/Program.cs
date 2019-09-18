@@ -26,6 +26,7 @@ namespace SyncSoft.StylesDelivered.WebSite
                 .UseStydMySql()
                 .UseStydDF()
                 .UseStydShared()
+                .UseStydOffice()
                 .UseGRPC()
                 .UseAliyun()
                 .UseJsonConfiguration()
