@@ -1,14 +1,15 @@
-﻿using SyncSoft.App.Components;
+﻿using SyncSoft.App;
+using SyncSoft.App.Components;
 using SyncSoft.App.Transactions;
+using SyncSoft.StylesDelivered.Command.Order;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.Domain.Inventory;
-using SyncSoft.StylesDelivered.DTO.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
+namespace SyncSoft.StylesDelivered.Domain.Order.ShipOrder
 {
     public class ShipConfirmActivity : Activity
     {
@@ -28,10 +29,15 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
         public override int RunOrdinal => 1;
 
         #endregion
+        // *******************************************************************************************************************************
+        #region -  RunAsync  -
 
         protected override async Task<string> RunAsync()
         {
-            var orderItems = await GetStateAsync<IList<OrderItemDTO>>("OrderItems").ConfigureAwait(false);
+            var cmd = await GetStateAsync<ShipOrderCommand>(CONSTANTS.TRANSACTIONS.EntryCommand).ConfigureAwait(false);
+            var orderItems = await OrderItemDAL.GetOrderItemsAsync(cmd.OrderNo).ConfigureAwait(false);
+            if (orderItems.IsMissing()) return MsgCodes.OrderItemsMissing;
+            // ^^^^^^^^^^
 
             var msgCode = MsgCodes.SUCCESS;
 
@@ -56,6 +62,10 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
             return msgCode;
         }
 
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  RollbackAsync  -
+
         protected override async Task<string> RollbackAsync()
         {
             var msgCode = MsgCodes.SUCCESS;
@@ -72,5 +82,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
             }
             return msgCode;
         }
+
+        #endregion
     }
 }

@@ -5,19 +5,18 @@ using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Order;
 using System;
 
-namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
+namespace SyncSoft.StylesDelivered.Domain.Order.ShipOrder
 {
-    public class ApproveOrderTransaction : Transaction
+    public class ShipOrderTransaction : Transaction
     {
         //public const string Error = nameof(Error);
 
-        private static readonly Lazy<ILogger> _lazyLogger = ObjectContainer.LazyResolveLogger<ApproveOrderTransaction>();
+        private static readonly Lazy<ILogger> _lazyLogger = ObjectContainer.LazyResolveLogger<ShipOrderTransaction>();
         public override ILogger Logger => _lazyLogger.Value;
 
-        public ApproveOrderTransaction(ApproveOrderCommand cmd) : base(cmd.CorrelationId
-            , new HoldInventoryActivity()
+        public ShipOrderTransaction(ShipOrderCommand cmd) : base(cmd.CorrelationId
             , new ChangeOrderStatusActivity()
-        //, new ShipConfirmActivity()
+            , new ShipConfirmActivity()
         )
         {
             Context.Set(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);

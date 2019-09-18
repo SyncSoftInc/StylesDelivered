@@ -27,8 +27,14 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         /// <summary>
         /// Approve Order
         /// </summary>
-        [HttpPatch("api/admin/order/{orderNo}")]
+        [HttpPut("api/admin/order/{orderNo}")]
         public Task<string> ApproveOrderAsync(ApproveOrderCommand cmd) => base.RequestAsync(cmd);
+
+        /// <summary>
+        /// Approve Order
+        /// </summary>
+        [HttpPatch("api/admin/order/{orderNo}")]
+        public Task<string> ShipOrderAsync(ShipOrderCommand cmd) => base.RequestAsync(cmd);
 
         /// <summary>
         /// 删除Order

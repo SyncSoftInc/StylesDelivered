@@ -5,6 +5,7 @@ using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.Domain.Order.ApproveOrder;
 using SyncSoft.StylesDelivered.Domain.Order.CreateOrder;
 using SyncSoft.StylesDelivered.Domain.Order.DeleteOrder;
+using SyncSoft.StylesDelivered.Domain.Order.ShipOrder;
 using System;
 using System.Threading.Tasks;
 
@@ -59,6 +60,18 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         public async Task<string> ApproveOrderAsync(ApproveOrderCommand cmd)
         {
             var tran = new ApproveOrderTransaction(cmd);
+            var ctl = ControllerFactory.CreateForTcc(tran);
+            var msgCode = await ctl.RunAsync().ConfigureAwait(false);
+            return msgCode;
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  ShipOrder  -
+
+        public async Task<string> ShipOrderAsync(ShipOrderCommand cmd)
+        {
+            var tran = new ShipOrderTransaction(cmd);
             var ctl = ControllerFactory.CreateForTcc(tran);
             var msgCode = await ctl.RunAsync().ConfigureAwait(false);
             return msgCode;
