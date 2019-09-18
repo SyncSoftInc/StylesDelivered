@@ -20,7 +20,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
         //, new ShipConfirmActivity()
         )
         {
-            Context.Set(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);
+            SetState(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);
         }
     }
 }
