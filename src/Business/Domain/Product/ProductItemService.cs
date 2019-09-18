@@ -94,7 +94,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> SyncInventoriesAsync()
         {
-            var query = await InventoryService.GetWarehouseOnHandQtysAsync(new InventoriesDTO { Warehouse = Constants.WarehouseID });
+            var query = await InventoryService.GetWarehouseOnHandQtysAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
             if (query.Inventories.IsPresent())
             {
                 var dic = query.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);

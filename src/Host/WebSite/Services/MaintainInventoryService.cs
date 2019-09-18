@@ -29,7 +29,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Services
 
         protected override async Task<string> InnerExecuteAsync(IJobExecutionContext context)
         {
-            var mr = await InventoryServiceClient.CleanWarehouseAsync(new InventoriesDTO { Warehouse = Constants.WarehouseID });
+            var mr = await InventoryServiceClient.CleanWarehouseAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
             var msgCode = mr.MsgCode;
             if (msgCode.IsSuccess())
             {

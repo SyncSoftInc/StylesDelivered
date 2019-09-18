@@ -21,7 +21,7 @@ namespace Logistics
         [Test]
         public async Task CleanWarehouse()
         {
-            var mr = await InventoryServiceClient.CleanWarehouseAsync(new InventoriesDTO { Warehouse = Constants.WarehouseID });
+            var mr = await InventoryServiceClient.CleanWarehouseAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
         }
     }
 }
