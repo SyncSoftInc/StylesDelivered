@@ -19,7 +19,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ShipOrder
             , new ShipConfirmActivity()
         )
         {
-            Context.Set(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);
+            SetState(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);
         }
     }
 }
