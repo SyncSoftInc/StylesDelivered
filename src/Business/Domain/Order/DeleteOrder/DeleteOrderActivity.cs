@@ -5,7 +5,6 @@ using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Order;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DTO.Order;
-using SyncSoft.StylesDelivered.Enum.Order;
 using System;
 using System.Threading.Tasks;
 
@@ -39,11 +38,6 @@ namespace SyncSoft.StylesDelivered.Domain.Order.DeleteOrder
             if (order.IsNull())
             {
                 return MsgCodes.OrderNotExists;
-            }
-            else if (order.IsNotNull() && order.Status == OrderStatusEnum.Approved)
-            {// order is approved
-                var err = $"Cannot delete approved order.";
-                return err;
             }
 
             // 备份

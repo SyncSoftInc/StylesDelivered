@@ -35,7 +35,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<long> GetOnHandAsync()
         {
-            var r = await InventoryServiceClient.GetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku });
+            var r = await InventoryServiceClient.GetOnHandQtyAsync(new InventoryMSG { Warehouse = Constants.WarehouseID, ItemNo = _sku });
             return r.Qty;
         }
 
@@ -45,7 +45,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> SetOnHandAsync(long qty)
         {
-            var r = await InventoryServiceClient.SetOnHandQtyAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            var r = await InventoryServiceClient.SetOnHandQtyAsync(new InventoryMSG { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
         }
 
@@ -55,7 +55,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> HoldAsync(Guid correlationId, long qty)
         {
-            var r = await InventoryServiceClient.HoldAsync(new InventoryDTO
+            var r = await InventoryServiceClient.HoldAsync(new InventoryMSG
             {
                 RequestID = correlationId.ToLowerNString() + "-" + _sku,
                 Warehouse = Constants.WarehouseID,
@@ -71,7 +71,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> UnholdAsync(long qty)
         {
-            var r = await InventoryServiceClient.UnholdAsync(new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
+            var r = await InventoryServiceClient.UnholdAsync(new InventoryMSG { Warehouse = Constants.WarehouseID, ItemNo = _sku, Qty = qty });
             return r.MsgCode;
         }
 
@@ -81,7 +81,7 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<long> GetAvbQtyAsync()
         {
-            var query = new InventoryDTO { Warehouse = Constants.WarehouseID, ItemNo = _sku };
+            var query = new InventoryMSG { Warehouse = Constants.WarehouseID, ItemNo = _sku };
             query = await InventoryServiceClient.GetAvbQtyAsync(query);
             return query.Qty;
         }
@@ -92,8 +92,8 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> ShipConfirmAsync(long qty)
         {
-            var invs = new InventoriesDTO { Warehouse = Constants.WarehouseID };
-            invs.Inventories.Add(new InventoryDTO { ItemNo = _sku, Qty = qty });
+            var invs = new InventoriesMSG { Warehouse = Constants.WarehouseID };
+            invs.Inventories.Add(new InventoryMSG { ItemNo = _sku, Qty = qty });
             var r = await InventoryServiceClient.ShipConfirmAsync(invs);
             return r.MsgCode;
         }
@@ -104,8 +104,8 @@ namespace SyncSoft.StylesDelivered.Domain.Inventory
 
         public async Task<string> CancelShipConfirmAsync(long qty)
         {
-            var invs = new InventoriesDTO { Warehouse = Constants.WarehouseID };
-            invs.Inventories.Add(new InventoryDTO { ItemNo = _sku, Qty = qty });
+            var invs = new InventoriesMSG { Warehouse = Constants.WarehouseID };
+            invs.Inventories.Add(new InventoryMSG { ItemNo = _sku, Qty = qty });
             var r = await InventoryServiceClient.CancelShipConfirmAsync(invs);
             return r.MsgCode;
         }

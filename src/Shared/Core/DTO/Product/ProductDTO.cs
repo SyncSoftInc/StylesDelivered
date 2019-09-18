@@ -1,5 +1,6 @@
 ﻿using SyncSoft.StylesDelivered.Enum.Product;
 using System;
+using System.Collections.Generic;
 
 namespace SyncSoft.StylesDelivered.DTO.Product
 {
@@ -12,6 +13,6 @@ namespace SyncSoft.StylesDelivered.DTO.Product
         public string ItemsJson { get; set; }
         public ProductStatusEnum Status { get; set; }
         public DateTime CreatedOnUtc { get; set; }
-        //public IList<ProductItemDTO> Items { get; set; }
+        public IList<ProductItemDTO> Items { get; set; }
     }
 }

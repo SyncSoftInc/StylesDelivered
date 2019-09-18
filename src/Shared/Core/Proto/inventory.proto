@@ -2,16 +2,16 @@ syntax = "proto3";
 
 package logistics;
 
-message InventoryDTO{
+message InventoryMSG{
   string RequestID = 1;
   string Warehouse = 2;
   string ItemNo = 3;
   int64 Qty = 4;
 }
 
-message InventoriesDTO{
+message InventoriesMSG{
   string Warehouse = 1;
-  repeated InventoryDTO Inventories = 2;
+  repeated InventoryMSG Inventories = 2;
 }
 
 message MsgResult{
@@ -19,23 +19,23 @@ message MsgResult{
 }
 
 service InventoryService {
-  rpc GetOnHandQty (InventoryDTO) returns (InventoryDTO) {}
-  rpc SetOnHandQty (InventoryDTO) returns (MsgResult) {}
+  rpc GetOnHandQty (InventoryMSG) returns (InventoryMSG) {}
+  rpc SetOnHandQty (InventoryMSG) returns (MsgResult) {}
 
-  rpc Hold (InventoryDTO) returns (MsgResult) {}
-  rpc Unhold (InventoryDTO) returns (MsgResult) {}
+  rpc Hold (InventoryMSG) returns (MsgResult) {}
+  rpc Unhold (InventoryMSG) returns (MsgResult) {}
 
-  rpc GetOnHoldQty (InventoryDTO) returns (InventoryDTO) {}
-  rpc SetOnHoldQty (InventoryDTO) returns (MsgResult) {}
+  rpc GetOnHoldQty (InventoryMSG) returns (InventoryMSG) {}
+  rpc SetOnHoldQty (InventoryMSG) returns (MsgResult) {}
 
-  rpc GetAvbQty(InventoryDTO) returns (InventoryDTO) {}
-  rpc GetAvbQtys(InventoriesDTO) returns (InventoriesDTO) {}
+  rpc GetAvbQty(InventoryMSG) returns (InventoryMSG) {}
+  rpc GetAvbQtys(InventoriesMSG) returns (InventoriesMSG) {}
 
-  rpc GetWarehouseOnHandQtys(InventoriesDTO) returns (InventoriesDTO) {}
-  rpc GetWarehouseOnHoldQtys(InventoriesDTO) returns (InventoriesDTO) {}
+  rpc GetWarehouseOnHandQtys(InventoriesMSG) returns (InventoriesMSG) {}
+  rpc GetWarehouseOnHoldQtys(InventoriesMSG) returns (InventoriesMSG) {}
   
-  rpc ShipConfirm(InventoriesDTO) returns (MsgResult) {}
-  rpc CancelShipConfirm(InventoriesDTO) returns (MsgResult) {}
+  rpc ShipConfirm(InventoriesMSG) returns (MsgResult) {}
+  rpc CancelShipConfirm(InventoriesMSG) returns (MsgResult) {}
 
-  rpc CleanWarehouse(InventoriesDTO) returns (MsgResult) {}
+  rpc CleanWarehouse(InventoriesMSG) returns (MsgResult) {}
 }
