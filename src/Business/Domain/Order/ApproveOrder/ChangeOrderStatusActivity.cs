@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
 {
-    public class ApproveOrderActivity : Activity
+    public class ChangeOrderStatusActivity : Activity
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -

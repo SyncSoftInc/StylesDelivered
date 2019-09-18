@@ -19,13 +19,18 @@ function DeleteOrder(orderNo) {
     });
 }
 
-function ApproveOrder(orderNo) {
+function ChangeOrder(action, orderNo) {
+    var actionType;
+    if (action === "Approve") actionType = "PUT";
+    else if (action === "Ship") actionType = "PATCH";
+    else return;
+
     $.ajax({
         url: '/api/admin/order/' + orderNo,
-        type: 'PATCH',
+        type: actionType,
         success: function (rs) {
             if ($.isSuccess(rs)) {
-                bootbox.alert("Order Approved.", function () {
+                bootbox.alert("Success.", function () {
                     mainTable.ajax.reload();
                 });
             }
@@ -77,11 +82,23 @@ $(function () {
                 width: 210,
                 orderable: false,
                 render: function (id, display, item) {
-                    var disabled = item.status === OrderStatusEnum.Approved ? " disabled" : "";
+                    var disabled = "", action = "";
+
+                    if (item.status === OrderStatusEnum.Pending) {
+                        action = "Approve";
+                    }
+                    else if (item.status === OrderStatusEnum.Approved) {
+                        action = "Ship";
+                    }
+                    else if (item.status === OrderStatusEnum.Shipped) {
+                        disabled = "disabled";
+                        action = "Shipped";
+                    }
+
                     var btns =
-                        '<button class="btn btn-sm btn-primary" type="button" onclick="ApproveOrder(\'' + item.orderNo + '\')"' + disabled + '>Approve</button>' +
-                        '<a class="btn btn-sm btn-info mr-2 ml-2" href="/admin/order/Detail/' + item.orderNo + '">Detail</a>' +
-                        '<button class="btn btn-sm btn-danger" type="button" onclick="DeleteOrder(\'' + item.orderNo + '\')"' + disabled + '>Delete</button>';
+                        `<button class="btn btn-sm btn-primary" type="button" style="width:70px;" onclick="ChangeOrder('${action}', '${item.orderNo}')" ${disabled}>${action}</button>` +
+                        `<a class="btn btn-sm btn-info mr-2 ml-2" href="/admin/order/Detail/${item.orderNo}">Detail</a>` +
+                        `<button class="btn btn-sm btn-danger" type="button" onclick="DeleteOrder('${item.orderNo}')" ${disabled}>Delete</button>`;
 
                     return btns;
                 }

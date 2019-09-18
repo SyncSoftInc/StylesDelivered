@@ -16,8 +16,8 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
 
         public ApproveOrderTransaction(ApproveOrderCommand cmd) : base(cmd.CorrelationId
             , new HoldInventoryActivity()
-            , new ApproveOrderActivity()
-            , new ShipConfirmActivity()
+            , new ChangeOrderStatusActivity()
+        //, new ShipConfirmActivity()
         )
         {
             SetState(CONSTANTS.TRANSACTIONS.EntryCommand, cmd);

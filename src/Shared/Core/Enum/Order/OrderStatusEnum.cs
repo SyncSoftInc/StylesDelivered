@@ -6,6 +6,7 @@ namespace SyncSoft.StylesDelivered.Enum.Order
     public enum OrderStatusEnum
     {
         Pending = 1,
-        Approved = 2
+        Approved = 2,
+        Shipped = 3,
     }
 }

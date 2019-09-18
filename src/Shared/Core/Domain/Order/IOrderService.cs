@@ -8,6 +8,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order
     {
         Task<MsgResult<string>> CreateOrderAsync(CreateOrderCommand cmd);
         Task<string> ApproveOrderAsync(ApproveOrderCommand cmd);
+        Task<string> ShipOrderAsync(ShipOrderCommand cmd);
         Task<string> DeleteOrderAsync(DeleteOrderCommand cmd);
     }
 }
