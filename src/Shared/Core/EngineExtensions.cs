@@ -2,6 +2,7 @@
 using SyncSoft.App.Configurations;
 using SyncSoft.App.EngineConfigs;
 using SyncSoft.App.GRPC;
+using SyncSoft.StylesDelivered.Domain.Inventory;
 
 namespace SyncSoft.App
 {
@@ -22,6 +23,8 @@ namespace SyncSoft.App
                         var channel = ObjectContainer.Resolve<IChannelFactory>().Create(endpoint);
                         return new global::Inventory.InventoryService.InventoryServiceClient(channel);
                     }, LifeCycleEnum.Singleton);
+
+                    ObjectContainer.Register<ISyncInvQueue, InMemorySyncInvQueue>(LifeCycleEnum.Singleton);
                 };
             }
 

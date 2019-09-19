@@ -32,6 +32,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ShipOrder
             var orderItems = await OrderItemDAL.GetOrderItemsAsync(cmd.OrderNo).ConfigureAwait(false);
             if (orderItems.IsMissing()) return MsgCodes.OrderItemsMissing;
             // ^^^^^^^^^^
+            SetResult(orderItems);
 
             var msgCode = MsgCodes.SUCCESS;
 
