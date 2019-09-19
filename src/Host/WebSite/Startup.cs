@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection;
 using SyncSoft.ECP;
 using SyncSoft.ECP.AspNetCore.Hosting;
@@ -20,7 +21,7 @@ namespace SyncSoft.StylesDelivered.WebSite
                 o.ConfigureMvcOptions = a =>
                 {
                     a.Filters.Add(new MessageHandlerAttribute());
-                    //a.Conventions.Add(new FromBodyBindingSourceConvention());
+                    a.Conventions.Add(new FromBodyBindingSourceConvention());
                 };
             });
         }
