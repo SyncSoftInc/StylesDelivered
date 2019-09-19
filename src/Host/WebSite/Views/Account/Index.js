@@ -13,21 +13,16 @@
         save: function () {
             var self = this;
 
-            $.ajax({
-                url: '/api/user/profile',
-                type: 'PATCH',
-                data: {
-                    User: self.user
-                },
-                success: function (rs) {
+            axios.patch('/api/user/profile', { User: self.user })
+                .then(function (resp) {
+                    var rs = resp.data;
                     if ($.isSuccess(rs)) {
                         bootbox.alert("Save successfully.");
                     }
                     else {
                         bootbox.alert(rs);
                     }
-                }
-            });
+                });
 
             return false;
         }
