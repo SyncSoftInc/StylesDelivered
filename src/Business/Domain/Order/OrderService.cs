@@ -93,7 +93,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order
             if (msgCode.IsSuccess())
             {
                 // 抛出Order更改事件
-                _ = MessageDispatcher.PublishAsync(new OrderShippedEvent(cmd.OrderNo));
+                _ = MessageDispatcher.PublishAsync(new OrderShippedEvent(cmd.OrderNo, tran.Result));
             }
 
             return msgCode;
