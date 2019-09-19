@@ -3,32 +3,32 @@
 function DeleteOrder(orderNo) {
     bootbox.confirm("Delete product?", function (confirm) {
         if (confirm) {
-            $.ajax({
-                url: '/api/admin/order/' + orderNo,
-                type: 'DELETE',
-                success: function (rs) {
+            axios.delete(`/api/admin/order/${orderNo}`, { data: { OrderNo: orderNo } })
+                .then(function (resp) {
+                    var rs = resp.data;
                     if ($.isSuccess(rs)) {
                         mainTable.ajax.reload();
                     }
                     else {
                         bootbox.alert(rs);
                     }
-                }
-            });
+                });
         }
     });
 }
 
 function ChangeOrder(action, orderNo) {
     var actionType;
-    if (action === "Approve") actionType = "PUT";
-    else if (action === "Ship") actionType = "PATCH";
+    if (action === "Approve") actionType = "put";
+    else if (action === "Ship") actionType = "patch";
     else return;
 
-    $.ajax({
-        url: '/api/admin/order/' + orderNo,
-        type: actionType,
-        success: function (rs) {
+    axios({
+        method: actionType,
+        url: '/api/admin/order/' + orderNo
+    })
+        .then(function (resp) {
+            var rs = resp.data;
             if ($.isSuccess(rs)) {
                 bootbox.alert("Success.", function () {
                     mainTable.ajax.reload();
@@ -37,8 +37,7 @@ function ChangeOrder(action, orderNo) {
             else {
                 bootbox.alert(rs);
             }
-        }
-    });
+        });
 }
 
 $(function () {

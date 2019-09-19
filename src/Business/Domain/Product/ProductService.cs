@@ -117,7 +117,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> UpdateStatusAsync(UpdateProductStatusCommand cmd)
         {
-            var dto = await ProductDAL.GetProductAsync(cmd.asin).ConfigureAwait(false);
+            var dto = await ProductDAL.GetProductAsync(cmd.ASIN).ConfigureAwait(false);
             if (dto.IsNull()) return MsgCodes.ProductNotExists;
             // ^^^^^^^^^^
 

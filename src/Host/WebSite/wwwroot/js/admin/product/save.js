@@ -17,23 +17,27 @@ var productVM = new Vue({
             self.title = self.isNew ? "New" : "Edit";
 
             if (!self.isNew) {
-                $.get("/api/admin/product/" + self.product.asin, function (rs) {
-                    rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 150, 150) : $.pic(rs.imageUrl);
-                    self.product = rs;
-                });
+                axios.get("/api/admin/product/" + self.product.asin)
+                    .then(function (resp) {
+                        var rs = resp.data;
+                        rs.imageUrl = $.isNW(rs.imageUrl) ? $.pic(null, 150, 150) : $.pic(rs.imageUrl);
+                        self.product = rs;
+                    });
             }
         },
         save: function () {
             var self = this;
-            var actionType = self.isNew ? 'POST' : 'PUT';
+            var actionType = self.isNew ? 'post' : 'put';
 
-            $.ajax({
+            axios({
+                method: actionType,
                 url: '/api/admin/product',
-                type: actionType,
                 data: {
                     Product: self.product
-                },
-                success: function (rs) {
+                }
+            })
+                .then(function (resp) {
+                    var rs = resp.data;
                     if ($.isSuccess(rs)) {
                         bootbox.alert("Save successfully.", function () {
                             window.location = "/admin/product/Save/" + self.product.asin;
@@ -42,8 +46,7 @@ var productVM = new Vue({
                     else {
                         bootbox.alert(rs);
                     }
-                }
-            });
+                });
 
             return false;
         }
@@ -69,7 +72,7 @@ var itemVM = new Vue({
             self.isNew = $.isNW(self.item.sku);
 
             if (!self.isNew) {
-                $.get("/api/product/item", { asin: productVM.product.asin, sku: self.item.sku }, function (rs) {
+                axios.get("/api/product/item", { asin: productVM.product.asin, sku: self.item.sku }, function (rs) {
                     self.item = rs;
                 });
             }
@@ -79,15 +82,17 @@ var itemVM = new Vue({
         },
         save: function () {
             var self = this;
-            var actionType = self.isNew ? 'POST' : 'PUT';
+            var actionType = self.isNew ? 'post' : 'put';
 
-            $.ajax({
+            axios({
+                method: actionType,
                 url: '/api/product/item',
-                type: actionType,
                 data: {
                     ProductItem: self.item
-                },
-                success: function (rs) {
+                }
+            })
+                .then(function (resp) {
+                    var rs = resp.data;
                     if ($.isSuccess(rs)) {
                         $("#itemModal").modal("toggle");
                         itemsTable.ajax.reload();
@@ -95,8 +100,7 @@ var itemVM = new Vue({
                     else {
                         bootbox.alert(rs);
                     }
-                }
-            });
+                });
 
             return false;
         }
@@ -149,21 +153,18 @@ function createTable() {
 
 // Item Delete
 function DeleteItem(skuIn) {
-    bootbox.confirm("Delete product?", function (confirmed) {
+    bootbox.confirm("Delete Item?", function (confirmed) {
         if (confirmed) {
-            $.ajax({
-                url: '/api/product/item',
-                data: { asin: productVM.product.asin, sku: skuIn },
-                type: 'DELETE',
-                success: function (rs) {
+            axios.delete("/api/product/item", { data: { ASIN: productVM.product.asin, SKU: skuIn } })
+                .then(function (resp) {
+                    var rs = resp.data;
                     if ($.isSuccess(rs)) {
                         itemsTable.ajax.reload();
                     }
                     else {
                         bootbox.alert(rs);
                     }
-                }
-            });
+                });
         }
     });
 }

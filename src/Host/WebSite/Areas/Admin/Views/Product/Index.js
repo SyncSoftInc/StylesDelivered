@@ -3,14 +3,14 @@
 function DeleteProduct(asin) {
     bootbox.confirm("Delete product?", function (confirm) {
         if (confirm) {
-            axios.delete('/api/admin/product/' + asin)
+            axios.delete(`/api/admin/product/${asin}`, { data: { ASIN: asin } })
                 .then(function (resp) {
                     var rs = resp.data;
-                    if (rs.isSuccess) {
+                    if ($.isSuccess(rs)) {
                         mainTable.ajax.reload();
                     }
                     else {
-                        bootbox.alert(rs.msgCode);
+                        bootbox.alert(rs);
                     }
                 });
         }
@@ -18,30 +18,19 @@ function DeleteProduct(asin) {
 }
 
 function UpdateProductStatus(asinIn, statusIn) {
-    axios.patch('/api/admin/product/' + asin)
+    axios.patch('/api/admin/product', { ASIN: asinIn, Status: statusIn })
         .then(function (resp) {
             var rs = resp.data;
-            if (rs.isSuccess) {
-                mainTable.ajax.reload();
-            }
-            else {
-                bootbox.alert(rs.msgCode);
-            }
-        });
-
-    $.ajax({
-        url: '/api/admin/product',
-        data: { asin: asinIn, status: statusIn },
-        type: 'PATCH',
-        success: function (rs) {
             if ($.isSuccess(rs)) {
                 mainTable.ajax.reload();
             }
             else {
                 bootbox.alert(rs);
             }
-        }
-    });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 
 
