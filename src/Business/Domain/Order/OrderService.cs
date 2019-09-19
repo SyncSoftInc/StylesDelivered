@@ -1,5 +1,6 @@
 ﻿using SyncSoft.App;
 using SyncSoft.App.Components;
+using SyncSoft.App.Messaging;
 using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Order;
 using SyncSoft.StylesDelivered.DataAccess.Order;
@@ -7,6 +8,7 @@ using SyncSoft.StylesDelivered.Domain.Order.ApproveOrder;
 using SyncSoft.StylesDelivered.Domain.Order.CreateOrder;
 using SyncSoft.StylesDelivered.Domain.Order.DeleteOrder;
 using SyncSoft.StylesDelivered.Domain.Order.ShipOrder;
+using SyncSoft.StylesDelivered.Event.Order;
 using System;
 using System.Threading.Tasks;
 
@@ -22,6 +24,9 @@ namespace SyncSoft.StylesDelivered.Domain.Order
 
         private static readonly Lazy<IOrderDAL> _lazyOrderDAL = ObjectContainer.LazyResolve<IOrderDAL>();
         private IOrderDAL OrderDAL => _lazyOrderDAL.Value;
+
+        private static readonly Lazy<IMessageDispatcher> _lazyMessageDispatcher = ObjectContainer.LazyResolve<IMessageDispatcher>();
+        private IMessageDispatcher MessageDispatcher => _lazyMessageDispatcher.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -65,6 +70,13 @@ namespace SyncSoft.StylesDelivered.Domain.Order
             var tran = new ApproveOrderTransaction(cmd);
             var ctl = ControllerFactory.CreateForTcc(tran);
             var msgCode = await ctl.RunAsync().ConfigureAwait(false);
+
+            if (msgCode.IsSuccess())
+            {
+                // 抛出Order更改事件
+                _ = MessageDispatcher.PublishAsync(new OrderApprovedEvent(cmd.OrderNo, tran.Result));
+            }
+
             return msgCode;
         }
 
@@ -77,6 +89,13 @@ namespace SyncSoft.StylesDelivered.Domain.Order
             var tran = new ShipOrderTransaction(cmd);
             var ctl = ControllerFactory.CreateForTcc(tran);
             var msgCode = await ctl.RunAsync().ConfigureAwait(false);
+
+            if (msgCode.IsSuccess())
+            {
+                // 抛出Order更改事件
+                _ = MessageDispatcher.PublishAsync(new OrderShippedEvent(cmd.OrderNo));
+            }
+
             return msgCode;
         }
 

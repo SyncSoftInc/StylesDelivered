@@ -10,5 +10,6 @@
         public string ImageUrl { get; set; }
         public string Url { get; set; }
         public long InvQty { get; set; }
+        public long HoldInvQty { get; set; }
     }
 }
