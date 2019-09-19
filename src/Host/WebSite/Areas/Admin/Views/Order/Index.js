@@ -25,7 +25,8 @@ function ChangeOrder(action, orderNo) {
 
     axios({
         method: actionType,
-        url: '/api/admin/order/' + orderNo
+        url: '/api/admin/order/' + orderNo,
+        data: { OrderNo: orderNo }
     })
         .then(function (resp) {
             var rs = resp.data;

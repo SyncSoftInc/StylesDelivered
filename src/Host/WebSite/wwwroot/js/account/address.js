@@ -8,51 +8,49 @@ var addressVM = new Vue({
     methods: {
         loadAddresses: function () {
             var self = this;
-            $.get("/api/user/addresses", function (rs) {
-                self.addresses = rs;
-            });
-            $.get("/api/states/us", function (rs) {
-                self.states = rs;
-            });
+            axios.get("/api/user/addresses")
+                .then(function (resp) {
+                    var rs = resp.data;
+                    self.addresses = rs;
+                });
         },
         loadStates: function () {
             var self = this;
-            $.get("/api/states/us", function (rs) {
-                self.states = rs;
-            });
+            axios.get("/api/states/us")
+                .then(function (resp) {
+                    var rs = resp.data;
+                    self.states = rs;
+                });
         },
         save: function () {
             var self = this;
-            $.post("/api/user/address", { Address: self.address }, function (rs) {
+            axios.post("/api/user/address", {  Address: self.address })
+                .then(function (resp) {
+                    var rs = resp.data;
 
-                if ($.isSuccess(rs)) {
-                    $('#editor').modal('hide');
-                    self.loadAddresses();
-                }
-                else {
-                    bootbox.alert(rs);
-                }
-            });
+                    if ($.isSuccess(rs)) {
+                        $('#editor').modal('hide');
+                        self.loadAddresses();
+                    }
+                    else {
+                        bootbox.alert(rs);
+                    }
+                });
         },
         remove: function (hash) {
             var self = this;
             bootbox.confirm("Delete this address?", function (flag) {
                 if (flag) {
-                    $.ajax({
-                        url: '/api/user/address',
-                        type: 'DELETE',
-                        data: {
-                            Address: { "Hash": hash }
-                        },
-                        success: function (rs) {
+                    axios.delete('/api/user/address', { data: { Address: { "Hash": hash } } })
+                        .then(function (resp) {
+                            var rs = resp.data;
                             if ($.isSuccess(rs)) {
                                 self.loadAddresses();
                             }
                             else {
                                 bootbox.alert(rs);
                             }
-                        }
-                    });
+                        });
                 }
             });
         }
