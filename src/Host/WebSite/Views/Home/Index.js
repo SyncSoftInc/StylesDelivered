@@ -1,7 +1,7 @@
 ﻿var homeVM = new Vue({
     el: "#app",
     data: {
-        pageSize: 9,
+        pageSize: 3,
         pageIndex: 1,
         totalPage: 1,
         items: []
@@ -107,12 +107,12 @@ var applyVM = new Vue({
 
             axios.put('/api/order', { Order: order })
                 .then(function (resp) {
-                    var msg = resp.data;
-                    if ($.isSuccess(msg)) {
+                    var rs = resp.data;
+                    if ($.isSuccess(rs.msgCode)) {
                         bootbox.alert("Success");
                     }
                     else {
-                        bootbox.alert(msg);
+                        bootbox.alert(rs.msgCode);
                     }
                 });
         },
