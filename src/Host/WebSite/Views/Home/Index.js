@@ -17,8 +17,8 @@
                     var dt = resp.data;
                     self.totalPage = dt.totalPage;
 
-                    for (var x in dt.data) {
-                        x.imageUrl = $.pic(x.imageUrl);
+                    for (var x of dt.data) {
+                        x.imageUrl = $.pic(x.imageUrl, 500, 500);
                     }
 
                     self.items = self.items.concat(dt.data);
@@ -63,7 +63,7 @@ var applyVM = new Vue({
             shipping_City: '',
             shipping_State: '',
             shipping_ZipCode: '',
-            shipping_Country: 'US',
+            shipping_Country: 'US'
         }
     },
     methods: {
@@ -102,7 +102,7 @@ var applyVM = new Vue({
                 shipping_City: self.address.shipping_City,
                 shipping_State: self.address.shipping_State,
                 shipping_ZipCode: self.address.shipping_ZipCode,
-                shipping_Country: self.address.shipping_Country,
+                shipping_Country: self.address.shipping_Country
             };
 
             axios.put('/api/order', { Order: order })
