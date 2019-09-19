@@ -1,4 +1,4 @@
-﻿using Logistics;
+﻿using Inventory;
 using SyncSoft.App.Components;
 using System;
 using System.Threading.Tasks;

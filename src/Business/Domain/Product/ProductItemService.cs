@@ -1,4 +1,4 @@
-﻿using Logistics;
+﻿using Inventory;
 using SyncSoft.App.Components;
 using SyncSoft.App.Messaging;
 using SyncSoft.StylesDelivered.DataAccess.Product;
@@ -94,7 +94,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> SyncInventoriesAsync()
         {
-            var query = await InventoryService.GetWarehouseOnHandQtysAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
+            var query = await InventoryService.GetOnHandQtysAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
             if (query.Inventories.IsPresent())
             {
                 var dic = query.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);
@@ -109,7 +109,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         public async Task<string> SyncHoldInventoriesAsync()
         {
-            var query = await InventoryService.GetWarehouseOnHoldQtysAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
+            var query = await InventoryService.GetOnHoldQtysAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
             if (query.Inventories.IsPresent())
             {
                 var dic = query.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);

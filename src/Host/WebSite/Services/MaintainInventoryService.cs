@@ -1,4 +1,4 @@
-﻿using Logistics;
+﻿using Inventory;
 using Quartz;
 using SyncSoft.App.Components;
 using SyncSoft.App.Logging;
