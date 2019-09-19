@@ -58,12 +58,11 @@ $.getWindowHeight = function () {
     return windowHeight;
 };
 
-/**
- * 根据给定flags取得一系列枚举名
- */
+
+// 根据给定flags取得一系列枚举名
 $.enumToName = function (EnumType, value) {
     for (var key in EnumType) {
-        if (value == EnumType[key]) {
+        if (value === EnumType[key]) {
             return key;
         }
     }
@@ -89,7 +88,7 @@ var itemVM = Vue.component("itembox", {
             selectedColor: null,
             sizeList: [],
             colorList: []
-        }
+        };
     },
     methods: {
         //addToCart: function (item) {
@@ -111,14 +110,14 @@ var itemVM = Vue.component("itembox", {
             if (!$.isNW(self.item.itemsJson)) {
                 self.items = JSON.parse(self.item.itemsJson);
 
-                $.each(self.items, function (idx, item) {
+                for (var item in self.items) {
                     if (!$.isNW(item.Size) && !self.sizeList.includes(item.Size)) {
                         self.sizeList.push(item.Size);
                     }
                     if (!$.isNW(item.Color) && !self.colorList.includes(item.Color)) {
                         self.colorList.push(item.Color);
                     }
-                });
+                }
 
                 if (!$.isNW(self.sizeList)) {
                     self.selectedSize = self.sizeList[0];
@@ -134,18 +133,18 @@ var itemVM = Vue.component("itembox", {
                 // clear color list
                 self.colorList = [];
 
-                $.each(self.items, function (idx, item) {
+                for (var item in self.items) {
                     if (!$.isNW(item.Color) && item.Size === selectedVal && !self.colorList.includes(item.Color)) {
                         self.colorList.push(item.Color);
                     }
-                });
+                }
 
                 if (!$.isNW(self.colorList)) self.selectedColor = self.colorList[0];
             }
         },
         applyItem: function () {
             var self = this;
-            var selectedItem = self.items.find(x => x.Size == self.selectedSize && x.Color == self.selectedColor);
+            var selectedItem = self.items.find(x => x.Size === self.selectedSize && x.Color === self.selectedColor);
 
             if (!$.isNW(selectedItem)) {
                 applyVM.asin = self.item.asin;

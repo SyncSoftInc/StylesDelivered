@@ -9,13 +9,13 @@
                 <div class="form-row card-text">
                     <div class="col-md-4" v-if="sizeList.length > 0">
                         <label>Size:</label>
-                        <select class="custom-select custom-select-sm" v-model="selectedSize" v-on:change="onSizeChange(selectedSize)">
+                        <select class="custom-select custom-select-sm" aria-label="Sizes" v-model="selectedSize" v-on:change="onSizeChange(selectedSize)">
                             <option v-for="size in sizeList" v-bind:value="size">{{size}}</option>
                         </select>
                     </div>
                     <div class="col-md-4" v-if="colorList.length > 0">
                         <label>Color:</label>
-                        <select class="custom-select custom-select-sm" v-model="selectedColor">
+                        <select class="custom-select custom-select-sm" aria-label="Colors" v-model="selectedColor">
                             <option v-for="color in colorList" v-bind:value="color">{{color}}</option>
                         </select>
                     </div>
@@ -52,7 +52,7 @@
                         <input type="text" class="form-control" v-model="address.shipping_City" placeholder="City" maxlength="50" required />
                     </div>
                     <div class="form-group col-md-4">
-                        <select class="form-control" v-model="address.shipping_State">
+                        <select class="form-control" aria-label="States" v-model="address.shipping_State">
                             <option disabled value="">State</option>
                             <option v-for="state in states" v-bind:value="state.code">{{state.name}}</option>
                         </select>

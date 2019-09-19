@@ -12,13 +12,17 @@
 
             var cursor = (self.pageIndex - 1) * self.pageSize;
 
-            return $.get("/api/products?length=" + self.pageSize + "&start=" + cursor, function (dt) {
-                self.totalPage = dt.totalPage;
-                $.each(dt.data, function (i, x) {
-                    x.imageUrl = $.pic(x.imageUrl);
+            return axios.get("/api/products?length=" + self.pageSize + "&start=" + cursor)
+                .then(function (resp) {
+                    var dt = resp.data;
+                    self.totalPage = dt.totalPage;
+
+                    for (var x in dt.data) {
+                        x.imageUrl = $.pic(x.imageUrl);
+                    }
+
+                    self.items = self.items.concat(dt.data);
                 });
-                self.items = self.items.concat(dt.data);
-            });
         },
         scroll: function () {
             var self = this;
@@ -29,7 +33,7 @@
                 if (bottomOfWindow && !isLoading && self.pageIndex < self.totalPage) {
                     isLoading = true;
                     self.pageIndex++;
-                    self.loadData().done(function () {
+                    self.loadData().then(function () {
                         isLoading = false;
                     });
                 }
@@ -119,7 +123,7 @@ var applyVM = new Vue({
             var self = this;
             self.address.shipping_Address1 = '';
             self.address.shipping_Address2 = '';
-            self.address.shipping_City ='';
+            self.address.shipping_City = '';
             self.address.shipping_State = '';
             self.address.shipping_ZipCode = '';
             self.address.shipping_Country = 'US';
