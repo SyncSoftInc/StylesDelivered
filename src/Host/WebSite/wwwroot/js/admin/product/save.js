@@ -127,6 +127,11 @@ function createTable() {
                 orderable: false
             },
             {
+                data: "holdInvQty",
+                width: 80,
+                orderable: false
+            },
+            {
                 width: 120,
                 orderable: false,
                 render: function (id, display, item) {

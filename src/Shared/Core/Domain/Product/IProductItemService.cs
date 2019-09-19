@@ -9,5 +9,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
         Task<string> UpdateItemAsync(ProductItemDTO dto);
         Task<string> DeleteItemAsync(string asin, string sku);
         Task<string> SyncInventoriesAsync();
+        Task<string> SyncHoldInventoriesAsync();
+
     }
 }

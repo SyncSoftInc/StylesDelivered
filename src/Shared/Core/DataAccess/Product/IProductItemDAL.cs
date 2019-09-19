@@ -15,6 +15,7 @@ namespace SyncSoft.StylesDelivered.DataAccess.Product
         Task<ProductItemDTO> GetItemAsync(string asin, string sku);
         Task<PagedList<ProductItemDTO>> GetItemsAsync(GetProductItemsQuery query);
         Task<IList<ProductItemDTO>> GetItemsAsync(string productASIN);
-        Task<string> SetItemInventoriesAsync(IDictionary<string, long> inventories);
+        Task<string> SetItemInvQtysdAsync(IDictionary<string, long> inventories);
+        Task<string> SetItemHoldInvQtysdAsync(IDictionary<string, long> inventories);
     }
 }

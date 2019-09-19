@@ -30,9 +30,9 @@ namespace SyncSoft.StylesDelivered.MySql.Product
         public Task<string> InsertItemAsync(ProductItemDTO dto)
         {
             return base.TryExecuteAsync(@"INSERT INTO ProductItem
-(SKU, ASIN, Alias, Color, Size, Url, InvQty)
+(SKU, ASIN, Alias, Color, Size, Url, InvQty, HoldInvQty)
 VALUES
-(@SKU, @ASIN, @Alias, @Color, @Size, @Url, @InvQty)", dto);
+(@SKU, @ASIN, @Alias, @Color, @Size, @Url, @InvQty, @HoldInvQty)", dto);
         }
 
         public Task<string> UpdateItemAsync(ProductItemDTO dto)
@@ -56,7 +56,38 @@ WHERE SKU = @SKU AND ASIN = @ASIN", dto);
         // *******************************************************************************************************************************
         #region -  SetItemInventories  -
 
-        public async Task<string> SetItemInventoriesAsync(IDictionary<string, long> inventories)
+        public async Task<string> SetItemHoldInvQtysdAsync(IDictionary<string, long> inventories)
+        {
+            var parameters = inventories.Select(x =>
+            {
+                var para = new DynamicParameters();
+
+                para.Add("SKU", x.Key, DbType.String);
+                para.Add("HoldInvQty", x.Value, DbType.Int64);
+
+                return para;
+            }).ToArray();
+
+            using (var conn = await base.CreateConnectionAsync().ConfigureAwait(false))
+            using (var tran = conn.BeginTransaction())
+            {
+                try
+                {
+                    await conn.ExecuteAsync("UPDATE ProductItem SET HoldInvQty = 0", transaction: tran).ConfigureAwait(false);
+                    await conn.ExecuteAsync("SP_SetProductItemHoldInventory", parameters, tran, commandType: CommandType.StoredProcedure);
+
+                    tran.Commit();
+                    return MsgCodes.SUCCESS;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return ex.GetRootExceptionMessage();
+                }
+            }
+        }
+
+        public async Task<string> SetItemInvQtysdAsync(IDictionary<string, long> inventories)
         {
             var parameters = inventories.Select(x =>
             {

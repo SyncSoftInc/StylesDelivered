@@ -1,4 +1,5 @@
-﻿using SyncSoft.App;
+﻿using Logistics;
+using SyncSoft.App;
 using SyncSoft.App.Components;
 using SyncSoft.App.Json;
 using SyncSoft.App.Securities;
@@ -35,6 +36,10 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         private static readonly Lazy<IJsonSerializer> _lazyJsonSerializer = ObjectContainer.LazyResolve<IJsonSerializer>();
         private IJsonSerializer JsonSerializer => _lazyJsonSerializer.Value;
+
+        private static readonly Lazy<InventoryService.InventoryServiceClient> _lazyInventoryServiceClient
+            = ObjectContainer.LazyResolve<InventoryService.InventoryServiceClient>();
+        private InventoryService.InventoryServiceClient InventoryServiceClient => _lazyInventoryServiceClient.Value;
 
         #endregion
         // *******************************************************************************************************************************

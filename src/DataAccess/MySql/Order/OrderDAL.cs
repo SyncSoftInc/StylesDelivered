@@ -7,6 +7,7 @@ using SyncSoft.StylesDelivered.DTO.Order;
 using SyncSoft.StylesDelivered.Enum.Order;
 using SyncSoft.StylesDelivered.Query.Order;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -120,6 +121,11 @@ WHERE t1.User_ID = @UserID AND t2.SKU = @SKU", new
         public Task<OrderDTO> GetOrderAsync(string orderNo)
         {
             return base.QueryFirstOrDefaultAsync<OrderDTO>("SELECT * FROM `Order` WHERE OrderNo = @OrderNo", new { OrderNo = orderNo });
+        }
+
+        public Task<IList<OrderDTO>> GetOrdersAsync(OrderStatusEnum status)
+        {
+            return base.QueryListAsync<OrderDTO>("SELECT * FROM `V_OrderExportingList` WHERE Status = @Status", new { Status = (int)status });
         }
 
         public Task<PagedList<OrderDTO>> GetOrdersAsync(GetOrdersQuery query)

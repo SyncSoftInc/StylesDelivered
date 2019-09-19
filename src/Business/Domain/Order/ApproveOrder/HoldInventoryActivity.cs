@@ -33,6 +33,7 @@ namespace SyncSoft.StylesDelivered.Domain.Order.ApproveOrder
             var orderItems = await OrderItemDAL.GetOrderItemsAsync(cmd.OrderNo).ConfigureAwait(false);
             if (orderItems.IsMissing()) return MsgCodes.OrderItemsMissing;
             // ^^^^^^^^^^
+            this.SetResult(orderItems);
 
             await SetStateAsync("OrderItems", orderItems).ConfigureAwait(false);
 

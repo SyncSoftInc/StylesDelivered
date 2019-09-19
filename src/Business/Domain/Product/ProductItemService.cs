@@ -98,7 +98,22 @@ namespace SyncSoft.StylesDelivered.Domain.Product
             if (query.Inventories.IsPresent())
             {
                 var dic = query.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);
-                return await ProductItemDAL.SetItemInventoriesAsync(dic).ConfigureAwait(false);
+                return await ProductItemDAL.SetItemInvQtysdAsync(dic).ConfigureAwait(false);
+            }
+            return MsgCodes.SUCCESS;
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  SyncHoldInventoriesAsync  -
+
+        public async Task<string> SyncHoldInventoriesAsync()
+        {
+            var query = await InventoryService.GetWarehouseOnHoldQtysAsync(new InventoriesMSG { Warehouse = Constants.WarehouseID });
+            if (query.Inventories.IsPresent())
+            {
+                var dic = query.Inventories.ToDictionary(x => x.ItemNo, x => x.Qty);
+                return await ProductItemDAL.SetItemHoldInvQtysdAsync(dic).ConfigureAwait(false);
             }
             return MsgCodes.SUCCESS;
         }
