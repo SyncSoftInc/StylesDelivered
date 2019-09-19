@@ -110,14 +110,14 @@ var itemVM = Vue.component("itembox", {
             if (!$.isNW(self.item.itemsJson)) {
                 self.items = JSON.parse(self.item.itemsJson);
 
-                for (var item in self.items) {
+                $.each(self.items, function (idx, item) {
                     if (!$.isNW(item.Size) && !self.sizeList.includes(item.Size)) {
                         self.sizeList.push(item.Size);
                     }
                     if (!$.isNW(item.Color) && !self.colorList.includes(item.Color)) {
                         self.colorList.push(item.Color);
                     }
-                }
+                });
 
                 if (!$.isNW(self.sizeList)) {
                     self.selectedSize = self.sizeList[0];
@@ -133,11 +133,11 @@ var itemVM = Vue.component("itembox", {
                 // clear color list
                 self.colorList = [];
 
-                for (var item in self.items) {
+                $.each(self.items, function (idx, item) {
                     if (!$.isNW(item.Color) && item.Size === selectedVal && !self.colorList.includes(item.Color)) {
                         self.colorList.push(item.Color);
                     }
-                }
+                });
 
                 if (!$.isNW(self.colorList)) self.selectedColor = self.colorList[0];
             }

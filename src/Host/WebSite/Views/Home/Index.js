@@ -69,15 +69,17 @@ var applyVM = new Vue({
     methods: {
         loadAddresses: function () {
             var self = this;
-            $.get("/api/user/addresses", function (rs) {
-                self.addresses = rs;
-            });
+            axios.get("/api/user/addresses")
+                .then(function (resp) {
+                    self.addresses = resp.data;
+                });
         },
         loadStates: function () {
             var self = this;
-            $.get("/api/states/us", function (rs) {
-                self.states = rs;
-            });
+            axios.get("/api/states/us")
+                .then(function (resp) {
+                    self.states = resp.data;
+                });
         },
         select: function (item) {
             var self = this;
@@ -103,21 +105,16 @@ var applyVM = new Vue({
                 shipping_Country: self.address.shipping_Country,
             };
 
-            $.ajax({
-                url: '/api/order',
-                type: "PUT",
-                data: {
-                    Order: order
-                },
-                success: function (rs) {
-                    if ($.isSuccess(rs)) {
+            axios.put('/api/order', { Order: order })
+                .then(function (resp) {
+                    var msg = resp.data;
+                    if ($.isSuccess(msg)) {
                         bootbox.alert("Success");
                     }
                     else {
-                        bootbox.alert(rs);
+                        bootbox.alert(msg);
                     }
-                }
-            });
+                });
         },
         clear: function () {
             var self = this;
