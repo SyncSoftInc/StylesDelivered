@@ -38,18 +38,16 @@ $(function () {
             if (confirm) {
                 var id = btn.data('id');
 
-                $.ajax({
-                    url: '/api/admin/user/' + id,
-                    type: 'DELETE',
-                    success: function (rs) {
+                axios.delete('/api/admin/user/' + id)
+                    .then(function (resp) {
+                        var rs = resp.data;
                         if ($.isSuccess(rs)) {
                             window.location = "/admin/user";
                         }
                         else {
                             bootbox.alert(rs);
                         }
-                    }
-                });
+                    });
             }
         });
     });
