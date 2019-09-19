@@ -10,21 +10,19 @@ var addressVM = new Vue({
             var self = this;
             axios.get("/api/user/addresses")
                 .then(function (resp) {
-                    var rs = resp.data;
-                    self.addresses = rs;
+                    self.addresses = resp.data;
                 });
         },
         loadStates: function () {
             var self = this;
             axios.get("/api/states/us")
                 .then(function (resp) {
-                    var rs = resp.data;
-                    self.states = rs;
+                    self.states = resp.data;
                 });
         },
         save: function () {
             var self = this;
-            axios.post("/api/user/address", {  Address: self.address })
+            axios.post("/api/user/address", { Address: self.address })
                 .then(function (resp) {
                     var rs = resp.data;
 

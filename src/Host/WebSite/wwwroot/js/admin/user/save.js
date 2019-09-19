@@ -14,9 +14,10 @@ var saveVM = new Vue({
             self.title = !self.isNew ? "Edit" : "New";
 
             if (!self.isNew) {
-                $.get("/api/admin/user/" + self.user.id, function (rs) {
-                    self.user = rs;
-                });
+                axios.get("/api/admin/user/" + self.user.id)
+                    .then(function (resp) {
+                        self.user = resp.data;
+                    });
             }
         },
         save: function () {
