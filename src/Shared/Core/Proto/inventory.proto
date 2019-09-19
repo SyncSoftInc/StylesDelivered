@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package logistics;
+package inventory;
 
 message InventoryMSG{
   string RequestID = 1;
@@ -14,28 +14,31 @@ message InventoriesMSG{
   repeated InventoryMSG Inventories = 2;
 }
 
-message MsgResult{
+message ResultMSG{
   string MsgCode = 1;
 }
 
 service InventoryService {
   rpc GetOnHandQty (InventoryMSG) returns (InventoryMSG) {}
-  rpc SetOnHandQty (InventoryMSG) returns (MsgResult) {}
+  rpc SetOnHandQty (InventoryMSG) returns (ResultMSG) {}
 
-  rpc Hold (InventoryMSG) returns (MsgResult) {}
-  rpc Unhold (InventoryMSG) returns (MsgResult) {}
+  rpc Hold (InventoryMSG) returns (ResultMSG) {}
+  rpc Unhold (InventoryMSG) returns (ResultMSG) {}
 
   rpc GetOnHoldQty (InventoryMSG) returns (InventoryMSG) {}
-  rpc SetOnHoldQty (InventoryMSG) returns (MsgResult) {}
+  rpc SetOnHoldQty (InventoryMSG) returns (ResultMSG) {}
 
   rpc GetAvbQty(InventoryMSG) returns (InventoryMSG) {}
   rpc GetAvbQtys(InventoriesMSG) returns (InventoriesMSG) {}
 
-  rpc GetWarehouseOnHandQtys(InventoriesMSG) returns (InventoriesMSG) {}
-  rpc GetWarehouseOnHoldQtys(InventoriesMSG) returns (InventoriesMSG) {}
-  
-  rpc ShipConfirm(InventoriesMSG) returns (MsgResult) {}
-  rpc CancelShipConfirm(InventoriesMSG) returns (MsgResult) {}
+  rpc GetOnHandQtys(InventoriesMSG) returns (InventoriesMSG) {}
+  rpc GetOnHoldQtys(InventoriesMSG) returns (InventoriesMSG) {}
 
-  rpc CleanWarehouse(InventoriesMSG) returns (MsgResult) {}
+  rpc SetOnHandQtys(InventoriesMSG) returns (ResultMSG) {}
+  rpc SetOnHoldQtys(InventoriesMSG) returns (ResultMSG) {}
+
+  rpc ShipConfirm(InventoriesMSG) returns (ResultMSG) {}
+  rpc CancelShipConfirm(InventoriesMSG) returns (ResultMSG) {}
+
+  rpc CleanWarehouse(InventoriesMSG) returns (ResultMSG) {}
 }

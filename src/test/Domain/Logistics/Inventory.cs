@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Inventory;
+using NUnit.Framework;
 using SyncSoft.App.Components;
 using SyncSoft.StylesDelivered;
 using System;

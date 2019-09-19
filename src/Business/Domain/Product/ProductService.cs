@@ -1,4 +1,4 @@
-﻿using Logistics;
+﻿using Inventory;
 using SyncSoft.App;
 using SyncSoft.App.Components;
 using SyncSoft.App.Json;
