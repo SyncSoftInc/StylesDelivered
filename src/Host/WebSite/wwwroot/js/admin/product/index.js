@@ -3,23 +3,32 @@ var mainTable;
 function DeleteProduct(asin) {
     bootbox.confirm("Delete product?", function (confirm) {
         if (confirm) {
-            $.ajax({
-                url: '/api/admin/product/' + asin,
-                type: 'DELETE',
-                success: function (rs) {
-                    if ($.isSuccess(rs)) {
+            axios.delete('/api/admin/product/' + asin)
+                .then(function (resp) {
+                    var rs = resp.data;
+                    if (rs.isSuccess) {
                         mainTable.ajax.reload();
                     }
                     else {
-                        bootbox.alert(rs);
+                        bootbox.alert(rs.msgCode);
                     }
-                }
-            });
+                });
         }
     });
 }
 
 function UpdateProductStatus(asinIn, statusIn) {
+    axios.patch('/api/admin/product/' + asin)
+        .then(function (resp) {
+            var rs = resp.data;
+            if (rs.isSuccess) {
+                mainTable.ajax.reload();
+            }
+            else {
+                bootbox.alert(rs.msgCode);
+            }
+        });
+
     $.ajax({
         url: '/api/admin/product',
         data: { asin: asinIn, status: statusIn },
