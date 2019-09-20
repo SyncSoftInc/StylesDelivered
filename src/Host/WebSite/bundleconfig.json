@@ -54,6 +54,12 @@
         ]
     },
     {
+        "outputFileName": "wwwroot/js/admin/service/index.js",
+        "inputFiles": [
+            "Areas/Admin/Views/Service/Index.js"
+        ]
+    },
+    {
         "outputFileName": "wwwroot/js/admin/user/index.js",
         "inputFiles": [
             "Areas/Admin/Views/User/Index.js"

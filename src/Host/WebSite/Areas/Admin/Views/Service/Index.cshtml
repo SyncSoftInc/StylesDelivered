@@ -1,0 +1,21 @@
+﻿<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="~/">Home</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Admin</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Services</li>
+    </ol>
+</nav>
+
+<table id="mainTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th class="all">Group Name</th>
+            <th class="min-desktop">Name</th>
+            <th class="min-desktop"></th>
+        </tr>
+    </thead>
+</table>
+
+@section Scripts{
+    <partial name="Script" model='"admin/service/index"' />
+}

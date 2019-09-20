@@ -6,6 +6,10 @@
 </nav>
 
 <div>
+    @if (await User.HasPermissionAsync(SyncSoft.StylesDelivered.Constants.AllowAdmin))
+    {
+        <a class="btn btn-outline-secondary btn-lg btn-block" href="~/admin/service">Service</a>
+    }
     <a class="btn btn-outline-secondary btn-lg btn-block" href="~/admin/product">Product</a>
     <a class="btn btn-outline-secondary btn-lg btn-block" href="~/admin/order">Order</a>
     @*<a class="btn btn-outline-secondary btn-lg btn-block" href="~/admin/user">User</a>*@
