@@ -78,7 +78,5 @@ code {
     }
 
 .card-img-top {
-    min-width: 100%;
-    width: auto;
-    height: auto;
+    object-fit: scale-down;
 }
