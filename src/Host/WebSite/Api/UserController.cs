@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SyncSoft.App.Components;
+using SyncSoft.ECOM.DTOs;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.DTO.Common;
-using SyncSoft.StylesDelivered.DTO.User;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

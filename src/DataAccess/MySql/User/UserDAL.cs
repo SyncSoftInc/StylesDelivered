@@ -1,9 +1,9 @@
-﻿using SyncSoft.ECP.DTOs;
+﻿using SyncSoft.ECOM.DTOs;
+using SyncSoft.ECP.DTOs;
 using SyncSoft.ECP.MySql;
 using SyncSoft.StylesDelivered.DataAccess;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.DTO.Common;
-using SyncSoft.StylesDelivered.DTO.User;
 using SyncSoft.StylesDelivered.Query.User;
 using System;
 using System.Collections.Generic;

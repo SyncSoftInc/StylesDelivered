@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SyncSoft.App.Components;
+using SyncSoft.ECOM.DTOs;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
-using SyncSoft.StylesDelivered.DTO.User;
-using SyncSoft.StylesDelivered.Query.User;
-using SyncSoft.StylesDelivered.WebSite.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -55,26 +53,26 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         [HttpGet("api/admin/user/{id}")]
         public Task<UserDTO> GetUserAsync(Guid id) => UserDF.GetUserAsync(id);
 
-        /// <summary>
-        /// 获取分页用户数据
-        /// </summary>
-        [HttpGet("api/admin/users")]
-        public async Task<DataTables<UserDTO>> GetUsersAsync(DataTableModel model)
-        {
-            var query = new GetUsersQuery
-            {
-                PageSize = model.PageSize,
-                PageIndex = model.PageIndex,
-                OrderBy = model.OrderBy,
-                Draw = model.Draw,
-                Keyword = model.Keyword,
-                SortDirection = model.SortDirection,
-            };
-            query.SetContext(User.Identity);
+        ///// <summary>
+        ///// 获取分页用户数据
+        ///// </summary>
+        //[HttpGet("api/admin/users")]
+        //public async Task<DataTables<UserDTO>> GetUsersAsync(DataTableModel model)
+        //{
+        //    var query = new GetUsersQuery
+        //    {
+        //        PageSize = model.PageSize,
+        //        PageIndex = model.PageIndex,
+        //        OrderBy = model.OrderBy,
+        //        Draw = model.Draw,
+        //        Keyword = model.Keyword,
+        //        SortDirection = model.SortDirection,
+        //    };
+        //    query.SetContext(User.Identity);
 
-            var plist = await UserDF.GetUsersAsync(query).ConfigureAwait(false);
-            return new DataTables<UserDTO>(query.Draw, plist);
-        }
+        //    var plist = await UserDF.GetUsersAsync(query).ConfigureAwait(false);
+        //    return new DataTables<UserDTO>(query.Draw, plist);
+        //}
 
         #endregion
     }

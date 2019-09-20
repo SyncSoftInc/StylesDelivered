@@ -29,6 +29,7 @@ namespace SyncSoft.StylesDelivered.WebSite
                 .UseStydOffice()
                 .UseGRPC()
                 .UseAliyun()
+                .UseEcomApi()
                 .UseJsonConfiguration()
                 .Start();
 

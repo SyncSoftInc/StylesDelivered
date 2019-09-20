@@ -1,5 +1,5 @@
 ﻿using SyncSoft.App.Messaging;
-using SyncSoft.StylesDelivered.DTO.User;
+using SyncSoft.ECOM.DTOs;
 
 namespace SyncSoft.StylesDelivered.Command.User
 {

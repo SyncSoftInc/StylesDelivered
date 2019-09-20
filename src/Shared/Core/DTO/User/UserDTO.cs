@@ -1,10 +1,10 @@
-﻿using SyncSoft.ECP.DTOs.Users;
+﻿//using SyncSoft.ECP.DTOs.Users;
 
-namespace SyncSoft.StylesDelivered.DTO.User
-{
-    public class UserDTO : UserBasicInfoDTO
-    {
-        public string Username { get; set; }
-        public string Phone { get; set; }
-    }
-}
+//namespace SyncSoft.StylesDelivered.DTO.User
+//{
+//    public class UserDTO : UserBasicInfoDTO
+//    {
+//        public string Username { get; set; }
+//        public string Phone { get; set; }
+//    }
+//}

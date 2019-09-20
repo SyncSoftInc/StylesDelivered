@@ -1,6 +1,6 @@
-﻿using SyncSoft.ECP.DTOs;
+﻿using SyncSoft.ECOM.DTOs;
+using SyncSoft.ECP.DTOs;
 using SyncSoft.StylesDelivered.DTO.Common;
-using SyncSoft.StylesDelivered.DTO.User;
 using SyncSoft.StylesDelivered.Query.User;
 using System;
 using System.Collections.Generic;

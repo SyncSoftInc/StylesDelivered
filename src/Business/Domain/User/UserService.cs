@@ -1,7 +1,7 @@
 ﻿using SyncSoft.App.Components;
+using SyncSoft.ECOM.DTOs;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
-using SyncSoft.StylesDelivered.DTO.User;
 using System;
 using System.Threading.Tasks;
 
@@ -115,9 +115,9 @@ namespace SyncSoft.StylesDelivered.Domain.User
         private string CheckUserDTO(UserDTO dto)
         {
             if (dto.ID.IsNull()) return MsgCodes.IDCannotBeEmpty;
-            if (dto.Username.IsNull()) return MsgCodes.UsernameCannotBeEmpty;
+            if (dto.UserName.IsNull()) return MsgCodes.UsernameCannotBeEmpty;
 
-            if (dto.Username.IsNotNull() && dto.Username.Length > 50) return MsgCodes.InvalidUsernameLength;
+            if (dto.UserName.IsNotNull() && dto.UserName.Length > 50) return MsgCodes.InvalidUsernameLength;
             if (dto.Phone.IsNotNull() && dto.Phone.Length > 50) return MsgCodes.InvalidPhoneLength;
             if (dto.Email.IsNotNull() && dto.Email.Length > 100) return MsgCodes.InvalidEmailLength;
 

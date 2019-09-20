@@ -24,6 +24,12 @@
         ]
     },
     {
+        "outputFileName": "wwwroot/js/account/profile.js",
+        "inputFiles": [
+            "Views/Account/Profile.js"
+        ]
+    },
+    {
         "outputFileName": "wwwroot/js/account/index.js",
         "inputFiles": [
             "Views/Account/Index.js"
