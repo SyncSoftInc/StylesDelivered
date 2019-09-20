@@ -15,6 +15,11 @@ namespace SyncSoft.StylesDelivered.WebSite.Controllers
             return View();
         }
 
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
         public IActionResult AccessDenied()
         {
             if (!User.Identity.IsAuthenticated)

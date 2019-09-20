@@ -1,4 +1,5 @@
 ﻿using SyncSoft.App.Components;
+using SyncSoft.ECOM.APIs.User;
 using SyncSoft.ECOM.DTOs;
 using SyncSoft.StylesDelivered.Command.User;
 using SyncSoft.StylesDelivered.DataAccess.User;
@@ -14,6 +15,9 @@ namespace SyncSoft.StylesDelivered.Domain.User
 
         private static readonly Lazy<IUserDAL> _lazyUserDAL = ObjectContainer.LazyResolve<IUserDAL>();
         private IUserDAL UserDAL => _lazyUserDAL.Value;
+
+        private static readonly Lazy<IUserApi> _lazyUserApi = ObjectContainer.LazyResolve<IUserApi>();
+        private IUserApi UserApi => _lazyUserApi.Value;
 
         #endregion
         // *******************************************************************************************************************************
@@ -59,14 +63,17 @@ namespace SyncSoft.StylesDelivered.Domain.User
             if (cmd.Identity.UserID() != cmd.User.ID) return MsgCodes.SecurityCheckFailed;
             // ^^^^^^^^^^   必须本人
 
-            var user = await UserDAL.GetUserAsync(cmd.User.ID).ConfigureAwait(false);
+            var userHr = await UserApi.GetUserAsync(cmd.User.ID).ConfigureAwait(false);
+            var user = await userHr.GetResultAsync().ConfigureAwait(false);
             if (user.IsNull()) return MsgCodes.UserNotExists;
             // ^^^^^^^^^^
 
             user.Email = cmd.User.Email;
             user.Phone = cmd.User.Phone;
 
-            return await UserDAL.UpdateUserProfileAsync(user).ConfigureAwait(false);
+            var hr = await UserApi.UpdateUserAsync(user).ConfigureAwait(false);
+            var rs = await hr.GetResultAsync().ConfigureAwait(false);
+            return rs;
         }
 
         #endregion

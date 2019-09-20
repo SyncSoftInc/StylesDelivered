@@ -53,7 +53,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Api
         [HttpPatch("api/user/profile")]
         public Task<string> SaveUserProfileAsync(SaveUserProfileCommand cmd)
         {
-            return RequestAsync(cmd);
+            return base.RequestAsync(cmd);
         }
 
         #endregion

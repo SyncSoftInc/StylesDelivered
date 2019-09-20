@@ -4,6 +4,7 @@ var orderVM = new Vue({
     el: "#app",
     data: {
         order: {
+            isAddress2: false,
             orderNo: orderNoParam
         }
     },
@@ -17,6 +18,7 @@ var orderVM = new Vue({
                     self.order = rs;
                     self.order.status = $.enumToName(OrderStatusEnum, self.order.status);
                     self.order.createdOnUtc = $.timeFormat(self.order.createdOnUtc);
+                    self.order.isAddress2 = !$.isNW(self.order.shipping_Address2);
                 });
         }
     },

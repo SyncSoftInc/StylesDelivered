@@ -33,7 +33,14 @@
         <div class="row">
             <div class="col-md-4">
                 <label class="font-weight-bold">Shipping Address</label>
-                <p>{{order.shipping_Address1}}<br />{{order.shipping_Address2}}<br />{{order.shipping_City}}<br />{{order.shipping_State}} {{order.shipping_ZipCode}}</p>
+                <p>
+                    {{order.shipping_Email}}<br />
+                    {{order.shipping_Phone}}<br />
+                    {{order.shipping_Address1}}<br />
+                    <span v-if="order.isAddress2">{{order.shipping_Address2}}<br /></span>
+                    {{order.shipping_City}}<br />
+                    {{order.shipping_State}} {{order.shipping_ZipCode}}
+                </p>
             </div>
         </div>
 

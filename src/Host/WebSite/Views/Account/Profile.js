@@ -1,61 +1,35 @@
-﻿var addressVM = new Vue({
+﻿var profileVM = new Vue({
     el: "#app",
     data: {
-        addresses: [],
-        states: [],
-        address: {}
+        user: {}
     },
     methods: {
-        loadAddresses: function () {
+        loadData: function () {
             var self = this;
-            axios.get("/api/user/addresses")
+            axios.get("/api/user")
                 .then(function (resp) {
-                    self.addresses = resp.data;
-                });
-        },
-        loadStates: function () {
-            var self = this;
-            axios.get("/api/states/us")
-                .then(function (resp) {
-                    self.states = resp.data;
+                    self.user = resp.data;
                 });
         },
         save: function () {
             var self = this;
-            axios.post("/api/user/address", { Address: self.address })
+            axios.patch("/api/user/profile", { User: self.user })
                 .then(function (resp) {
                     var rs = resp.data;
 
                     if ($.isSuccess(rs)) {
-                        $('#editor').modal('hide');
-                        self.loadAddresses();
+                        bootbox.alert("Success.");
                     }
                     else {
                         bootbox.alert(rs);
                     }
                 });
-        },
-        remove: function (hash) {
-            var self = this;
-            bootbox.confirm("Delete this address?", function (flag) {
-                if (flag) {
-                    axios.delete('/api/user/address', { data: { Address: { "Hash": hash } } })
-                        .then(function (resp) {
-                            var rs = resp.data;
-                            if ($.isSuccess(rs)) {
-                                self.loadAddresses();
-                            }
-                            else {
-                                bootbox.alert(rs);
-                            }
-                        });
-                }
-            });
+
+            return false;
         }
     },
     beforeMount: function () {
         var self = this;
-        self.loadStates();
-        self.loadAddresses();
+        self.loadData();
     }
 });

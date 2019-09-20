@@ -58,6 +58,8 @@ var applyVM = new Vue({
         addresses: [],
         states: [],
         address: {
+            shipping_Email: '',
+            shipping_Phone: '',
             shipping_Address1: '',
             shipping_Address2: '',
             shipping_City: '',
@@ -81,6 +83,14 @@ var applyVM = new Vue({
                     self.states = resp.data;
                 });
         },
+        loadUser: function () {
+            var self = this;
+            axios.get("/api/user")
+                .then(function (resp) {
+                    self.address.shipping_Email = resp.data.email;
+                    self.address.shipping_Phone = resp.data.phone;
+                });
+        },
         select: function (item) {
             var self = this;
             self.address.shipping_Address1 = item.address1;
@@ -97,6 +107,8 @@ var applyVM = new Vue({
                     asin: self.asin,
                     sku: self.sku
                 }],
+                shipping_Email: self.address.shipping_Email,
+                shipping_Phone: self.address.shipping_Phone,
                 shipping_Address1: self.address.shipping_Address1,
                 shipping_Address2: self.address.shipping_Address2,
                 shipping_City: self.address.shipping_City,
@@ -130,5 +142,6 @@ var applyVM = new Vue({
         var self = this;
         self.loadStates();
         self.loadAddresses();
+        self.loadUser();
     }
 });

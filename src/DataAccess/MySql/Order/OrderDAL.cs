@@ -40,6 +40,8 @@ namespace SyncSoft.StylesDelivered.MySql.Order
                         dto.OrderNo,
                         dto.User_ID,
                         dto.User,
+                        dto.Shipping_Email,
+                        dto.Shipping_Phone,
                         dto.Shipping_Address1,
                         dto.Shipping_Address2,
                         dto.Shipping_City,

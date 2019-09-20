@@ -36,7 +36,8 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         {
             var userId = cmd.Identity.UserID();
 
-            if (cmd.Order.Shipping_Address1.IsMissing() || cmd.Order.Shipping_City.IsMissing()
+            if (cmd.Order.Shipping_Email.IsMissing() || cmd.Order.Shipping_Phone.IsMissing()
+                || cmd.Order.Shipping_Address1.IsMissing() || cmd.Order.Shipping_City.IsMissing()
                 || cmd.Order.Shipping_State.IsMissing() || cmd.Order.Shipping_ZipCode.IsMissing())
             {
                 var err = $"Missing address information.";

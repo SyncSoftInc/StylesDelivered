@@ -9,6 +9,8 @@ namespace SyncSoft.StylesDelivered.DTO.Order
         public string OrderNo { get; set; }
         public Guid User_ID { get; set; }
         public string User { get; set; }
+        public string Shipping_Email { get; set; }
+        public string Shipping_Phone { get; set; }
         public string Shipping_Address1 { get; set; }
         public string Shipping_Address2 { get; set; }
         public string Shipping_City { get; set; }
