@@ -47,9 +47,15 @@ itemsTable = $('#itemsTable').DataTable({
         { data: "color", orderable: false },
         { data: "size", orderable: false },
         {
-            data: "qty",
-            width: 50,
-            orderable: false
+            orderable: false,
+            render: function (data, type, item) {
+                if (!$.isNW(item.url)) {
+                    return `<a target="_blank" href="${item.url}">${item.url}</a>`;
+                }
+            }
+        },
+        {
+            data: "qty", width: 50, orderable: false
         }
     ],
     columnDefs: [
