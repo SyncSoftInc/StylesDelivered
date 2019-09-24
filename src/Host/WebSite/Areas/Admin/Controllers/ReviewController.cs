@@ -3,12 +3,11 @@ using SyncSoft.App.Components;
 using SyncSoft.ECP.AspNetCore.Mvc.Controllers;
 using SyncSoft.StylesDelivered.Domain.Order;
 using System;
-using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.WebSite.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class OrderController : WebController
+    public class ReviewController : WebController
     {
         // *******************************************************************************************************************************
         #region -  Lazy Object(s)  -
@@ -18,7 +17,7 @@ namespace SyncSoft.StylesDelivered.WebSite.Areas.Admin.Controllers
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  Items  -
+        #region -  Index  -
 
         public IActionResult Index()
         {
@@ -32,21 +31,6 @@ namespace SyncSoft.StylesDelivered.WebSite.Areas.Admin.Controllers
         public IActionResult Detail(string id)
         {
             return View(model: id);
-        }
-
-        #endregion
-        // *******************************************************************************************************************************
-        #region -  Export  -
-
-        [HttpGet]
-        public async Task<IActionResult> ExportOrders()
-        {
-            var bytes = await OrderExporter.ExportAsync().ConfigureAwait(false);
-
-            Response.Headers["Content-Disposition"] = "attachment";
-            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-            return File(bytes, contentType, "ApprovedOrders.xlsx");
         }
 
         #endregion

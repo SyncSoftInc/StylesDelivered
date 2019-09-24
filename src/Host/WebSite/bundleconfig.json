@@ -76,5 +76,17 @@
         "inputFiles": [
             "Areas/Admin/Views/User/Save.js"
         ]
+    },
+    {
+        "outputFileName": "wwwroot/js/admin/review/index.js",
+        "inputFiles": [
+            "Areas/Admin/Views/Review/Index.js"
+        ]
+    },
+    {
+        "outputFileName": "wwwroot/js/admin/review/detail.js",
+        "inputFiles": [
+            "Areas/Admin/Views/Review/Detail.js"
+        ]
     }
 ]

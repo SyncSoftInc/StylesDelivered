@@ -42,5 +42,8 @@ namespace SyncSoft.StylesDelivered
         public const string ApproveOrderFailed = nameof(ApproveOrderFailed);
         public const string DeleteOrderFailed = nameof(DeleteOrderFailed);
         public const string OrderItemsMissing = nameof(OrderItemsMissing);
+
+        // Review
+        public const string ReviewNotExists = nameof(ReviewNotExists);
     }
 }

@@ -1,0 +1,57 @@
+﻿@model string
+<div id="app">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="~/">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Admin</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Review</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detail</li>
+        </ol>
+    </nav>
+
+    <form>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="font-weight-bold">User</label>
+                <p>{{review.user}}</p>
+            </div>
+            <div class="col-md-6">
+                <label class="font-weight-bold">Created Time</label>
+                <p>{{review.createdOnUtc}}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="font-weight-bold">OrderNo</label>
+                <p>{{review.orderNo}}</p>
+            </div>
+            <div class="col-md-6">
+                <label class="font-weight-bold">SKU</label>
+                <p>{{review.sku}}</p>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-12">
+                <label class="font-weight-bold">Title</label>
+                <p>{{review.title}}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="font-weight-bold">Content</label>
+                <p>{{review.content}}</p>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+@section Scripts{
+    <script>@(Html.RenderEnumJson<SyncSoft.StylesDelivered.Enum.Order.OrderStatusEnum, int>())</script>
+    <script>var idParam='@Model';</script>
+    <partial name="Script" model='"admin/review/detail"' />
+}

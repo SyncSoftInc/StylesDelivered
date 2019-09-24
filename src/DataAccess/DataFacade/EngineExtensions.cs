@@ -3,11 +3,13 @@ using SyncSoft.App.EngineConfigs;
 using SyncSoft.StylesDelivered.DataAccess.Common;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DataAccess.Product;
+using SyncSoft.StylesDelivered.DataAccess.Review;
 using SyncSoft.StylesDelivered.DataAccess.ShoppingCart;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.DataFacade.Common;
 using SyncSoft.StylesDelivered.DataFacade.Order;
 using SyncSoft.StylesDelivered.DataFacade.Product;
+using SyncSoft.StylesDelivered.DataFacade.Review;
 using SyncSoft.StylesDelivered.DataFacade.ShoppingCart;
 using SyncSoft.StylesDelivered.DataFacade.User;
 
@@ -30,6 +32,7 @@ namespace SyncSoft.App
                     ObjectContainer.Register<ICommonDF, CommonDF>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IOrderDF, OrderDF>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IOrderItemDF, OrderItemDF>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IReviewDF, ReviewDF>(LifeCycleEnum.Singleton);
                 };
             }
 

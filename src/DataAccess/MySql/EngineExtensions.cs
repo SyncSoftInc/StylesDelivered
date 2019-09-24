@@ -4,12 +4,14 @@ using SyncSoft.StylesDelivered.DataAccess;
 using SyncSoft.StylesDelivered.DataAccess.Common;
 using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DataAccess.Product;
+using SyncSoft.StylesDelivered.DataAccess.Review;
 using SyncSoft.StylesDelivered.DataAccess.ShoppingCart;
 using SyncSoft.StylesDelivered.DataAccess.User;
 using SyncSoft.StylesDelivered.MySql;
 using SyncSoft.StylesDelivered.MySql.Common;
 using SyncSoft.StylesDelivered.MySql.Order;
 using SyncSoft.StylesDelivered.MySql.Product;
+using SyncSoft.StylesDelivered.MySql.Review;
 using SyncSoft.StylesDelivered.MySql.ShoppingCart;
 using SyncSoft.StylesDelivered.MySql.User;
 using System;
@@ -37,6 +39,7 @@ namespace SyncSoft.App
                     ObjectContainer.Register<ICommonDAL, CommonDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IOrderDAL, OrderDAL>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IOrderItemDAL, OrderItemDAL>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IReviewDAL, ReviewDAL>(LifeCycleEnum.Singleton);
                 };
             }
 

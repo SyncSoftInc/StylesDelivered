@@ -11,15 +11,18 @@
       <Content Remove="bundleconfig.json" />
       <Content Remove="wwwroot\js\account\index.min.js" />
       <Content Remove="wwwroot\js\account\profile.min.js" />
+      <Content Remove="wwwroot\js\admin\review\index.js" />
     </ItemGroup>
 
     <ItemGroup>
       <None Include="appsettings*" />
       <_ContentIncludedByDefault Remove="wwwroot\js\account\index.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\js\account\profile.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\js\admin\review\index.js" />
       <None Include="bundleconfig.json" />
       <None Include="wwwroot\js\account\index.min.js" />
       <None Include="wwwroot\js\account\profile.min.js" />
+      <None Include="wwwroot\js\admin\review\index.js" />
     </ItemGroup>
 
 
