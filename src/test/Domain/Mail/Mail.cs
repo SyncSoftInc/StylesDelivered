@@ -19,15 +19,15 @@ namespace Mail
         #region -  CreateOrder  -
 
         [Test]
-        public async Task Send()
+        public async Task Enqueue()
         {
             var msg = new MailMSG
             {
                 Subject = "Test Subject",
                 Body = "Test Body"
             };
-            msg.To.Add("lukiya.chen@syncsoftinc.com");
-            var msgCode = await EmailSender.SendAsync(msg).ConfigureAwait(false);
+            msg.To.Add("dev@syncsoftinc.com");
+            var msgCode = await EmailSender.EnqueueAsync(msg).ConfigureAwait(false);
             Assert.IsTrue(msgCode.IsSuccess());
         }
 

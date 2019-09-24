@@ -11,7 +11,7 @@ namespace SyncSoft.StylesDelivered.Domain.Mail
         private static readonly Lazy<MailServiceClient> _lazyMailService = ObjectContainer.LazyResolve<MailServiceClient>();
         private MailServiceClient MailService => _lazyMailService.Value;
 
-        public async Task<string> SendAsync(MailMSG mailMSG)
+        public async Task<string> EnqueueAsync(MailMSG mailMSG)
         {
             var mr = await MailService.EnqueueAsync(mailMSG);
             return mr.MsgCode;

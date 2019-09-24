@@ -4,7 +4,7 @@ package mail;
 
 message MailMSG{
     repeated string To = 1;
-    repeated string CC = 2;
+    repeated string Cc = 2;
     repeated string Bcc = 3;
     string Subject = 4;
     string Body = 5;
