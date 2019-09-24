@@ -24,6 +24,14 @@ namespace SyncSoft.App
                         return new global::Inventory.InventoryService.InventoryServiceClient(channel);
                     }, LifeCycleEnum.Singleton);
 
+                    ObjectContainer.Register(() =>
+                    {
+                        var endpoint = ObjectContainer.Resolve<IConfigProvider>().GetValue<string>("Services:Mail");
+
+                        var channel = ObjectContainer.Resolve<IChannelFactory>().Create(endpoint);
+                        return new global::Mail.MailService.MailServiceClient(channel);
+                    }, LifeCycleEnum.Singleton);
+
                     ObjectContainer.Register<ISyncInvQueue, InMemorySyncInvQueue>(LifeCycleEnum.Singleton);
                 };
             }
