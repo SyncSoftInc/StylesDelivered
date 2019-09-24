@@ -1,6 +1,7 @@
 ﻿using SyncSoft.App.Components;
 using SyncSoft.App.EngineConfigs;
 using SyncSoft.StylesDelivered.Domain.Inventory;
+using SyncSoft.StylesDelivered.Domain.Mail;
 using SyncSoft.StylesDelivered.Domain.Order;
 using SyncSoft.StylesDelivered.Domain.Product;
 using SyncSoft.StylesDelivered.Domain.Review;
@@ -24,6 +25,7 @@ namespace SyncSoft.App
                     //ObjectContainer.Register<IShoppingCartService, ShoppingCartService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IItemInventoryFactory, ItemInventoryFactory>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IOrderService, OrderService>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IEmailSender, EmailSender>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IReviewService, ReviewService>(LifeCycleEnum.Singleton);
                 };
             }

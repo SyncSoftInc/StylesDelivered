@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package mail;
+
+message MailMSG{
+    repeated string To = 1;
+    repeated string CC = 2;
+    repeated string Bcc = 3;
+    string Subject = 4;
+    string Body = 5;
+}
+
+message MailsMSG{
+    repeated MailMSG Mails = 1;
+}
+  
+message ResultMSG{
+    string MsgCode = 1;
+}
+
+service MailService{
+    rpc Enqueue (MailMSG) returns (ResultMSG);
+}
