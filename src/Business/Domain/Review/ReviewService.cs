@@ -2,9 +2,12 @@
 using SyncSoft.App.Messaging;
 using SyncSoft.App.Transactions;
 using SyncSoft.StylesDelivered.Command.Review;
+using SyncSoft.StylesDelivered.DataAccess.Order;
 using SyncSoft.StylesDelivered.DataAccess.Review;
 using SyncSoft.StylesDelivered.Enum.Review;
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Domain.Review
@@ -20,6 +23,9 @@ namespace SyncSoft.StylesDelivered.Domain.Review
         private static readonly Lazy<IReviewDAL> _lazyReviewDAL = ObjectContainer.LazyResolve<IReviewDAL>();
         private IReviewDAL ReviewDAL => _lazyReviewDAL.Value;
 
+        private static readonly Lazy<IOrderItemDAL> _lazyOrderItemDAL = ObjectContainer.LazyResolve<IOrderItemDAL>();
+        private IOrderItemDAL OrderItemDAL => _lazyOrderItemDAL.Value;
+
         private static readonly Lazy<IMessageDispatcher> _lazyMessageDispatcher = ObjectContainer.LazyResolve<IMessageDispatcher>();
         private IMessageDispatcher MessageDispatcher => _lazyMessageDispatcher.Value;
 
@@ -31,10 +37,22 @@ namespace SyncSoft.StylesDelivered.Domain.Review
         {
             var userId = cmd.Identity.UserID();
 
+            var dto = await OrderItemDAL.GetOrderItemsAsync(cmd.Review.OrderNo).ConfigureAwait(false);
+            if (!dto.IsPresent() || !dto.Select(x => x.SKU == cmd.Review.SKU).SingleOrDefault()) return MsgCodes.OrderNotExists;
+            // ^^^^^^^^^^
+
             var count = await ReviewDAL.GetOrderItemReviewAsync(cmd.Review.OrderNo, cmd.Review.SKU, userId).ConfigureAwait(false);
             if (count > 0) return "You have already reviewed this item.";
             // ^^^^^^^^^^
 
+            if (!cmd.Review.Content.IsPresent()) return MsgCodes.ContentCannotBeEmpty;
+            // ^^^^^^^^^^
+
+            if (cmd.Review.Title.IsNull())
+            {
+                var rs = Regex.Match(cmd.Review.Content, "/^(.*?)[.,?!]\\s/");
+                var title = rs.Value;
+            }
             cmd.Review.ID = Guid.NewGuid();
             cmd.Review.User_ID = userId;
             cmd.Review.User = cmd.Identity.UserNickName();

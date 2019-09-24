@@ -1,4 +1,5 @@
-﻿var homeVM = new Vue({
+﻿var applyVM;
+var homeVM = new Vue({
     el: "#app",
     data: {
         pageSize: 3,
@@ -50,98 +51,100 @@
     }
 });
 
-var applyVM = new Vue({
-    el: "#addressModal",
-    data: {
-        asin: "",
-        sku: "",
-        addresses: [],
-        states: [],
-        address: {
-            shipping_Email: '',
-            shipping_Phone: '',
-            shipping_Address1: '',
-            shipping_Address2: '',
-            shipping_City: '',
-            shipping_State: '',
-            shipping_ZipCode: '',
-            shipping_Country: 'US'
-        }
-    },
-    methods: {
-        loadAddresses: function () {
-            var self = this;
-            axios.get("/api/user/addresses")
-                .then(function (resp) {
-                    self.addresses = resp.data;
-                });
+function CreateApplyVM() {
+    applyVM = new Vue({
+        el: "#addressModal",
+        data: {
+            asin: "",
+            sku: "",
+            addresses: [],
+            states: [],
+            address: {
+                shipping_Email: '',
+                shipping_Phone: '',
+                shipping_Address1: '',
+                shipping_Address2: '',
+                shipping_City: '',
+                shipping_State: '',
+                shipping_ZipCode: '',
+                shipping_Country: 'US'
+            }
         },
-        loadStates: function () {
-            var self = this;
-            axios.get("/api/states/us")
-                .then(function (resp) {
-                    self.states = resp.data;
-                });
-        },
-        loadUser: function () {
-            var self = this;
-            axios.get("/api/user")
-                .then(function (resp) {
-                    self.address.shipping_Email = resp.data.email;
-                    self.address.shipping_Phone = resp.data.phone;
-                });
-        },
-        select: function (item) {
-            var self = this;
-            self.address.shipping_Address1 = item.address1;
-            self.address.shipping_Address2 = item.address2;
-            self.address.shipping_City = item.city;
-            self.address.shipping_State = item.state;
-            self.address.shipping_ZipCode = item.zipCode;
-            self.address.shipping_Country = item.country;
-        },
-        apply: function () {
-            var self = this;
-            var order = {
-                items: [{
-                    asin: self.asin,
-                    sku: self.sku
-                }],
-                shipping_Email: self.address.shipping_Email,
-                shipping_Phone: self.address.shipping_Phone,
-                shipping_Address1: self.address.shipping_Address1,
-                shipping_Address2: self.address.shipping_Address2,
-                shipping_City: self.address.shipping_City,
-                shipping_State: self.address.shipping_State,
-                shipping_ZipCode: self.address.shipping_ZipCode,
-                shipping_Country: self.address.shipping_Country
-            };
+        methods: {
+            loadAddresses: function () {
+                var self = this;
+                axios.get("/api/user/addresses")
+                    .then(function (resp) {
+                        self.addresses = resp.data;
+                    });
+            },
+            loadStates: function () {
+                var self = this;
+                axios.get("/api/states/us")
+                    .then(function (resp) {
+                        self.states = resp.data;
+                    });
+            },
+            loadUser: function () {
+                var self = this;
+                axios.get("/api/user")
+                    .then(function (resp) {
+                        self.address.shipping_Email = resp.data.email;
+                        self.address.shipping_Phone = resp.data.phone;
+                    });
+            },
+            select: function (item) {
+                var self = this;
+                self.address.shipping_Address1 = item.address1;
+                self.address.shipping_Address2 = item.address2;
+                self.address.shipping_City = item.city;
+                self.address.shipping_State = item.state;
+                self.address.shipping_ZipCode = item.zipCode;
+                self.address.shipping_Country = item.country;
+            },
+            apply: function () {
+                var self = this;
+                var order = {
+                    items: [{
+                        asin: self.asin,
+                        sku: self.sku
+                    }],
+                    shipping_Email: self.address.shipping_Email,
+                    shipping_Phone: self.address.shipping_Phone,
+                    shipping_Address1: self.address.shipping_Address1,
+                    shipping_Address2: self.address.shipping_Address2,
+                    shipping_City: self.address.shipping_City,
+                    shipping_State: self.address.shipping_State,
+                    shipping_ZipCode: self.address.shipping_ZipCode,
+                    shipping_Country: self.address.shipping_Country
+                };
 
-            axios.put('/api/order', { Order: order })
-                .then(function (resp) {
-                    var rs = resp.data;
-                    if ($.isSuccess(rs.msgCode)) {
-                        bootbox.alert("Success");
-                    }
-                    else {
-                        bootbox.alert(rs.msgCode);
-                    }
-                });
+                axios.put('/api/order', { Order: order })
+                    .then(function (resp) {
+                        var rs = resp.data;
+                        if ($.isSuccess(rs.msgCode)) {
+                            bootbox.alert("Success");
+                        }
+                        else {
+                            bootbox.alert(rs.msgCode);
+                        }
+                    });
+            },
+            clear: function () {
+                var self = this;
+                self.address.shipping_Address1 = '';
+                self.address.shipping_Address2 = '';
+                self.address.shipping_City = '';
+                self.address.shipping_State = '';
+                self.address.shipping_ZipCode = '';
+                self.address.shipping_Country = 'US';
+            }
         },
-        clear: function () {
+        beforeMount: function () {
             var self = this;
-            self.address.shipping_Address1 = '';
-            self.address.shipping_Address2 = '';
-            self.address.shipping_City = '';
-            self.address.shipping_State = '';
-            self.address.shipping_ZipCode = '';
-            self.address.shipping_Country = 'US';
+            self.loadUser();
+            self.loadStates();
+            self.loadAddresses();
         }
-    },
-    beforeMount: function () {
-        var self = this;
-        self.loadStates();
-        self.loadAddresses();
-        self.loadUser();
-    }
-});
+    });
+};

@@ -45,5 +45,6 @@ namespace SyncSoft.StylesDelivered
 
         // Review
         public const string ReviewNotExists = nameof(ReviewNotExists);
+        public const string ContentCannotBeEmpty = nameof(ContentCannotBeEmpty);
     }
 }

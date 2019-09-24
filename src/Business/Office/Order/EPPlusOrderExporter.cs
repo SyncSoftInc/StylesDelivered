@@ -78,7 +78,6 @@ namespace SyncSoft.StylesDelivered.Office.Order
 
             // data
             var idx = 2;
-            var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             orders.ForEach(x =>
             {
                 ws.Cells[idx, 1].Value = x.ASIN;
@@ -95,7 +94,7 @@ namespace SyncSoft.StylesDelivered.Office.Order
                 ws.Cells[idx, 12].Value = x.Shipping_State;
                 ws.Cells[idx, 13].Value = x.Shipping_ZipCode;
                 ws.Cells[idx, 14].Value = x.Shipping_Country;
-                ws.Cells[idx, 15].Value = TimeZoneInfo.ConvertTimeFromUtc(x.CreatedOnUtc, timeZone).ToString();
+                ws.Cells[idx, 15].Value = x.CreatedOnUtc.ToLocalTime().ToString("MM'/'dd'/'yyyy hh:mm:ss tt");
                 idx++;
             });
 

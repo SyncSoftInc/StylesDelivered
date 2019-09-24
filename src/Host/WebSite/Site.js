@@ -147,6 +147,8 @@ var itemVM = Vue.component("itembox", {
             var selectedItem = self.items.find(x => x.Size === self.selectedSize && x.Color === self.selectedColor);
 
             if (!$.isNW(selectedItem)) {
+                if ($.isNW(applyVM)) CreateApplyVM();
+
                 applyVM.asin = self.item.asin;
                 applyVM.sku = selectedItem.SKU;
                 $("#addressModal").modal("show");

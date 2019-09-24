@@ -36,6 +36,12 @@
         ]
     },
     {
+        "outputFileName": "wwwroot/js/review/index.js",
+        "inputFiles": [
+            "Views/Review/Index.js"
+        ]
+    },
+    {
         "outputFileName": "wwwroot/js/admin/product/save.js",
         "inputFiles": [
             "Areas/Admin/Views/Product/Save.js"
