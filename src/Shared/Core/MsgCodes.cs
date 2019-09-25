@@ -27,6 +27,7 @@ namespace SyncSoft.StylesDelivered
         public const string InvalidColorLength = nameof(InvalidColorLength);
         public const string InvalidSizeLength = nameof(InvalidSizeLength);
         public const string InvalidInventoryQuantity = nameof(InvalidInventoryQuantity);
+
         // User
         public const string UserNotExists = nameof(UserNotExists);
         public const string AddressExists = nameof(AddressExists);
@@ -42,6 +43,18 @@ namespace SyncSoft.StylesDelivered
         public const string ApproveOrderFailed = nameof(ApproveOrderFailed);
         public const string DeleteOrderFailed = nameof(DeleteOrderFailed);
         public const string OrderItemsMissing = nameof(OrderItemsMissing);
+
+        // ShippingAddress
+        public const string EmailCannotBeEmpty = nameof(EmailCannotBeEmpty);
+        public const string PhoneCannotBeEmpty = nameof(PhoneCannotBeEmpty);
+        public const string AddressCannotBeEmpty = nameof(AddressCannotBeEmpty);
+        public const string CityCannotBeEmpty = nameof(CityCannotBeEmpty);
+        public const string StateCannotBeEmpty = nameof(StateCannotBeEmpty);
+        public const string ZipCodeCannotBeEmpty = nameof(ZipCodeCannotBeEmpty);
+        public const string InvalidAddressLength = nameof(InvalidAddressLength);
+        public const string InvalidCityLength = nameof(InvalidCityLength);
+        public const string InvalidStateLength = nameof(InvalidStateLength);
+        public const string InvalidZipCodeLength = nameof(InvalidZipCodeLength);
 
         // Review
         public const string ReviewNotExists = nameof(ReviewNotExists);

@@ -48,7 +48,6 @@ namespace SyncSoft.StylesDelivered.Domain.Order.CreateOrder
             cmd.Order.Shipping_City = Utils.FormatAddress(cmd.Order.Shipping_City);
             cmd.Order.Shipping_State = Utils.FormatAddress(cmd.Order.Shipping_State);
             cmd.Order.Shipping_ZipCode = Utils.FormatAddress(cmd.Order.Shipping_ZipCode);
-            cmd.Order.Shipping_Country = "US";
 
             foreach (var orderItem in cmd.Order.Items)
             {

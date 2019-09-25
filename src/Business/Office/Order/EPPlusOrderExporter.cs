@@ -64,16 +64,17 @@ namespace SyncSoft.StylesDelivered.Office.Order
             ws.Cells[1, 3].Value = "Alias";
             ws.Cells[1, 4].Value = "Size";
             ws.Cells[1, 5].Value = "Color";
-            ws.Cells[1, 6].Value = "User";
-            ws.Cells[1, 7].Value = "Shipping_Email";
-            ws.Cells[1, 8].Value = "Shipping_Phone";
-            ws.Cells[1, 9].Value = "Shipping_Address1";
-            ws.Cells[1, 10].Value = "Shipping_Address2";
-            ws.Cells[1, 11].Value = "Shipping_City";
-            ws.Cells[1, 12].Value = "Shipping_State";
-            ws.Cells[1, 13].Value = "Shipping_ZipCode";
-            ws.Cells[1, 14].Value = "Shipping_Country";
-            ws.Cells[1, 15].Value = "Created Time";
+            ws.Cells[1, 6].Value = "Url";
+            ws.Cells[1, 7].Value = "User";
+            ws.Cells[1, 8].Value = "Shipping_Email";
+            ws.Cells[1, 9].Value = "Shipping_Phone";
+            ws.Cells[1, 10].Value = "Shipping_Address1";
+            ws.Cells[1, 11].Value = "Shipping_Address2";
+            ws.Cells[1, 12].Value = "Shipping_City";
+            ws.Cells[1, 13].Value = "Shipping_State";
+            ws.Cells[1, 14].Value = "Shipping_ZipCode";
+            ws.Cells[1, 15].Value = "Shipping_Country";
+            ws.Cells[1, 16].Value = "Created Time";
 
 
             // data
@@ -85,16 +86,17 @@ namespace SyncSoft.StylesDelivered.Office.Order
                 ws.Cells[idx, 3].Value = x.Alias;
                 ws.Cells[idx, 4].Value = x.Size;
                 ws.Cells[idx, 5].Value = x.Color;
-                ws.Cells[idx, 6].Value = x.User;
-                ws.Cells[idx, 7].Value = x.Shipping_Email;
-                ws.Cells[idx, 8].Value = x.Shipping_Phone;
-                ws.Cells[idx, 9].Value = x.Shipping_Address1;
-                ws.Cells[idx, 10].Value = x.Shipping_Address2;
-                ws.Cells[idx, 11].Value = x.Shipping_City;
-                ws.Cells[idx, 12].Value = x.Shipping_State;
-                ws.Cells[idx, 13].Value = x.Shipping_ZipCode;
-                ws.Cells[idx, 14].Value = x.Shipping_Country;
-                ws.Cells[idx, 15].Value = x.CreatedOnUtc.ToLocalTime().ToString("MM'/'dd'/'yyyy hh:mm:ss tt");
+                ws.Cells[idx, 6].Value = x.Url;
+                ws.Cells[idx, 7].Value = x.User;
+                ws.Cells[idx, 8].Value = x.Shipping_Email;
+                ws.Cells[idx, 9].Value = x.Shipping_Phone;
+                ws.Cells[idx, 10].Value = x.Shipping_Address1;
+                ws.Cells[idx, 11].Value = x.Shipping_Address2;
+                ws.Cells[idx, 12].Value = x.Shipping_City;
+                ws.Cells[idx, 13].Value = x.Shipping_State;
+                ws.Cells[idx, 14].Value = x.Shipping_ZipCode;
+                ws.Cells[idx, 15].Value = x.Shipping_Country;
+                ws.Cells[idx, 16].Value = x.CreatedOnUtc.ToLocalTime().ToString("MM'/'dd'/'yyyy hh:mm:ss tt");
                 idx++;
             });
 

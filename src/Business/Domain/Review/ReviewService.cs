@@ -51,7 +51,7 @@ namespace SyncSoft.StylesDelivered.Domain.Review
             if (cmd.Review.Title.IsNull())
             {
                 cmd.Review.Content += '\n';
-                var rs = Regex.Match(cmd.Review.Content, "(.*?)([.,?!](?!(\\w|\\s[a-z]))|(?<=.)[\n])");
+                var rs = Regex.Match(cmd.Review.Content, "(.*?)([.,?!]\\s|(?<=.)[\n])");
                 var title = rs?.Value;
                 cmd.Review.Title = title.Trim(new[] { '\n', '\t', ' ' });
             }

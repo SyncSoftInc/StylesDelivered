@@ -8,6 +8,7 @@ using SyncSoft.StylesDelivered.Domain.Order.ApproveOrder;
 using SyncSoft.StylesDelivered.Domain.Order.CreateOrder;
 using SyncSoft.StylesDelivered.Domain.Order.DeleteOrder;
 using SyncSoft.StylesDelivered.Domain.Order.ShipOrder;
+using SyncSoft.StylesDelivered.DTO.Order;
 using SyncSoft.StylesDelivered.Event.Order;
 using System;
 using System.Threading.Tasks;
@@ -36,21 +37,18 @@ namespace SyncSoft.StylesDelivered.Domain.Order
         {
             var userId = cmd.Identity.UserID();
 
-            if (cmd.Order.Shipping_Email.IsMissing() || cmd.Order.Shipping_Phone.IsMissing()
-                || cmd.Order.Shipping_Address1.IsMissing() || cmd.Order.Shipping_City.IsMissing()
-                || cmd.Order.Shipping_State.IsMissing() || cmd.Order.Shipping_ZipCode.IsMissing())
-            {
-                var err = $"Missing address information.";
-                return new MsgResult<string>(msgCode: err);
-            }
+            var err = CheckOrderDTO(cmd.Order);
+            if (!err.IsSuccess()) return new MsgResult<string>(msgCode: err);
+            // ^^^^^^^^^^
 
             foreach (var item in cmd.Order.Items)
             {
                 var count = await OrderDAL.CountOrderedItemsAsync(userId, item.SKU).ConfigureAwait(false);
                 if (count > 0)
                 {
-                    var err = $"You have already applied this item.";
+                    err = $"You have already applied this item.";
                     return new MsgResult<string>(msgCode: err);
+                    // ^^^^^^^^^^
                 }
             }
 
@@ -110,6 +108,30 @@ namespace SyncSoft.StylesDelivered.Domain.Order
             var ctl = ControllerFactory.CreateForTcc(tran);
             var msgCode = await ctl.RunAsync().ConfigureAwait(false);
             return msgCode;
+        }
+
+        #endregion
+        // *******************************************************************************************************************************
+        #region -  Utilities  -
+
+        private string CheckOrderDTO(OrderDTO dto)
+        {
+            if (dto.Shipping_Email.IsMissing()) return MsgCodes.EmailCannotBeEmpty;
+            if (dto.Shipping_Phone.IsMissing()) return MsgCodes.PhoneCannotBeEmpty;
+            if (dto.Shipping_Address1.IsMissing()) return MsgCodes.AddressCannotBeEmpty;
+            if (dto.Shipping_City.IsMissing()) return MsgCodes.CityCannotBeEmpty;
+            if (dto.Shipping_State.IsMissing()) return MsgCodes.StateCannotBeEmpty;
+            if (dto.Shipping_ZipCode.IsMissing()) return MsgCodes.ZipCodeCannotBeEmpty;
+
+            if (dto.Shipping_Email.IsNotNull() && dto.Shipping_Email.Length > 50) return MsgCodes.InvalidEmailLength;
+            if (dto.Shipping_Phone.IsNotNull() && dto.Shipping_Phone.Length > 50) return MsgCodes.InvalidPhoneLength;
+            if (dto.Shipping_Address1.IsNotNull() && dto.Shipping_Address1.Length > 100) return MsgCodes.InvalidAddressLength;
+            if (dto.Shipping_Address2.IsNotNull() && dto.Shipping_Address2.Length > 200) return MsgCodes.InvalidAddressLength;
+            if (dto.Shipping_City.IsNotNull() && dto.Shipping_City.Length > 50) return MsgCodes.InvalidCityLength;
+            if (dto.Shipping_State.IsNotNull() && dto.Shipping_State.Length > 5) return MsgCodes.InvalidStateLength;
+            if (dto.Shipping_ZipCode.IsNotNull() && dto.Shipping_ZipCode.Length > 15) return MsgCodes.InvalidZipCodeLength;
+
+            return MsgCodes.SUCCESS;
         }
 
         #endregion

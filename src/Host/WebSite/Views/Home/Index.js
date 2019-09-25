@@ -1,4 +1,4 @@
-﻿var applyVM;
+﻿var addressVM;
 var homeVM = new Vue({
     el: "#app",
     data: {
@@ -51,8 +51,8 @@ var homeVM = new Vue({
     }
 });
 
-function CreateApplyVM() {
-    applyVM = new Vue({
+function CreateAddressVM() {
+    addressVM = new Vue({
         el: "#addressModal",
         data: {
             asin: "",
@@ -104,6 +104,7 @@ function CreateApplyVM() {
             },
             apply: function () {
                 var self = this;
+
                 var order = {
                     items: [{
                         asin: self.asin,
@@ -129,6 +130,8 @@ function CreateApplyVM() {
                             bootbox.alert(rs.msgCode);
                         }
                     });
+
+                return false;
             },
             clear: function () {
                 var self = this;

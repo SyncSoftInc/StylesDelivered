@@ -44,7 +44,7 @@ VALUES
 
         public Task<string> DeleteReviewAsync(Guid id)
         {
-            return base.TryExecuteAsync(@"DELETE Review WHERE ID = @ID", new { ID = id });
+            return base.TryExecuteAsync(@"DELETE FROM Review WHERE ID = @ID", new { ID = id });
         }
 
         #endregion

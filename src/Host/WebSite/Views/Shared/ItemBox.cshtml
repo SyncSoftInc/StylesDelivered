@@ -40,52 +40,54 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <input type="text" class="form-control" v-model="address.shipping_Email" placeholder="Email" maxlength="50" required />
+            <form onsubmit="return addressVM.apply();">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" v-model="address.shipping_Email" placeholder="Email" maxlength="50" required />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" v-model="address.shipping_Phone" placeholder="Phone" maxlength="50" required />
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <input type="text" class="form-control" v-model="address.shipping_Phone" placeholder="Phone" maxlength="50" required />
+                    <div class="form-group">
+                        <input type="text" class="form-control" v-model="address.shipping_Address1" placeholder="Address1" maxlength="100" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" v-model="address.shipping_Address2" placeholder="Address2" maxlength="200" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <input type="text" class="form-control" v-model="address.shipping_City" placeholder="City" maxlength="50" required />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <select class="form-control" aria-label="States" v-model="address.shipping_State">
+                                <option disabled value="">State</option>
+                                <option v-for="state in states" v-bind:value="state.code">{{state.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <input type="text" class="form-control" v-model="address.shipping_ZipCode" placeholder="ZipCode" maxlength="15" required />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="addrBtnBox">
+                        <div class="card addrBtn" v-for="item in addresses">
+                            <a href="javascript:;" v-on:click="select(item)">
+                                <div class="card-body">
+                                    <p class="card-text addr">{{item.address1}}<br />{{item.address2}}<br /></p>
+                                    <p class="card-text">{{item.city}}<br />{{item.state}} {{item.zipCode}}</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" v-model="address.shipping_Address1" placeholder="Address1" maxlength="100" required />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" id="clearBtn" v-on:click="clear">Clear</button>
+                    <button type="submit" class="btn btn-primary">Apply</button>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" v-model="address.shipping_Address2" placeholder="Address2" maxlength="200" />
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <input type="text" class="form-control" v-model="address.shipping_City" placeholder="City" maxlength="50" required />
-                    </div>
-                    <div class="form-group col-md-4">
-                        <select class="form-control" aria-label="States" v-model="address.shipping_State">
-                            <option disabled value="">State</option>
-                            <option v-for="state in states" v-bind:value="state.code">{{state.name}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <input type="text" class="form-control" v-model="address.shipping_ZipCode" placeholder="ZipCode" maxlength="15" required />
-                    </div>
-                </div>
-                <hr />
-                <div class="addrBtnBox">
-                    <div class="card addrBtn" v-for="item in addresses">
-                        <a href="javascript:;" v-on:click="select(item)">
-                            <div class="card-body">
-                                <p class="card-text addr">{{item.address1}}<br />{{item.address2}}<br /></p>
-                                <p class="card-text">{{item.city}}<br />{{item.state}} {{item.zipCode}}</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" id="clearBtn" v-on:click="clear">Clear</button>
-                <button type="button" class="btn btn-primary" v-on:click="apply()">Apply</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
