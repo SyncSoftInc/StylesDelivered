@@ -50,8 +50,10 @@ namespace SyncSoft.StylesDelivered.Domain.Review
 
             if (cmd.Review.Title.IsNull())
             {
-                var rs = Regex.Match(cmd.Review.Content, "/^(.*?)[.,?!]\\s/");
-                var title = rs.Value;
+                cmd.Review.Content += '\n';
+                var rs = Regex.Match(cmd.Review.Content, "(.*?)([.,?!](?!(\\w|\\s[a-z]))|(?<=.)[\n])");
+                var title = rs?.Value;
+                cmd.Review.Title = title.Trim(new[] { '\n', '\t', ' ' });
             }
             cmd.Review.ID = Guid.NewGuid();
             cmd.Review.User_ID = userId;
