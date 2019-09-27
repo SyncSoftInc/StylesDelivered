@@ -30,6 +30,7 @@ namespace SyncSoft.StylesDelivered.WebSite
                 .UseGRPC()
                 .UseAliyun()
                 .UseEcomApi()
+                .UseHandlebars()
                 .UseJsonConfiguration()
                 .Start();
 

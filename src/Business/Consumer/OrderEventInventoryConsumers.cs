@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.Consumer
 {
-    public class OrderEventConsumers : IConsumer<OrderApprovedEvent>
+    public class OrderEventInventoryConsumers : IConsumer<OrderApprovedEvent>
         , IConsumer<OrderShippedEvent>
     {
         // *******************************************************************************************************************************

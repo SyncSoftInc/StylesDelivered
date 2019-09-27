@@ -79,7 +79,7 @@ namespace Order
         #region -  CreateOrder  -
 
         [Test]
-        public async Task LifeStyle()
+        public async Task LifeCycle()
         {
             var createCmd = new CreateOrderCommand
             {

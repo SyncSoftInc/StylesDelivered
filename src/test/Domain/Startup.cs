@@ -14,6 +14,8 @@ namespace DomainTest
                 {
                     o.ProjectName = "styd";
                 })
+                .UseMessageQueue()
+                .UseDefaultMessageComponents()
                 .UseStydDomain()
                 .UseStydRedis()
                 .UseStydMySql()

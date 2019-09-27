@@ -21,6 +21,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="SyncSoft.App.GRPC" Version="2.9.19" />
+        <PackageReference Include="SyncSoft.App.HandlebarsDotNet" Version="2.9.19" />
         <PackageReference Include="SyncSoft.ECOM.APIs" Version="1.0.1" />
         <PackageReference Include="SyncSoft.ECP.Hosting" Version="2.9.19" />
     </ItemGroup>

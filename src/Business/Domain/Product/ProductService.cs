@@ -113,7 +113,7 @@ namespace SyncSoft.StylesDelivered.Domain.Product
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  UploadImageAsync  -
+        #region -  UpdateStatusAsync  -
 
         public async Task<string> UpdateStatusAsync(UpdateProductStatusCommand cmd)
         {
