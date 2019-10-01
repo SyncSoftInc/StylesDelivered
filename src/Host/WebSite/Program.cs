@@ -1,18 +1,17 @@
 ﻿using SyncSoft.App;
 using SyncSoft.App.Securities;
 using SyncSoft.ECP.Quartz.Hosting;
+using System.Threading.Tasks;
 
 namespace SyncSoft.StylesDelivered.WebSite
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Engine.Init(args)
                 .UseEcpHostQuickSettings(o =>
                 {
-                    o.ProjectName = "styd";
-
                     o.ConfigECPSecurityComponentsOptions = a =>
                     {
                         a.CoreCertProviderType = typeof(ConfigurationCoreCertProvider);
@@ -34,7 +33,11 @@ namespace SyncSoft.StylesDelivered.WebSite
                 .UseJsonConfiguration()
                 .Start();
 
-            QuartzHost.Run<Startup>(args);
+            var host = QuartzHost
+                .CreateHostBuilder<Startup>(args)
+                .Build();
+
+            await QuartzHost.RunAsync(host).ConfigureAwait(false);
 
             Engine.Stop();
         }

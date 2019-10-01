@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SyncSoft.ECP;
 using SyncSoft.ECP.AspNetCore.Hosting;
 using SyncSoft.ECP.AspNetCore.Mvc.ActionFilters;
@@ -11,6 +12,10 @@ namespace SyncSoft.StylesDelivered.WebSite
 {
     public class Startup : SerilogStartup
     {
+        public Startup(IWebHostEnvironment env) : base(env)
+        {
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebSiteServer(o =>
@@ -26,11 +31,9 @@ namespace SyncSoft.StylesDelivered.WebSite
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            app.UseReverseProxy();
-
-            if (env.IsDevelopment())
+            if (HostEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }

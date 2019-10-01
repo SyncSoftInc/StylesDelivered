@@ -10,10 +10,7 @@ namespace DomainTest
         public void Setup()
         {
             Engine.Init()
-                .UseEcpHostQuickSettings(o =>
-                {
-                    o.ProjectName = "styd";
-                })
+                .UseEcpHostQuickSettings()
                 .UseMessageQueue()
                 .UseDefaultMessageComponents()
                 .UseStydDomain()

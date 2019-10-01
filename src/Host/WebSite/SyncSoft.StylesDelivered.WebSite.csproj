@@ -1,45 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
     <Import Project="..\..\build\common.props" />
-
-    <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-  </PropertyGroup>
-
     <ItemGroup>
-      <Content Remove="appsettings*" />
       <Content Remove="bundleconfig.json" />
-      <Content Remove="wwwroot\js\account\index.min.js" />
-      <Content Remove="wwwroot\js\account\profile.min.js" />
-      <Content Remove="wwwroot\js\admin\review\index.js" />
     </ItemGroup>
-
     <ItemGroup>
-      <None Include="appsettings*" />
-      <_ContentIncludedByDefault Remove="wwwroot\js\account\index.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\js\account\profile.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\js\admin\review\index.js" />
       <None Include="bundleconfig.json" />
-      <None Include="wwwroot\js\account\index.min.js" />
-      <None Include="wwwroot\js\account\profile.min.js" />
-      <None Include="wwwroot\js\admin\review\index.js" />
     </ItemGroup>
-
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Business\Aliyun\SyncSoft.StylesDelivered.Aliyun.csproj" />
-    <ProjectReference Include="..\..\Business\Consumer\SyncSoft.StylesDelivered.Consumer.csproj" />
-    <ProjectReference Include="..\..\Business\Domain\SyncSoft.StylesDelivered.Domain.csproj" />
-    <ProjectReference Include="..\..\Business\Office\SyncSoft.StylesDelivered.Office.csproj" />
-    <ProjectReference Include="..\..\DataAccess\DataFacade\SyncSoft.StylesDelivered.DataFacade.csproj" />
-    <ProjectReference Include="..\..\DataAccess\MySql\SyncSoft.StylesDelivered.MySql.csproj" />
-    <ProjectReference Include="..\..\DataAccess\Redis\SyncSoft.StylesDelivered.Redis.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Business\Aliyun\SyncSoft.StylesDelivered.Aliyun.csproj" />
+        <ProjectReference Include="..\..\Business\Consumer\SyncSoft.StylesDelivered.Consumer.csproj" />
+        <ProjectReference Include="..\..\Business\Domain\SyncSoft.StylesDelivered.Domain.csproj" />
+        <ProjectReference Include="..\..\Business\Office\SyncSoft.StylesDelivered.Office.csproj" />
+        <ProjectReference Include="..\..\DataAccess\DataFacade\SyncSoft.StylesDelivered.DataFacade.csproj" />
+        <ProjectReference Include="..\..\DataAccess\MySql\SyncSoft.StylesDelivered.MySql.csproj" />
+        <ProjectReference Include="..\..\DataAccess\Redis\SyncSoft.StylesDelivered.Redis.csproj" />
+    </ItemGroup>
 
 </Project>
