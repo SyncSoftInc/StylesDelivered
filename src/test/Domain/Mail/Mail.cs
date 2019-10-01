@@ -16,7 +16,7 @@ namespace Mail
 
         #endregion
         // *******************************************************************************************************************************
-        #region -  CreateOrder  -
+        #region -  Enqueue  -
 
         [Test]
         public async Task Enqueue()
@@ -26,7 +26,7 @@ namespace Mail
                 Subject = "Test Subject",
                 Body = "Test Body"
             };
-            msg.To.Add("dev@syncsoftinc.com");
+            msg.To.Add("jonathan.poon@syncsoftinc.com");
             var msgCode = await EmailSender.EnqueueAsync(msg).ConfigureAwait(false);
             Assert.IsTrue(msgCode.IsSuccess());
         }

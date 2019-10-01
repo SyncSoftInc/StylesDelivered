@@ -95,6 +95,11 @@ namespace Order
             var msgCode = await OrderService.ApproveOrderAsync(approveCmd).ConfigureAwait(false);
             Assert.IsTrue(msgCode.IsSuccess(), msgCode);
 
+            var shipCmd = new ShipOrderCommand { OrderNo = _order.OrderNo };
+            shipCmd.SetContext(_identity);
+            msgCode = await OrderService.ShipOrderAsync(shipCmd).ConfigureAwait(false);
+            Assert.IsTrue(msgCode.IsSuccess(), msgCode);
+
             var deleteCmd = new DeleteOrderCommand { OrderNo = _order.OrderNo };
             deleteCmd.SetContext(_identity);
             msgCode = await OrderService.DeleteOrderAsync(deleteCmd).ConfigureAwait(false);

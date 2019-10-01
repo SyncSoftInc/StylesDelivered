@@ -26,6 +26,7 @@ namespace SyncSoft.App
                     ObjectContainer.Register<IItemInventoryFactory, ItemInventoryFactory>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IOrderService, OrderService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IEmailSender, EmailSender>(LifeCycleEnum.Singleton);
+                    ObjectContainer.Register<IEmailService, EmailService>(LifeCycleEnum.Singleton);
                     ObjectContainer.Register<IReviewService, ReviewService>(LifeCycleEnum.Singleton);
                 };
             }
